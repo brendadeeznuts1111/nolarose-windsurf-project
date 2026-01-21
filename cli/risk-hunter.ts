@@ -893,6 +893,7 @@ export class RiskHunterCLI {
     console.log('  # Monitor with enhanced features');
     console.log('  bun run risk-hunter.ts monitor --realTime --external');
   }
+}
 
 // CLI Entry Point
 if (import.meta.main) {
