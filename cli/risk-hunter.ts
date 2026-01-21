@@ -684,5 +684,3 @@ if (import.meta.main) {
   const cli = new RiskHunterCLI();
   cli.run(process.argv.slice(2)).catch(console.error);
 }
-
-export { RiskHunterCLI };
