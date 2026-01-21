@@ -159,7 +159,7 @@ const httpServer = Bun.serve({
 const unixServer = Bun.serve({
   port: 0, // Random free TCP port instead of unix socket
   
-  fetch(req) {
+  fetch(req): Response | Promise<Response> {
     const url = new URL(req.url);
     
     if (url.pathname === '/internal/security-check') {
@@ -186,7 +186,7 @@ const unixServer = Bun.serve({
 const abstractServer = Bun.serve({
   port: 0, // Random free TCP port instead of abstract socket
   
-  fetch(req) {
+  fetch(req): Response | Promise<Response> {
     const url = new URL(req.url);
     
     if (url.pathname === '/ipc/security-event') {
