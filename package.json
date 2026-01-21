@@ -37,7 +37,11 @@
     "filter:test": "bun run --filter 'test*' test",
     "filter:bench": "bun run --filter 'bench*' bench:all",
     "demo:table": "echo 'console.table([{name: \"Feature A\", weight: 0.28, impact: \"Critical\"}, {name: \"Feature B\", weight: 0.22, impact: \"High\"}])' | bun run -",
-    "demo:inspect": "echo 'console.log({ nested: { a: { b: { c: \"deep value\" } } } })' | bun --console-depth 5 run -"
+    "demo:inspect": "echo 'console.log({ nested: { a: { b: { c: \"deep value\" } } } })' | bun --console-depth 5 run -",
+    "demo:shallow": "bun --console-depth 1 run simple-demo.js",
+    "demo:default": "bun --console-depth 2 run simple-demo.js",
+    "demo:deep": "bun --console-depth 4 run simple-demo.js",
+    "demo:depth-comparison": "echo '=== Console Depth Comparison ===' && echo 'Depth 1:' && bun --console-depth 1 run simple-demo.js && echo '' && echo 'Depth 2 (default):' && bun --console-depth 2 run simple-demo.js && echo '' && echo 'Depth 4:' && bun --console-depth 4 run simple-demo.js"
   },
   "keywords": [
     "fraud-detection",
