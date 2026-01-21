@@ -5,7 +5,7 @@
     "windsurf-cli": "dist/index.js"
   },
   "scripts": {
-    "build": "bun build cli/risk-hunter.ts --outdir dist --target node",
+    "build": "bun build cli/risk-hunter.ts --outfile dist/index.js --target bun",
     "test": "bun test",
     "type-check": "tsc --noEmit",
     "lint": "bunx @biomejs/biome check .",
