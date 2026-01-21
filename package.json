@@ -1,23 +1,97 @@
 {
   "name": "@nolarose/windsurf-project",
   "version": "1.0.0",
+  "description": "Advanced fraud detection and risk analysis system with real-time monitoring",
   "bin": {
     "windsurf-cli": "dist/index.js"
   },
   "scripts": {
     "build": "bun build cli/risk-hunter.ts --outfile dist/index.js --target bun",
     "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "test:watch": "bun test --watch",
     "type-check": "tsc --noEmit",
     "lint": "bunx @biomejs/biome check .",
+    "lint:fix": "bunx @biomejs/biome check --write .",
     "format": "bunx @biomejs/biome format .",
+    "format:write": "bunx @biomejs/biome format --write .",
+    "dev": "bun run cli/risk-hunter.ts",
+    "start": "bun run dist/index.js",
+    "bench": "bun run bench/dashboard.bench.ts",
+    "bench:all": "bun run bench/*",
     "prepublishOnly": "bun run build",
     "version": "bun run build",
-    "release": "bun version patch && git push && git push --tags"
+    "release": "bun version patch && git push && git push --tags",
+    "clean": "rm -rf dist node_modules .cache",
+    "reset": "bun run clean && bun install",
+    "docs:serve": "bunx http-server docs -p 8080",
+    "security:audit": "bun audit",
+    "deps:update": "bun update",
+    "deps:check": "bun outdated"
+  },
+  "keywords": [
+    "fraud-detection",
+    "risk-analysis",
+    "anomaly-detection",
+    "security",
+    "ai",
+    "machine-learning",
+    "real-time",
+    "monitoring",
+    "typescript",
+    "bun"
+  ],
+  "author": {
+    "name": "Nola Rose",
+    "email": "nolarose@example.com",
+    "url": "https://github.com/nolarose"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brendadeeznuts1111/nolarose-windsurf-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brendadeeznuts1111/nolarose-windsurf-project/issues"
+  },
+  "homepage": "https://github.com/brendadeeznuts1111/nolarose-windsurf-project#readme",
+  "engines": {
+    "bun": ">=1.0.0",
+    "node": ">=18.0.0"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
     "@biomejs/biome": "latest",
     "typescript": "^5.9.3"
+  },
+  "files": [
+    "dist/",
+    "ai/",
+    "bench/",
+    "cli/",
+    "dashboard/",
+    "docs/",
+    "fraud-oracle/",
+    "ghost-shield/",
+    "feature-weights/",
+    "types/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./ai/anomaly-predict.ts"
+    },
+    "./cli": {
+      "types": "./types/cli.d.ts",
+      "import": "./cli/risk-hunter.ts"
+    },
+    "./dashboard": {
+      "types": "./types/dashboard.d.ts",
+      "import": "./dashboard/risk-heatmap.ts"
+    }
   }
 }
