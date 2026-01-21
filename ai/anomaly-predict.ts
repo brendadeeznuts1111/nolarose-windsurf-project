@@ -276,6 +276,7 @@ class AnomalyPredictionModel {
 // HTTP/WebSocket server
 const server = serve({
   port: process.env.PORT ? parseInt(process.env.PORT) : 3051,
+  hostname: process.env.HOST || "0.0.0.0", // defaults to "0.0.0.0" as per Bun docs
   fetch(req: Request, server: Server<any>) {
     const url = new URL(req.url);
     
@@ -808,6 +809,6 @@ setInterval(() => {
 console.log(`🚀 Anomaly Prediction Engine Started`);
 console.log(`🎯 0.92 Block Threshold Active`);
 console.log(`⚡ 5-Feature Weighted Oracle Ready`);
-console.log(`🌐 WebSocket Server: ws://${process.env.HOST || 'localhost'}:${process.env.PORT || '3051'}/ws/risk-live`);
-console.log(`🔗 API Endpoint: http://${process.env.HOST || 'localhost'}:${process.env.PORT || '3051'}/api/risk/score`);
-console.log(`📈 Health Check: http://${process.env.HOST || 'localhost'}:${process.env.PORT || '3051'}/api/health`);
+console.log(`🌐 WebSocket Server: ws://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/ws/risk-live`);
+console.log(`🔗 API Endpoint: http://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/api/risk/score`);
+console.log(`📈 Health Check: http://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/api/health`);
