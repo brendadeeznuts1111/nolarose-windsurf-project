@@ -228,7 +228,8 @@
 
     <script type="module">
         // Import and initialize dashboard components
-        import { RiskHeatmap, createRiskHeatmap } from './risk-heatmap.js';
+        import { createRiskHeatmap, RiskHeatmap } from './risk-heatmap.js';
+
         
         // Global state
         let websocket = null;
@@ -505,7 +506,7 @@
         }
         
         // Close fraud alert modal
-        window.closeFraudAlert = function() {
+        window.closeFraudAlert = () => {
             const modal = document.getElementById('fraudAlertModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');

@@ -1,159 +1,159 @@
 {
-  "model": {
-    "name": "qr-onboarding-anomaly-detector",
-    "version": "1.3.6",
-    "type": "weighted-ensemble",
-    "trained_on": "2026-01-21",
-    "accuracy_target": 0.97,
-    "false_positive_rate": 0.03,
-    "detection_threshold": 0.92
-  },
-  "features": {
-    "root_detected": {
-      "weight": 0.28,
-      "threshold": 1,
-      "description": "Device root/jailbreak detection",
-      "impact": "critical"
-    },
-    "vpn_active": {
-      "weight": 0.22,
-      "threshold": 1,
-      "description": "VPN or proxy usage",
-      "impact": "high"
-    },
-    "thermal_spike": {
-      "weight": 0.15,
-      "threshold": 15,
-      "description": "Unusual temperature increase (°C)",
-      "impact": "medium"
-    },
-    "biometric_fail": {
-      "weight": 0.18,
-      "threshold": 3,
-      "description": "Failed biometric attempts",
-      "impact": "high"
-    },
-    "proxy_hop_count": {
-      "weight": 0.17,
-      "threshold": 3,
-      "description": "Number of proxy hops",
-      "impact": "high"
-    },
-    "device_age_hours": {
-      "weight": 0.12,
-      "threshold": 24,
-      "description": "Device account age in hours",
-      "impact": "medium"
-    },
-    "location_velocity": {
-      "weight": 0.09,
-      "threshold": 800,
-      "description": "Impossible travel speed (km/h)",
-      "impact": "medium"
-    },
-    "battery_drain_rate": {
-      "weight": 0.11,
-      "threshold": 20,
-      "description": "Battery consumption rate (%/hour)",
-      "impact": "low"
-    },
-    "network_latency": {
-      "weight": 0.08,
-      "threshold": 2000,
-      "description": "Network response time (ms)",
-      "impact": "low"
-    },
-    "app_install_count": {
-      "weight": 0.05,
-      "threshold": 200,
-      "description": "Number of installed applications",
-      "impact": "low"
-    }
-  },
-  "risk_levels": {
-    "low": {
-      "range": [0.0, 0.49],
-      "action": "allow",
-      "color": "#22c55e"
-    },
-    "medium": {
-      "range": [0.50, 0.74],
-      "action": "monitor",
-      "color": "#f59e0b"
-    },
-    "high": {
-      "range": [0.75, 0.91],
-      "action": "additional_verification",
-      "color": "#ef4444"
-    },
-    "critical": {
-      "range": [0.92, 1.0],
-      "action": "block",
-      "color": "#991b1b"
-    }
-  },
-  "performance": {
-    "max_prediction_time_ms": 10,
-    "max_memory_usage_mb": 100,
-    "concurrent_sessions": 1000,
-    "batch_processing_limit": 10000
-  },
-  "security": {
-    "model_encryption": true,
-    "data_retention_days": 2555,
-    "audit_logging": true,
-    "gdpr_compliant": true,
-    "pci_dss_compliant": true
-  },
-  "monitoring": {
-    "real_time_alerts": true,
-    "performance_metrics": true,
-    "accuracy_tracking": true,
-    "drift_detection": true,
-    "auto_retraining": true
-  },
-  "integration": {
-    "qr_onboarding": {
-      "enabled": true,
-      "blocking_threshold": 0.92,
-      "session_timeout_minutes": 30
-    },
-    "websocket_streaming": {
-      "enabled": true,
-      "real_time_updates": true,
-      "broadcast_predictions": true
-    },
-    "dashboard": {
-      "enabled": true,
-      "live_metrics": true,
-      "anomaly_map": true,
-      "risk_heatmap": true
-    }
-  },
-  "global_rules_alignment": {
-    "security_first": {
-      "priority": 100,
-      "enforced": true,
-      "mTLS_required": true,
-      "biometric_verification": true
-    },
-    "ai_monitoring": {
-      "priority": 85,
-      "anomaly_detection": true,
-      "predictive_alerts": true,
-      "self_healing": true
-    },
-    "performance_optimization": {
-      "priority": 92,
-      "target_prediction_time": "<10ms",
-      "memory_efficiency": true,
-      "concurrent_processing": true
-    },
-    "compliance_framework": {
-      "priority": 95,
-      "pci_dss": true,
-      "gdpr": true,
-      "audit_logging": true
-    }
-  }
+	"model": {
+		"name": "qr-onboarding-anomaly-detector",
+		"version": "1.3.6",
+		"type": "weighted-ensemble",
+		"trained_on": "2026-01-21",
+		"accuracy_target": 0.97,
+		"false_positive_rate": 0.03,
+		"detection_threshold": 0.92
+	},
+	"features": {
+		"root_detected": {
+			"weight": 0.28,
+			"threshold": 1,
+			"description": "Device root/jailbreak detection",
+			"impact": "critical"
+		},
+		"vpn_active": {
+			"weight": 0.22,
+			"threshold": 1,
+			"description": "VPN or proxy usage",
+			"impact": "high"
+		},
+		"thermal_spike": {
+			"weight": 0.15,
+			"threshold": 15,
+			"description": "Unusual temperature increase (°C)",
+			"impact": "medium"
+		},
+		"biometric_fail": {
+			"weight": 0.18,
+			"threshold": 3,
+			"description": "Failed biometric attempts",
+			"impact": "high"
+		},
+		"proxy_hop_count": {
+			"weight": 0.17,
+			"threshold": 3,
+			"description": "Number of proxy hops",
+			"impact": "high"
+		},
+		"device_age_hours": {
+			"weight": 0.12,
+			"threshold": 24,
+			"description": "Device account age in hours",
+			"impact": "medium"
+		},
+		"location_velocity": {
+			"weight": 0.09,
+			"threshold": 800,
+			"description": "Impossible travel speed (km/h)",
+			"impact": "medium"
+		},
+		"battery_drain_rate": {
+			"weight": 0.11,
+			"threshold": 20,
+			"description": "Battery consumption rate (%/hour)",
+			"impact": "low"
+		},
+		"network_latency": {
+			"weight": 0.08,
+			"threshold": 2000,
+			"description": "Network response time (ms)",
+			"impact": "low"
+		},
+		"app_install_count": {
+			"weight": 0.05,
+			"threshold": 200,
+			"description": "Number of installed applications",
+			"impact": "low"
+		}
+	},
+	"risk_levels": {
+		"low": {
+			"range": [0.0, 0.49],
+			"action": "allow",
+			"color": "#22c55e"
+		},
+		"medium": {
+			"range": [0.5, 0.74],
+			"action": "monitor",
+			"color": "#f59e0b"
+		},
+		"high": {
+			"range": [0.75, 0.91],
+			"action": "additional_verification",
+			"color": "#ef4444"
+		},
+		"critical": {
+			"range": [0.92, 1.0],
+			"action": "block",
+			"color": "#991b1b"
+		}
+	},
+	"performance": {
+		"max_prediction_time_ms": 10,
+		"max_memory_usage_mb": 100,
+		"concurrent_sessions": 1000,
+		"batch_processing_limit": 10000
+	},
+	"security": {
+		"model_encryption": true,
+		"data_retention_days": 2555,
+		"audit_logging": true,
+		"gdpr_compliant": true,
+		"pci_dss_compliant": true
+	},
+	"monitoring": {
+		"real_time_alerts": true,
+		"performance_metrics": true,
+		"accuracy_tracking": true,
+		"drift_detection": true,
+		"auto_retraining": true
+	},
+	"integration": {
+		"qr_onboarding": {
+			"enabled": true,
+			"blocking_threshold": 0.92,
+			"session_timeout_minutes": 30
+		},
+		"websocket_streaming": {
+			"enabled": true,
+			"real_time_updates": true,
+			"broadcast_predictions": true
+		},
+		"dashboard": {
+			"enabled": true,
+			"live_metrics": true,
+			"anomaly_map": true,
+			"risk_heatmap": true
+		}
+	},
+	"global_rules_alignment": {
+		"security_first": {
+			"priority": 100,
+			"enforced": true,
+			"mTLS_required": true,
+			"biometric_verification": true
+		},
+		"ai_monitoring": {
+			"priority": 85,
+			"anomaly_detection": true,
+			"predictive_alerts": true,
+			"self_healing": true
+		},
+		"performance_optimization": {
+			"priority": 92,
+			"target_prediction_time": "<10ms",
+			"memory_efficiency": true,
+			"concurrent_processing": true
+		},
+		"compliance_framework": {
+			"priority": 95,
+			"pci_dss": true,
+			"gdpr": true,
+			"audit_logging": true
+		}
+	}
 }

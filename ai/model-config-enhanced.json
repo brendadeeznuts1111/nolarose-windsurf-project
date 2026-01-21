@@ -1,281 +1,346 @@
 {
-  "model": {
-    "name": "qr-onboarding-anomaly-detector",
-    "version": "2.1.0",
-    "type": "hierarchical-ensemble",
-    "trained_on": "2024-01-21T10:30:00Z",
-    "last_updated": "2024-01-21T16:45:00Z",
-    "accuracy_target": 0.985,
-    "false_positive_rate": 0.015,
-    "detection_threshold": 0.92,
-    "model_size_mb": 45,
-    "inference_time_ms": 8,
-    "supported_languages": ["typescript", "python", "java", "go", "rust", "csharp", "php", "ruby", "swift"],
-    "deployment_platforms": ["cloud", "edge", "hybrid", "on-premise", "mobile"],
-    "compliance_certifications": ["SOC2", "PCI-DSS", "GDPR", "HIPAA", "SOX", "ISO27001"],
-    "model_family": "fraud-detection-v2",
-    "architecture": "microservices",
-    "lifecycle_stage": "production",
-    "governance": {
-      "data_governance": true,
-      "model_governance": true,
-      "ethical_ai": true,
-      "bias_detection": true,
-      "explainability": true
-    }
-  },
-  "feature_matrix": {
-    "columns": {
-      "basic_properties": ["name", "weight", "threshold", "description", "impact"],
-      "data_characteristics": ["data_type", "collection_method", "refresh_rate", "reliability", "cost"],
-      "privacy_compliance": ["privacy_level", "retention_days", "gdpr_sensitive", "pci_required", "hipaa_phi"],
-      "engineering": ["normalization", "encoding", "validation", "drift_detection"],
-      "performance": ["importance_score", "feature_correlation", "stability_index", "latency_ms"],
-      "business": ["business_impact", "cost_benefit_ratio", "risk_contribution", "regulatory_flag"]
-    },
-    "features": {
-      "root_detected": {
-        "basic_properties": {
-          "name": "root_detected",
-          "weight": 0.28,
-          "threshold": 1,
-          "description": "Device root/jailbreak detection",
-          "impact": "critical"
-        },
-        "data_characteristics": {
-          "data_type": "binary",
-          "collection_method": "device-api",
-          "refresh_rate": "real-time",
-          "reliability": 0.98,
-          "cost": 0.001
-        },
-        "privacy_compliance": {
-          "privacy_level": "high",
-          "retention_days": 2555,
-          "gdpr_sensitive": true,
-          "pci_required": true,
-          "hipaa_phi": false
-        },
-        "engineering": {
-          "normalization": "standard",
-          "encoding": "binary",
-          "validation": "strict",
-          "drift_detection": true
-        },
-        "performance": {
-          "importance_score": 0.95,
-          "feature_correlation": 0.12,
-          "stability_index": 0.98,
-          "latency_ms": 2
-        },
-        "business": {
-          "business_impact": "critical",
-          "cost_benefit_ratio": 15.5,
-          "risk_contribution": 0.35,
-          "regulatory_flag": true
-        }
-      },
-      "vpn_active": {
-        "basic_properties": {
-          "name": "vpn_active",
-          "weight": 0.22,
-          "threshold": 1,
-          "description": "VPN or proxy usage",
-          "impact": "high"
-        },
-        "data_characteristics": {
-          "data_type": "binary",
-          "collection_method": "network-analysis",
-          "refresh_rate": "real-time",
-          "reliability": 0.95,
-          "cost": 0.002
-        },
-        "privacy_compliance": {
-          "privacy_level": "medium",
-          "retention_days": 365,
-          "gdpr_sensitive": false,
-          "pci_required": true,
-          "hipaa_phi": false
-        },
-        "engineering": {
-          "normalization": "none",
-          "encoding": "binary",
-          "validation": "moderate",
-          "drift_detection": true
-        },
-        "performance": {
-          "importance_score": 0.88,
-          "feature_correlation": 0.25,
-          "stability_index": 0.92,
-          "latency_ms": 3
-        },
-        "business": {
-          "business_impact": "high",
-          "cost_benefit_ratio": 8.2,
-          "risk_contribution": 0.28,
-          "regulatory_flag": false
-        }
-      },
-      "thermal_spike": {
-        "basic_properties": {
-          "name": "thermal_spike",
-          "weight": 0.15,
-          "threshold": 15,
-          "description": "Unusual temperature increase (°C)",
-          "impact": "medium"
-        },
-        "data_characteristics": {
-          "data_type": "numeric",
-          "collection_method": "device-sensors",
-          "refresh_rate": "per-second",
-          "reliability": 0.92,
-          "cost": 0.0005
-        },
-        "privacy_compliance": {
-          "privacy_level": "low",
-          "retention_days": 90,
-          "gdpr_sensitive": false,
-          "pci_required": false,
-          "hipaa_phi": false
-        },
-        "engineering": {
-          "normalization": "min-max",
-          "encoding": "float",
-          "validation": "basic",
-          "drift_detection": true
-        },
-        "performance": {
-          "importance_score": 0.72,
-          "feature_correlation": 0.08,
-          "stability_index": 0.85,
-          "latency_ms": 1
-        },
-        "business": {
-          "business_impact": "medium",
-          "cost_benefit_ratio": 12.8,
-          "risk_contribution": 0.15,
-          "regulatory_flag": false
-        }
-      },
-      "biometric_fail": {
-        "basic_properties": {
-          "name": "biometric_fail",
-          "weight": 0.18,
-          "threshold": 3,
-          "description": "Failed biometric attempts",
-          "impact": "high"
-        },
-        "data_characteristics": {
-          "data_type": "integer",
-          "collection_method": "biometric-api",
-          "refresh_rate": "per-attempt",
-          "reliability": 0.96,
-          "cost": 0.003
-        },
-        "privacy_compliance": {
-          "privacy_level": "high",
-          "retention_days": 2555,
-          "gdpr_sensitive": true,
-          "pci_required": true,
-          "hipaa_phi": true
-        },
-        "engineering": {
-          "normalization": "log",
-          "encoding": "integer",
-          "validation": "strict",
-          "drift_detection": true
-        },
-        "performance": {
-          "importance_score": 0.91,
-          "feature_correlation": 0.18,
-          "stability_index": 0.94,
-          "latency_ms": 5
-        },
-        "business": {
-          "business_impact": "high",
-          "cost_benefit_ratio": 6.5,
-          "risk_contribution": 0.22,
-          "regulatory_flag": true
-        }
-      },
-      "proxy_hop_count": {
-        "basic_properties": {
-          "name": "proxy_hop_count",
-          "weight": 0.17,
-          "threshold": 3,
-          "description": "Number of proxy hops",
-          "impact": "high"
-        },
-        "data_characteristics": {
-          "data_type": "integer",
-          "collection_method": "network-tracing",
-          "refresh_rate": "per-session",
-          "reliability": 0.89,
-          "cost": 0.004
-        },
-        "privacy_compliance": {
-          "privacy_level": "medium",
-          "retention_days": 180,
-          "gdpr_sensitive": false,
-          "pci_required": true,
-          "hipaa_phi": false
-        },
-        "engineering": {
-          "normalization": "standard",
-          "encoding": "integer",
-          "validation": "moderate",
-          "drift_detection": true
-        },
-        "performance": {
-          "importance_score": 0.84,
-          "feature_correlation": 0.32,
-          "stability_index": 0.78,
-          "latency_ms": 8
-        },
-        "business": {
-          "business_impact": "high",
-          "cost_benefit_ratio": 4.8,
-          "risk_contribution": 0.20,
-          "regulatory_flag": false
-        }
-      }
-    }
-  },
-  "ensemble_models": {
-    "columns": {
-      "model_info": ["name", "type", "version", "accuracy", "specialization"],
-      "performance": ["inference_time_ms", "memory_mb", "cpu_usage", "gpu_required"],
-      "training": ["dataset_size", "training_time_hours", "last_retrained", "validation_accuracy"],
-      "deployment": ["scaling_factor", "cost_per_1000_predictions", "sla_requirement", "regions"]
-    },
-    "models": {
-      "gradient_boosting_core": {
-        "model_info": {
-          "name": "gradient_boosting_core",
-          "type": "xgboost",
-          "version": "1.2.0",
-          "accuracy": 0.94,
-          "specialization": "tabular_features"
-        },
-        "performance": {
-          "inference_time_ms": 3,
-          "memory_mb": 128,
-          "cpu_usage": 0.15,
-          "gpu_required": false
-        },
-        "training": {
-          "dataset_size": 5000000,
-          "training_time_hours": 4,
-          "last_retrained": "2024-01-20T00:00:00Z",
-          "validation_accuracy": 0.93
-        },
-        "deployment": {
-          "scaling_factor": 1000,
-          "cost_per_1000_predictions": 0.005,
-          "sla_requirement": "99.9%",
-          "regions": ["us-east-1", "eu-west-1", "ap-southeast-1"]
-        }
-      }
-    }
-  }
+	"model": {
+		"name": "qr-onboarding-anomaly-detector",
+		"version": "2.1.0",
+		"type": "hierarchical-ensemble",
+		"trained_on": "2024-01-21T10:30:00Z",
+		"last_updated": "2024-01-21T16:45:00Z",
+		"accuracy_target": 0.985,
+		"false_positive_rate": 0.015,
+		"detection_threshold": 0.92,
+		"model_size_mb": 45,
+		"inference_time_ms": 8,
+		"supported_languages": [
+			"typescript",
+			"python",
+			"java",
+			"go",
+			"rust",
+			"csharp",
+			"php",
+			"ruby",
+			"swift"
+		],
+		"deployment_platforms": ["cloud", "edge", "hybrid", "on-premise", "mobile"],
+		"compliance_certifications": [
+			"SOC2",
+			"PCI-DSS",
+			"GDPR",
+			"HIPAA",
+			"SOX",
+			"ISO27001"
+		],
+		"model_family": "fraud-detection-v2",
+		"architecture": "microservices",
+		"lifecycle_stage": "production",
+		"governance": {
+			"data_governance": true,
+			"model_governance": true,
+			"ethical_ai": true,
+			"bias_detection": true,
+			"explainability": true
+		}
+	},
+	"feature_matrix": {
+		"columns": {
+			"basic_properties": [
+				"name",
+				"weight",
+				"threshold",
+				"description",
+				"impact"
+			],
+			"data_characteristics": [
+				"data_type",
+				"collection_method",
+				"refresh_rate",
+				"reliability",
+				"cost"
+			],
+			"privacy_compliance": [
+				"privacy_level",
+				"retention_days",
+				"gdpr_sensitive",
+				"pci_required",
+				"hipaa_phi"
+			],
+			"engineering": [
+				"normalization",
+				"encoding",
+				"validation",
+				"drift_detection"
+			],
+			"performance": [
+				"importance_score",
+				"feature_correlation",
+				"stability_index",
+				"latency_ms"
+			],
+			"business": [
+				"business_impact",
+				"cost_benefit_ratio",
+				"risk_contribution",
+				"regulatory_flag"
+			]
+		},
+		"features": {
+			"root_detected": {
+				"basic_properties": {
+					"name": "root_detected",
+					"weight": 0.28,
+					"threshold": 1,
+					"description": "Device root/jailbreak detection",
+					"impact": "critical"
+				},
+				"data_characteristics": {
+					"data_type": "binary",
+					"collection_method": "device-api",
+					"refresh_rate": "real-time",
+					"reliability": 0.98,
+					"cost": 0.001
+				},
+				"privacy_compliance": {
+					"privacy_level": "high",
+					"retention_days": 2555,
+					"gdpr_sensitive": true,
+					"pci_required": true,
+					"hipaa_phi": false
+				},
+				"engineering": {
+					"normalization": "standard",
+					"encoding": "binary",
+					"validation": "strict",
+					"drift_detection": true
+				},
+				"performance": {
+					"importance_score": 0.95,
+					"feature_correlation": 0.12,
+					"stability_index": 0.98,
+					"latency_ms": 2
+				},
+				"business": {
+					"business_impact": "critical",
+					"cost_benefit_ratio": 15.5,
+					"risk_contribution": 0.35,
+					"regulatory_flag": true
+				}
+			},
+			"vpn_active": {
+				"basic_properties": {
+					"name": "vpn_active",
+					"weight": 0.22,
+					"threshold": 1,
+					"description": "VPN or proxy usage",
+					"impact": "high"
+				},
+				"data_characteristics": {
+					"data_type": "binary",
+					"collection_method": "network-analysis",
+					"refresh_rate": "real-time",
+					"reliability": 0.95,
+					"cost": 0.002
+				},
+				"privacy_compliance": {
+					"privacy_level": "medium",
+					"retention_days": 365,
+					"gdpr_sensitive": false,
+					"pci_required": true,
+					"hipaa_phi": false
+				},
+				"engineering": {
+					"normalization": "none",
+					"encoding": "binary",
+					"validation": "moderate",
+					"drift_detection": true
+				},
+				"performance": {
+					"importance_score": 0.88,
+					"feature_correlation": 0.25,
+					"stability_index": 0.92,
+					"latency_ms": 3
+				},
+				"business": {
+					"business_impact": "high",
+					"cost_benefit_ratio": 8.2,
+					"risk_contribution": 0.28,
+					"regulatory_flag": false
+				}
+			},
+			"thermal_spike": {
+				"basic_properties": {
+					"name": "thermal_spike",
+					"weight": 0.15,
+					"threshold": 15,
+					"description": "Unusual temperature increase (°C)",
+					"impact": "medium"
+				},
+				"data_characteristics": {
+					"data_type": "numeric",
+					"collection_method": "device-sensors",
+					"refresh_rate": "per-second",
+					"reliability": 0.92,
+					"cost": 0.0005
+				},
+				"privacy_compliance": {
+					"privacy_level": "low",
+					"retention_days": 90,
+					"gdpr_sensitive": false,
+					"pci_required": false,
+					"hipaa_phi": false
+				},
+				"engineering": {
+					"normalization": "min-max",
+					"encoding": "float",
+					"validation": "basic",
+					"drift_detection": true
+				},
+				"performance": {
+					"importance_score": 0.72,
+					"feature_correlation": 0.08,
+					"stability_index": 0.85,
+					"latency_ms": 1
+				},
+				"business": {
+					"business_impact": "medium",
+					"cost_benefit_ratio": 12.8,
+					"risk_contribution": 0.15,
+					"regulatory_flag": false
+				}
+			},
+			"biometric_fail": {
+				"basic_properties": {
+					"name": "biometric_fail",
+					"weight": 0.18,
+					"threshold": 3,
+					"description": "Failed biometric attempts",
+					"impact": "high"
+				},
+				"data_characteristics": {
+					"data_type": "integer",
+					"collection_method": "biometric-api",
+					"refresh_rate": "per-attempt",
+					"reliability": 0.96,
+					"cost": 0.003
+				},
+				"privacy_compliance": {
+					"privacy_level": "high",
+					"retention_days": 2555,
+					"gdpr_sensitive": true,
+					"pci_required": true,
+					"hipaa_phi": true
+				},
+				"engineering": {
+					"normalization": "log",
+					"encoding": "integer",
+					"validation": "strict",
+					"drift_detection": true
+				},
+				"performance": {
+					"importance_score": 0.91,
+					"feature_correlation": 0.18,
+					"stability_index": 0.94,
+					"latency_ms": 5
+				},
+				"business": {
+					"business_impact": "high",
+					"cost_benefit_ratio": 6.5,
+					"risk_contribution": 0.22,
+					"regulatory_flag": true
+				}
+			},
+			"proxy_hop_count": {
+				"basic_properties": {
+					"name": "proxy_hop_count",
+					"weight": 0.17,
+					"threshold": 3,
+					"description": "Number of proxy hops",
+					"impact": "high"
+				},
+				"data_characteristics": {
+					"data_type": "integer",
+					"collection_method": "network-tracing",
+					"refresh_rate": "per-session",
+					"reliability": 0.89,
+					"cost": 0.004
+				},
+				"privacy_compliance": {
+					"privacy_level": "medium",
+					"retention_days": 180,
+					"gdpr_sensitive": false,
+					"pci_required": true,
+					"hipaa_phi": false
+				},
+				"engineering": {
+					"normalization": "standard",
+					"encoding": "integer",
+					"validation": "moderate",
+					"drift_detection": true
+				},
+				"performance": {
+					"importance_score": 0.84,
+					"feature_correlation": 0.32,
+					"stability_index": 0.78,
+					"latency_ms": 8
+				},
+				"business": {
+					"business_impact": "high",
+					"cost_benefit_ratio": 4.8,
+					"risk_contribution": 0.2,
+					"regulatory_flag": false
+				}
+			}
+		}
+	},
+	"ensemble_models": {
+		"columns": {
+			"model_info": ["name", "type", "version", "accuracy", "specialization"],
+			"performance": [
+				"inference_time_ms",
+				"memory_mb",
+				"cpu_usage",
+				"gpu_required"
+			],
+			"training": [
+				"dataset_size",
+				"training_time_hours",
+				"last_retrained",
+				"validation_accuracy"
+			],
+			"deployment": [
+				"scaling_factor",
+				"cost_per_1000_predictions",
+				"sla_requirement",
+				"regions"
+			]
+		},
+		"models": {
+			"gradient_boosting_core": {
+				"model_info": {
+					"name": "gradient_boosting_core",
+					"type": "xgboost",
+					"version": "1.2.0",
+					"accuracy": 0.94,
+					"specialization": "tabular_features"
+				},
+				"performance": {
+					"inference_time_ms": 3,
+					"memory_mb": 128,
+					"cpu_usage": 0.15,
+					"gpu_required": false
+				},
+				"training": {
+					"dataset_size": 5000000,
+					"training_time_hours": 4,
+					"last_retrained": "2024-01-20T00:00:00Z",
+					"validation_accuracy": 0.93
+				},
+				"deployment": {
+					"scaling_factor": 1000,
+					"cost_per_1000_predictions": 0.005,
+					"sla_requirement": "99.9%",
+					"regions": ["us-east-1", "eu-west-1", "ap-southeast-1"]
+				}
+			}
+		}
+	}
 }
