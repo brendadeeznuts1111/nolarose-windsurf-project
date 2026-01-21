@@ -4,7 +4,7 @@
 
 import { serve } from "bun";
 import type { Server, ServerWebSocket } from "bun";
-import { networkOptimizer, optimizedFetch, batchFetch } from "./network-optimizer";
+import { networkOptimizer, optimizedFetch, batchFetch, getNetworkMetrics } from "./network-optimizer.js";
 
 // Feature weight configuration aligned with global rules (5-feature weighted oracle)
 export const FEATURE_WEIGHTS = {

@@ -547,6 +547,22 @@ export class RiskHunterCLI {
     });
   }
   
+  // Display single session
+  private displaySession(session: any): void {
+    console.log('📊 Session Results:');
+    console.log('==================');
+    console.log(`Session ID: ${session.sessionId}`);
+    console.log(`Merchant ID: ${session.merchantId}`);
+    console.log(`Risk Score: ${session.score.toFixed(3)}`);
+    console.log(`Risk Level: ${session.riskLevel}`);
+    console.log(`Blocked: ${session.blocked ? 'Yes' : 'No'}`);
+    if (session.reason) {
+      console.log(`Reason: ${session.reason}`);
+    }
+    console.log(`Timestamp: ${new Date(session.timestamp).toLocaleString()}`);
+    console.log('');
+  }
+  
   // Display session analysis
   private displaySessionAnalysis(session: any, options: CLIOptions): void {
     console.log('📊 Session Analysis Results:');
