@@ -467,29 +467,14 @@ export async function fetchExternalData(ipAddress: string, deviceFingerprint: st
   const startTime = performance.now();
   
   try {
-    // Batch fetch all external APIs concurrently
-    const requests = [
-      ...EXTERNAL_APIS.device_intelligence.map(url => 
-        optimizedFetch(`${url}?fingerprint=${deviceFingerprint}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        })
-      ),
-      ...EXTERNAL_APIS.geolocation.map(url => 
-        optimizedFetch(`${url}?ip=${ipAddress}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        })
-      ),
-      ...EXTERNAL_APIS.threat_intelligence.map(url => 
-        optimizedFetch(`${url}?query=${ipAddress}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        })
-      )
+    // Create request URLs as strings for batchFetch
+    const requestUrls = [
+      ...EXTERNAL_APIS.device_intelligence.map(url => `${url}?fingerprint=${deviceFingerprint}`),
+      ...EXTERNAL_APIS.geolocation.map(url => `${url}?ip=${ipAddress}`),
+      ...EXTERNAL_APIS.threat_intelligence.map(url => `${url}?query=${ipAddress}`)
     ];
     
-    const responses = await batchFetch(requests);
+    const responses = await batchFetch(requestUrls);
     
     // Parse responses
     const externalData: ExternalDataSources = {
@@ -606,10 +591,10 @@ async function parseDeviceIntelligence(responses: Response[]): Promise<DeviceInt
   try {
     const data = await Promise.all(responses.map(r => r.json()));
     return {
-      riskScore: Math.max(...data.map(d => d.riskScore || 0)),
-      isEmulator: data.some(d => d.isEmulator),
-      isRooted: data.some(d => d.isRooted),
-      trustScore: Math.min(...data.map(d => d.trustScore || 1))
+      riskScore: Math.max(...data.map((d: any) => d.riskScore || 0)),
+      isEmulator: data.some((d: any) => d.isEmulator),
+      isRooted: data.some((d: any) => d.isRooted),
+      trustScore: Math.min(...data.map((d: any) => d.trustScore || 1))
     };
   } catch {
     return getDefaultDeviceIntelligence();
@@ -619,12 +604,12 @@ async function parseDeviceIntelligence(responses: Response[]): Promise<DeviceInt
 async function parseGeolocation(responses: Response[]): Promise<Geolocation> {
   try {
     const data = await Promise.all(responses.map(r => r.json()));
-    const primary = data[0];
+    const primary: any = data[0];
     return {
-      country: primary.country || 'unknown',
-      isHighRiskCountry: primary.isHighRisk || false,
-      vpnProbability: primary.vpnProbability || 0,
-      proxyScore: primary.proxyScore || 0
+      country: primary?.country || 'unknown',
+      isHighRiskCountry: primary?.isHighRisk || false,
+      vpnProbability: primary?.vpnProbability || 0,
+      proxyScore: primary?.proxyScore || 0
     };
   } catch {
     return getDefaultGeolocation();
@@ -635,10 +620,10 @@ async function parseThreatIntelligence(responses: Response[]): Promise<ThreatInt
   try {
     const data = await Promise.all(responses.map(r => r.json()));
     return {
-      maliciousScore: Math.max(...data.map(d => d.maliciousScore || 0)),
-      isKnownAttacker: data.some(d => d.isKnownAttacker),
-      threatTypes: data.flatMap(d => d.threatTypes || []),
-      confidence: Math.max(...data.map(d => d.confidence || 0))
+      maliciousScore: Math.max(...data.map((d: any) => d.maliciousScore || 0)),
+      isKnownAttacker: data.some((d: any) => d.isKnownAttacker),
+      threatTypes: data.flatMap((d: any) => d.threatTypes || []),
+      confidence: Math.max(...data.map((d: any) => d.confidence || 0))
     };
   } catch {
     return getDefaultThreatIntelligence();
