@@ -12,13 +12,43 @@ http://localhost:3001
 
 ## Authentication
 
-Currently, the API runs without authentication for development. In production, implement JWT-based authentication:
+### Authentication & Authorization Matrix
 
-```typescript
-// Headers
-Authorization: Bearer <jwt_token>
-Content-Type: application/json
-```
+| Auth Method | Type | Token Format | Expiry | Refresh Supported | Scope Granularity | MFA Required | Rate Limiting | Implementation Cost | Security Level | Use Case | Compliance |
+|-------------|------|--------------|--------|------------------|------------------|--------------|--------------|-------------------|---------------|----------|------------|
+| **JWT Bearer** | Stateful | JSON Web Token | 1 hour | Yes | Resource-based | Optional | Standard | Low | High | API access | OAuth 2.0 |
+| **API Key** | Stateless | UUID v4 | Never | No | Global | No | Per-key | Very Low | Medium | Service-to-service | SOX |
+| **OAuth 2.0** | Delegated | Access Token | 2 hours | Yes | Permission scopes | Optional | Standard | High | High | Third-party apps | GDPR, CCPA |
+| **mTLS** | Certificate | X.509 Cert | 1 year | No | Service-based | No | Per-cert | High | Very High | Zero-trust | PCI DSS |
+| **HMAC** | Signature | HMAC-SHA256 | 5 minutes | No | Request-based | No | Per-signer | Medium | High | Webhooks | ISO 27001 |
+| **Session Cookie** | Stateful | Session ID | 30 minutes | Yes | User-based | Optional | Per-session | Low | Medium | Web interface | HIPAA |
+| **Service Token** | Internal | JWT | 8 hours | Yes | Service scope | No | Internal | Low | High | Microservices | Internal |
+| **API Gateway** | Proxy | JWT/API Key | Variable | Yes | Endpoint-based | Optional | Gateway | High | Very High | Enterprise | All standards |
+
+### Authentication Flow
+
+| Step | Action | Endpoint | Method | Headers | Response Body | Next Step | Error Handling |
+|------|--------|----------|--------|---------|---------------|-----------|----------------|
+| **1** | User Login | `/api/auth/login` | POST | Content-Type, Authorization | `{ token, refresh_token, expires_in }` | Store tokens | Invalid credentials |
+| **2** | Token Validation | `/api/auth/validate` | GET | Authorization: Bearer | `{ valid, user_id, permissions }` | Access resource | Invalid token |
+| **3** | Refresh Token | `/api/auth/refresh` | POST | Refresh Token | `{ token, refresh_token }` | Update tokens | Expired refresh |
+| **4** | Resource Access | Any API | GET/POST/PUT/DELETE | Authorization: Bearer | Resource data | Complete | Insufficient permissions |
+| **5** | Logout | `/api/auth/logout` | POST | Authorization | `{ success: true }` | Clear tokens | Invalid session |
+
+### Permission Scopes
+
+| Scope | Description | Access Level | Required Role | Rate Limit | Cost | Audit Required |
+|-------|-------------|--------------|---------------|------------|------|----------------|
+| `read:health` | Read system health | Read-only | Viewer | 1000/hr | Free | No |
+| `read:risk` | Read risk assessments | Read-only | Analyst | 200/hr | $0.05 | Yes |
+| `write:risk` | Create risk assessments | Write | Analyst | 100/hr | $0.10 | Yes |
+| `admin:config` | Modify system config | Admin | Admin | 10/hr | $1.00 | Yes |
+| `admin:users` | Manage user accounts | Admin | Super Admin | 5/hr | $2.00 | Yes |
+| `audit:read` | Read audit logs | Read-only | Auditor | 50/hr | $0.50 | Yes |
+| `analytics:read` | Access analytics | Read-only | Business User | 100/hr | $0.20 | No |
+| `proxy:detect` | Use proxy detection | Write | Security Analyst | 25/hr | $0.30 | Yes |
+| `realtime:monitor` | WebSocket access | Read-only | Monitor | 10/min | $0.25 | Yes |
+| `system:admin` | Full system access | Admin | Super Admin | Unlimited | $5.00 | Yes |
 
 ## Endpoints
 
@@ -451,6 +481,50 @@ interface ProxyDetectionResult {
 
 ## SDK Examples
 
+### SDK & Client Library Matrix
+
+| Language | Library Name | Version | Package Manager | Size (KB) | Dependencies | TypeScript Support | Async/Await | WebSocket | Testing | Documentation Quality | Maintenance Status |
+|----------|--------------|---------|----------------|-----------|--------------|-------------------|-------------|-----------|----------|---------------------|-------------------|
+| **TypeScript** | @windsurf/sdk | 1.0.0 | npm/yarn | 45 | 2 | ✅ Native | ✅ | ✅ | ✅ Jest | ⭐⭐⭐⭐⭐ | Active |
+| **JavaScript** | windsurf-js | 1.0.0 | npm/yarn | 40 | 2 | ✅ Types | ✅ | ✅ | ✅ Mocha | ⭐⭐⭐⭐ | Active |
+| **Python** | windsurf-python | 1.0.0 | pip | 35 | 3 | ✅ Typing | ✅ | ✅ | ✅ pytest | ⭐⭐⭐⭐⭐ | Active |
+| **Java** | windsurf-java | 1.0.0 | Maven/Gradle | 120 | 5 | ✅ Types | ✅ | ✅ | ✅ JUnit | ⭐⭐⭐⭐ | Active |
+| **Go** | windsurf-go | 1.0.0 | go mod | 25 | 1 | N/A | ✅ | ✅ | ✅ testing | ⭐⭐⭐⭐ | Active |
+| **Ruby** | windsurf-ruby | 1.0.0 | gem | 30 | 2 | ✅ Sorbet | ✅ | ✅ | ✅ RSpec | ⭐⭐⭐ | Beta |
+| **PHP** | windsurf-php | 0.9.0 | Composer | 40 | 3 | ✅ Types | ✅ | ✅ | ✅ PHPUnit | ⭐⭐⭐ | Beta |
+| **C#** | windsurf-dotnet | 1.0.0 | NuGet | 85 | 4 | ✅ Types | ✅ | ✅ | ✅ xUnit | ⭐⭐⭐⭐ | Active |
+| **Rust** | windsurf-rs | 0.8.0 | cargo | 20 | 1 | N/A | ✅ | ✅ | ✅ cargo test | ⭐⭐⭐ | Alpha |
+| **Swift** | windsurf-swift | 0.5.0 | Swift PM | 35 | 2 | ✅ Types | ✅ | ✅ | ✅ XCTest | ⭐⭐ | Alpha |
+
+### SDK Feature Comparison
+
+| Feature | TypeScript | Python | Java | Go | Ruby | PHP | C# | Rust | Swift |
+|---------|------------|--------|------|----|------|-----|----|-----|-------|
+| **Risk Scoring** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Batch Processing** | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ✅ | ✅ | 🟡 |
+| **WebSocket Support** | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ✅ | ✅ | 🟡 |
+| **Proxy Detection** | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ❌ |
+| **Analytics API** | ✅ | ✅ | ✅ | ✅ | 🟡 | ❌ | ✅ | ✅ | ❌ |
+| **Retry Logic** | ✅ | ✅ | ✅ | ✅ | ✅ | 🟡 | ✅ | ✅ | 🟡 |
+| **Rate Limiting** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Caching** | ✅ | ✅ | ✅ | 🟡 | 🟡 | ❌ | ✅ | 🟡 | ❌ |
+| **Metrics** | ✅ | ✅ | ✅ | 🟡 | 🟡 | ❌ | ✅ | 🟡 | ❌ |
+| **Logging** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+### Installation Guide
+
+| Language | Install Command | Quick Start | Dependencies | Setup Time |
+|----------|-----------------|-------------|--------------|------------|
+| **TypeScript** | `npm install @windsurf/sdk` | 5 lines | Node.js 18+ | < 1 minute |
+| **Python** | `pip install windsurf-python` | 4 lines | Python 3.8+ | < 30 seconds |
+| **Java** | `mvn install windsurf-java` | 8 lines | Java 11+ | 2 minutes |
+| **Go** | `go get github.com/windsurf/go` | 6 lines | Go 1.19+ | < 1 minute |
+| **Ruby** | `gem install windsurf-ruby` | 5 lines | Ruby 2.7+ | < 45 seconds |
+| **PHP** | `composer require windsurf/php` | 7 lines | PHP 8.0+ | 2 minutes |
+| **C#** | `dotnet add package windsurf-dotnet` | 6 lines | .NET 6+ | 1 minute |
+| **Rust** | `cargo install windsurf-rs` | 8 lines | Rust 1.70+ | 3 minutes |
+| **Swift** | `swift package-add windsurf-swift` | 7 lines | Swift 5.7+ | 2 minutes |
+
 ### TypeScript/JavaScript
 
 ```typescript
@@ -516,6 +590,55 @@ bun run cli/risk-hunter.ts report --since 24h --output json
 | **Async Processing** | High | High | High | Per feature | Queue system | Queue depth |
 | **Database Sharding** | Very High | Very High | High | One-time | Architecture | Shard balance |
 | **Edge Computing** | High | High | High | Per region | Edge provider | Geographic latency |
+
+## Monitoring & Observability
+
+### Monitoring Metrics Matrix
+
+| Metric Category | Metric Name | Type | Unit | Collection Frequency | Retention | Alert Threshold | Dashboard | SLA Impact | Cost | Export Available |
+|-----------------|-------------|------|------|---------------------|-----------|-----------------|-----------|------------|------|-----------------|
+| **Performance** | Response Time | Gauge | Milliseconds | 1 second | 30 days | > 1000ms | Main Dashboard | High | Included | Prometheus |
+| | Request Rate | Counter | Requests/sec | 1 second | 30 days | < 10 req/s | Main Dashboard | Medium | Included | Prometheus |
+| | Error Rate | Counter | Percentage | 1 second | 30 days | > 5% | Main Dashboard | High | Included | Prometheus |
+| | P95 Latency | Histogram | Milliseconds | 1 second | 30 days | > 500ms | Performance Dashboard | Medium | Included | Prometheus |
+| **Business** | Fraud Detections | Counter | Count | Real-time | 90 days | < 1/hour | Business Dashboard | High | Included | BigQuery |
+| | Risk Score Distribution | Histogram | Score | Real-time | 90 days | N/A | Business Dashboard | Medium | Included | BigQuery |
+| | Blocked Sessions | Counter | Count | Real-time | 90 days | N/A | Security Dashboard | High | Included | BigQuery |
+| | Merchant Activity | Gauge | Active merchants | 1 minute | 90 days | < 10 | Business Dashboard | Medium | Included | BigQuery |
+| **Infrastructure** | CPU Usage | Gauge | Percentage | 10 seconds | 7 days | > 80% | Infrastructure Dashboard | High | Included | Prometheus |
+| | Memory Usage | Gauge | Percentage | 10 seconds | 7 days | > 85% | Infrastructure Dashboard | High | Included | Prometheus |
+| | Disk I/O | Counter | IOPS | 10 seconds | 7 days | > 1000 IOPS | Infrastructure Dashboard | Medium | Included | Prometheus |
+| | Network Traffic | Counter | Bytes/sec | 10 seconds | 7 days | > 1GB/s | Infrastructure Dashboard | Medium | Included | Prometheus |
+| **Security** | Failed Auth Attempts | Counter | Count | Real-time | 90 days | > 100/min | Security Dashboard | High | Included | SIEM |
+| | Rate Limit Hits | Counter | Count | Real-time | 90 days | > 1000/min | Security Dashboard | Medium | Included | SIEM |
+| | Suspicious IPs | Gauge | Count | 1 minute | 30 days | > 50 | Security Dashboard | High | Included | SIEM |
+| | Anomaly Score | Gauge | Score | Real-time | 90 days | > 0.8 | Security Dashboard | High | Included | SIEM |
+
+### Alerting Configuration
+
+| Alert Name | Severity | Condition | Duration | Notification Channels | Escalation Policy | Runbook | Cost | MTTR Target |
+|------------|----------|-----------|----------|---------------------|------------------|---------|------|-------------|
+| **High Error Rate** | Critical | Error Rate > 5% | 5 minutes | Slack, PagerDuty, Email | 15 min → Manager → Director | Error Response Playbook | $50/month | 15 minutes |
+| **High Latency** | Warning | P95 Latency > 500ms | 10 minutes | Slack, Email | 30 min → Manager | Performance Tuning Guide | $20/month | 30 minutes |
+| **Service Down** | Critical | Health Check Failed | 1 minute | PagerDuty, Phone Call | Immediate → On-call | Service Recovery Guide | $100/month | 5 minutes |
+| **Security Breach** | Critical | Failed Auth > 100/min | 2 minutes | PagerDuty, Security Team | Immediate → CISO | Security Incident Plan | $200/month | 10 minutes |
+| **Resource Exhaustion** | Warning | CPU > 80% | 15 minutes | Slack, Email | 30 min → DevOps | Resource Scaling Guide | $30/month | 45 minutes |
+| **Rate Limit Exceeded** | Warning | Rate Limit Hits > 1000/min | 5 minutes | Slack, Email | 15 min → API Team | Rate Limit Adjustment | $25/month | 20 minutes |
+| **Fraud Spike** | High | Fraud Detections > 100/hour | 10 minutes | Slack, Security Team | 30 min → Fraud Team | Fraud Investigation Guide | $75/month | 25 minutes |
+| **Data Quality Issue** | Medium | Data Validation Failures | 30 minutes | Slack, Email | 1 hour → Data Team | Data Quality Playbook | $40/month | 60 minutes |
+
+### Logging Strategy
+
+| Log Level | Type | Format | Retention | Indexing | Cost | Access Control | Analytics | Compliance |
+|-----------|------|--------|-----------|----------|------|----------------|-----------|------------|
+| **DEBUG** | Application | JSON | 7 days | Full | $10/month | Dev Team | Debugging | Development |
+| **INFO** | Application | JSON | 30 days | Full | $25/month | All Teams | Basic Analytics | Operational |
+| **WARN** | Application | JSON | 90 days | Full | $40/month | All Teams | Trend Analysis | Operational |
+| **ERROR** | Application | JSON | 1 year | Full | $60/month | All Teams | Error Analysis | SOX |
+| **AUDIT** | Security | Immutable JSON | 7 years | Full | $150/month | Security Team | Forensics | SOX, HIPAA |
+| **ACCESS** | Security | Immutable JSON | 3 years | Full | $100/month | Security Team | Access Patterns | GDPR, CCPA |
+| **PERFORMANCE** | Metrics | JSON | 90 days | Partial | $35/month | DevOps | Performance Tuning | Operational |
+| **BUSINESS** | Business | JSON | 2 years | Full | $80/month | Business Teams | Business Intelligence | Financial |
 
 ## Security Notes
 
