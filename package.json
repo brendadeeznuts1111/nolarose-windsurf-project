@@ -41,8 +41,16 @@
 		"demo:shallow": "bun --console-depth 1 run simple-demo.js",
 		"demo:default": "bun --console-depth 2 run simple-demo.js",
 		"demo:deep": "bun --console-depth 4 run simple-demo.js",
-		"demo:depth-10": "bun --console-depth 10 run deep-demo.js",
-		"demo:depth-comparison": "echo '=== Console Depth Comparison ===' && echo 'Depth 1:' && bun --console-depth 1 run simple-demo.js && echo '' && echo 'Depth 2 (default):' && bun --console-depth 2 run simple-demo.js && echo '' && echo 'Depth 4:' && bun --console-depth 4 run simple-demo.js && echo '' && echo 'Depth 10:' && bun --console-depth 10 run deep-demo.js"
+    "demo:depth-10": "bun --console-depth 10 run deep-demo.js",
+    "demo:depth-0": "bun --console-depth 0 run console-depth-demo.js",
+    "demo:depth-1": "bun --console-depth 1 run console-depth-demo.js",
+    "demo:depth-2": "bun --console-depth 2 run console-depth-demo.js",
+    "demo:depth-3": "bun --console-depth 3 run console-depth-demo.js",
+    "demo:depth-4": "bun --console-depth 4 run console-depth-demo.js",
+    "demo:depth-5": "bun --console-depth 5 run console-depth-demo.js",
+    "demo:depth-7": "bun --console-depth 7 run console-depth-demo.js",
+    "demo:depth-all": "./test-depths.sh",
+    "demo:depth-comparison": "echo '=== Console Depth Comparison ===' && echo 'Depth 1:' && bun --console-depth 1 run simple-demo.js && echo '' && echo 'Depth 2 (default):' && bun --console-depth 2 run simple-demo.js && echo '' && echo 'Depth 4:' && bun --console-depth 4 run simple-demo.js && echo '' && echo 'Depth 10:' && bun --console-depth 10 run deep-demo.js"
 	},
 	"keywords": [
 		"fraud-detection",
