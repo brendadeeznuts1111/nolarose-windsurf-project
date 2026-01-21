@@ -2,7 +2,7 @@
 // Advanced proxy detection with hop counting and geolocation analysis
 // Multi-hop proxy identification and traffic pattern analysis
 
-import { FeatureVector } from "../ai/anomaly-predict";
+import { type FeatureVector } from "../ai/anomaly-predict";
 
 // Proxy detection configuration
 export interface ProxyDetectionConfig {
@@ -170,14 +170,14 @@ export class ProxyDetector {
       const hopData = simulatedHops[hopIndex];
       const hop: ProxyHop = {
         hopNumber: hopIndex + 1,
-        ipAddress: hopData.ip,
-        hostname: hopData.hostname,
-        asn: hopData.asn,
-        organization: hopData.organization,
-        country: hopData.country,
-        latency: hopData.latency,
-        isKnownProxy: this.isKnownProxyIP(hopData.ip),
-        riskScore: this.calculateHopRiskScore(hopData)
+        ipAddress: hopData?.ip || '',
+        hostname: hopData?.hostname || '',
+        asn: hopData?.asn || '',
+        organization: hopData?.organization || '',
+        country: hopData?.country || '',
+        latency: hopData?.latency || 0,
+        isKnownProxy: this.isKnownProxyIP(hopData?.ip || ''),
+        riskScore: this.calculateHopRiskScore(hopData || {})
       };
       
       hops.push(hop);
@@ -236,22 +236,26 @@ export class ProxyDetector {
     let impossibleVelocity = false;
     
     for (let hopIndex = 0; hopIndex < hops.length; hopIndex++) {
-      if (hops[hopIndex].country) {
-        countries.add(hops[hopIndex].country);
+      const currentHop = hops[hopIndex];
+      if (currentHop?.country) {
+        countries.add(currentHop.country);
       }
       
       // Calculate distance between consecutive hops
-      if (hopIndex > 0 && hops[hopIndex-1].country && hops[hopIndex].country) {
-        const distance = this.calculateDistance(
-          hops[hopIndex-1].country || 'US',
-          hops[hopIndex].country || 'US'
-        );
-        totalDistance += distance;
-        
-        // Check for impossible velocity
-        const timeDiff = (hops[hopIndex].latency - hops[hopIndex-1].latency) / 1000; // Convert to seconds
-        if (timeDiff > 0 && distance / timeDiff > 800) { // 800 km/h threshold
-          impossibleVelocity = true;
+      if (hopIndex > 0) {
+        const previousHop = hops[hopIndex - 1];
+        if (previousHop?.country && currentHop?.country) {
+          const distance = this.calculateDistance(
+            previousHop.country || 'US',
+            currentHop.country || 'US'
+          );
+          totalDistance += distance;
+          
+          // Check for impossible velocity
+          const timeDiff = (currentHop.latency - previousHop.latency) / 1000; // Convert to seconds
+          if (timeDiff > 0 && distance / timeDiff > 800) { // 800 km/h threshold
+            impossibleVelocity = true;
+          }
         }
       }
     }
@@ -378,7 +382,7 @@ export class ProxyDetector {
   private async trackDNSPatterns(sessionId: string): Promise<DNSTracking> {
     // Simulated DNS tracking (would integrate with DNS monitoring in production)
     const queryPatterns = [`session-${sessionId}`, `api-${sessionId}`, `auth-${sessionId}`];
-    const suspiciousDomains = [];
+    const suspiciousDomains: string[] = [];
     const dnsOverHttps = Math.random() > 0.7;
     const dnsEncryption = Math.random() > 0.6;
     const isSuspicious = suspiciousDomains.length > 0 || !dnsEncryption;
@@ -505,7 +509,7 @@ export class ProxyDetector {
       factors.push('Bot-like traffic patterns');
     }
     
-    if (trafficAnalysis?.headerAnomalies.length > 0) {
+    if (trafficAnalysis?.headerAnomalies?.length > 0) {
       factors.push(`${trafficAnalysis.headerAnomalies.length} header anomalies`);
     }
     
@@ -599,6 +603,3 @@ export class ProxyDetector {
 
 // Export singleton instance
 export const proxyDetector = new ProxyDetector();
-
-// Export types for external use
-export type { ProxyDetectionConfig, ProxyHop, ProxyDetectionResult, TrafficPattern, DNSTracking };

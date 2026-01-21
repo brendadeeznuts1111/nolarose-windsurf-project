@@ -138,10 +138,10 @@ AIBenchRunner.bench("Fraud Detection Accuracy Test", async () => {
     }
   }
   
-  const accuracy = ((results.total_tests - results.legitimate_blocked - results.fraudulent_allowed) / results.total_tests) * 100;
+  const accuracy = ((results.totalTests - results.falsePositives - results.falseNegatives) / results.totalTests) * 100;
   console.log(`📊 Accuracy: ${accuracy.toFixed(1)}%`);
-  console.log(`   False Positives: ${results.legitimate_blocked}`);
-  console.log(`   False Negatives: ${results.fraudulent_allowed}`);
+  console.log(`   False Positives: ${results.falsePositives}`);
+  console.log(`   False Negatives: ${results.falseNegatives}`);
 });
 
 // Benchmark: Real-time Onboarding Analysis
