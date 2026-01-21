@@ -6,14 +6,14 @@ import { EnhancedNetworkOptimizer } from "../ai/enhanced-network-optimizer.ts";
 import { RealTimeFraudDetector } from "../ai/realtime-fraud-detector.ts";
 
 interface FraudSignal {
-  id: string;
   eventId: string;
   score: number;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "low" | "medium" | "high" | "critical";
+  confidence: number;
   factors: string[];
-  recommendations: string[];
-  requiresAction: boolean;
   timestamp: number;
+  requiresAction: boolean;
+  recommendations: string[];
 }
 
 interface AnalyticsData {
