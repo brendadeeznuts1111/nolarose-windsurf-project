@@ -109,7 +109,7 @@ interface SecurityRule {
 }
 
 interface SecurityAction {
-	type: "block" | "alert" | "log" | "quarantine" | "escalate";
+	type: "block" | "alert" | "log" | "quarantine" | "escalate" | "encrypt";
 	parameters: Record<string, any>;
 }
 

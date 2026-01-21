@@ -399,18 +399,14 @@ class EnhancedNetworkOptimizer {
 	}
 
 	private updateCachePatterns(key: string): void {
-		// Extract host pattern from cache key
-		const hostMatch = key.match(/https?:\/\/([^/]+)/);
-		if (hostMatch && hostMatch[1]) {
-			const hostname = hostMatch[1];
-			const currentFrequency =
-				this.predictiveModel.hostPatterns.get(hostname) || 0;
-			this.predictiveModel.hostPatterns.set(
-				hostname,
-				Math.min(1.0, currentFrequency + 0.01),
-			);
-		}
-	}
+    // Extract host pattern from cache key
+    const hostMatch = key.match(/https?:\/\/([^\/]+)/);
+    if (hostMatch?.[1]) {
+      const hostname = hostMatch[1];
+      const currentFrequency = this.predictiveModel.hostPatterns.get(hostname) || 0;
+      this.predictiveModel.hostPatterns.set(hostname, Math.min(1.0, currentFrequency + 0.01));
+    }
+  }
 
 	private updatePredictionAccuracy(): void {
 		// Calculate prediction accuracy based on preconnection success

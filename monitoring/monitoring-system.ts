@@ -688,17 +688,15 @@ class MonitoringAlertingSystem {
 	}
 
 	public getCurrentMetrics(): SystemMetrics | null {
-		return this.metrics.length > 0
-			? this.metrics[this.metrics.length - 1]
-			: null;
-	}
+    return this.metrics.length > 0 ? this.metrics[this.metrics.length - 1] : null;
+  }
 
-	public getMetrics(timeRange?: number): SystemMetrics[] {
-		if (!timeRange) return [...this.metrics];
+  public getMetrics(timeRange?: number): SystemMetrics[] {
+    if (!timeRange) return [...this.metrics];
 
-		const cutoff = Date.now() - timeRange;
-		return this.metrics.filter((m) => m.timestamp >= cutoff);
-	}
+    const cutoff = Date.now() - timeRange;
+    return this.metrics.filter(m => m.timestamp >= cutoff);
+  }
 
 	public getHealthStatus(): Map<string, HealthCheck> {
 		return new Map(this.healthChecks);

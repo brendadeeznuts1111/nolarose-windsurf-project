@@ -5,6 +5,17 @@ import { EnhancedAIModel } from "../ai/enhanced-ai-model.ts";
 import { EnhancedNetworkOptimizer } from "../ai/enhanced-network-optimizer.ts";
 import { RealTimeFraudDetector } from "../ai/realtime-fraud-detector.ts";
 
+interface FraudSignal {
+  id: string;
+  eventId: string;
+  score: number;
+  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  factors: string[];
+  recommendations: string[];
+  requiresAction: boolean;
+  timestamp: number;
+}
+
 interface AnalyticsData {
 	timestamp: number;
 	fraudScore: number;
@@ -351,24 +362,24 @@ class EnhancedCLI {
 	}
 
 	private async displayModelAnalytics(): Promise<void> {
-		console.log("\n🤖 MODEL ANALYTICS");
-		console.log("------------------");
-
-		const modelStatus = this.aiModel.getModelStatus();
-
-		// Ensemble Model Performance
-		console.log("\n📊 Ensemble Model Performance:");
-		const modelPerformance = modelStatus.models.map((model: any) => ({
-			Model: model.type.replace("_", " ").toUpperCase(),
-			Weight: model.weight.toFixed(2),
-			Accuracy: `${(model.performance.accuracy * 100).toFixed(1)}%`,
-			Precision: `${(model.performance.precision * 100).toFixed(1)}%`,
-			Recall: `${(model.performance.recall * 100).toFixed(1)}%`,
-			"F1 Score": `${(model.performance.f1Score * 100).toFixed(1)}%`,
-			Latency: `${model.performance.latency.toFixed(1)}ms`,
-			Status: model.isActive ? "🟢 Active" : "⭕ Inactive",
-		}));
-		console.table(modelPerformance);
+    console.log('\n🤖 MODEL ANALYTICS');
+    console.log('------------------');
+    
+    const modelStatus = this.aiModel.getModelStatus();
+    
+    // Ensemble Model Performance
+    console.log('\n📊 Ensemble Model Performance:');
+    const modelPerformance = modelStatus?.models?.map((model: any) => ({
+      'Model': model?.type?.replace('_', ' ')?.toUpperCase() || 'UNKNOWN',
+      'Weight': model?.weight?.toFixed(2) || '0.00',
+      'Accuracy': `${(model?.performance?.accuracy * 100 || 0).toFixed(1)}%`,
+      'Precision': `${(model?.performance?.precision * 100 || 0).toFixed(1)}%`,
+      'Recall': `${(model?.performance?.recall * 100 || 0).toFixed(1)}%`,
+      'F1 Score': `${(model?.performance?.f1Score * 100 || 0).toFixed(1)}%`,
+      'Latency': `${model?.performance?.latency?.toFixed(1) || '0'}ms`,
+      'Status': model?.isActive ? '🟢 Active' : '⭕ Inactive'
+    })) || [];
+    console.table(modelPerformance);
 
 		// Learning Metrics
 		console.log("\n🧠 Learning Metrics:");

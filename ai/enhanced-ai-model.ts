@@ -358,14 +358,14 @@ class EnhancedAIModel {
 			recommendations.push("Consider step-up authentication");
 		}
 
-		// Feature-specific recommendations
-		if (features.root_detected) {
+		// Feature-specific recommendations with null checks
+		if (features?.root_detected) {
 			recommendations.push("Device root access detected - high security risk");
 		}
-		if (features.vpn_active) {
+		if (features?.vpn_active) {
 			recommendations.push("VPN usage detected - verify identity");
 		}
-		if (features.thermal_spike && features.thermal_spike > 0.8) {
+		if (features?.thermal_spike && features.thermal_spike > 0.8) {
 			recommendations.push("Unusual device temperature - possible tampering");
 		}
 
