@@ -582,6 +582,27 @@ export interface ComparisonMetrics {
 }
 
 /**
+ * Model configuration interface
+ */
+export interface ModelConfig {
+  readonly algorithm: ModelType;
+  readonly parameters: Record<string, any>;
+  readonly hyperparameters: Record<string, any>;
+  readonly features: string[];
+  readonly target: string;
+  readonly validation: ValidationConfig;
+}
+
+/**
+ * Validation configuration
+ */
+export interface ValidationConfig {
+  readonly validationSplit: number;
+  readonly crossValidationFolds: number;
+  readonly metrics: TrainingMetric[];
+}
+
+/**
  * Model export format
  */
 export interface ModelExport {

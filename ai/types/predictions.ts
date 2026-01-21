@@ -491,6 +491,15 @@ export type AlertType =
   | 'resource-exhaustion'
   | 'anomaly-detected';
 
+/**
+ * Alert severity levels
+ */
+export type AlertSeverity = 
+  | 'info'
+  | 'warning'
+  | 'error'
+  | 'critical';
+
 // ============================================================================
 // EXPORT TYPES
 // ============================================================================
