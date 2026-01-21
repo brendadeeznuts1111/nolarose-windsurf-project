@@ -276,7 +276,6 @@ class AnomalyPredictionModel {
 // HTTP/WebSocket server
 const server = serve({
   port: process.env.PORT ? parseInt(process.env.PORT) : 3051,
-  hostname: process.env.HOST || 'localhost',
   fetch(req: Request, server: Server<any>) {
     const url = new URL(req.url);
     
@@ -368,10 +367,6 @@ const server = serve({
     close(ws: ServerWebSocket<any>) {
       websocketClients.delete(ws);
       console.log(`❌ WebSocket client disconnected. Total: ${websocketClients.size}`);
-    },
-    error(ws: ServerWebSocket<any>, error: Error) {
-      console.error("WebSocket error:", error);
-      websocketClients.delete(ws);
     }
   }
 });
