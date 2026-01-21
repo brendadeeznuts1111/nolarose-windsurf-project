@@ -212,7 +212,6 @@ const benchmarkAlgorithms = (algorithms) => {
 - [VS Code Snippets](../.vscode/bun-table-snippets.code-snippets)
 - [Bun Documentation](https://bun.sh/docs)
 - [Enhanced Fraud Detection System](../README.md)
-- [Performance Monitoring Guide](../docs/performance.md)
 
 ---
 
