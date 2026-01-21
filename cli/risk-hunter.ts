@@ -56,7 +56,8 @@ interface CLIOptions {
 		| "report"
 		| "test"
 		| "network"
-		| "external";
+		| "external"
+		| "matrix";
 	since?: string;
 	parseSince?: string;
 	threshold?: number;
