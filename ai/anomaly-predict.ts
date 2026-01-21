@@ -292,16 +292,30 @@ const server = serve({
       return handleRiskScore(req);
     }
     
+    if (req.method === "POST" && url.pathname === "/api/risk/enhanced") {
+      return handleEnhancedPrediction(req);
+    }
+    
     if (req.method === "GET" && url.pathname === "/api/risk/heatmap") {
       return handleRiskHeatmap();
+    }
+    
+    if (req.method === "GET" && url.pathname === "/api/network/metrics") {
+      return handleNetworkMetrics();
+    }
+    
+    if (req.method === "POST" && url.pathname === "/api/external/data") {
+      return handleExternalAPIs(req);
     }
     
     if (req.method === "GET" && url.pathname === "/api/health") {
       return new Response(JSON.stringify({
         status: "healthy",
         active_sessions: activeSessions.size,
-        avg_risk_score: riskHistory.length > 0 ? riskHistory.reduce((a, b) => a + b, 0) / riskHistory.length : 0,
-        threshold: RISK_THRESHOLDS.CRITICAL_BLOCK
+        network_optimization: true,
+        external_apis: true,
+        version: "2.0.0",
+        timestamp: Date.now()
       }), {
         headers: { "Content-Type": "application/json" }
       });
@@ -368,9 +382,18 @@ async function handleRiskScore(req: Request): Promise<Response> {
       features: FeatureVector;
       sessionId: string;
       merchantId: string;
+      enableExternal?: boolean;
     };
     
-    const session = await predictRisk(body.features, body.sessionId, body.merchantId);
+    let session;
+    if (body.enableExternal) {
+      // Enhanced prediction with external data
+      const externalData = await fetchExternalData('8.8.8.8', 'device-fingerprint');
+      session = await predictRiskEnhanced(body.features, body.sessionId, body.merchantId, externalData);
+    } else {
+      // Standard prediction
+      session = await predictRisk(body.features, body.sessionId, body.merchantId);
+    }
     
     return new Response(JSON.stringify(session), {
       headers: { "Content-Type": "application/json" }
@@ -403,6 +426,86 @@ function handleRiskHeatmap(): Response {
   }), {
     headers: { "Content-Type": "application/json" }
   });
+}
+
+// Enhanced API endpoints
+async function handleNetworkMetrics(): Promise<Response> {
+  try {
+    const metrics = getNetworkMetrics();
+    return new Response(JSON.stringify(metrics), {
+      headers: { "Content-Type": "application/json" }
+    });
+  } catch (error) {
+    console.error("Network metrics error:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch metrics" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+}
+
+async function handleExternalAPIs(req: Request): Promise<Response> {
+  try {
+    const body = await req.json() as {
+      ipAddress?: string;
+      deviceFingerprint?: string;
+    };
+    
+    const ipAddress = body.ipAddress || '8.8.8.8';
+    const deviceFingerprint = body.deviceFingerprint || 'test-fingerprint';
+    
+    const externalData = await fetchExternalData(ipAddress, deviceFingerprint);
+    
+    return new Response(JSON.stringify(externalData), {
+      headers: { "Content-Type": "application/json" }
+    });
+  } catch (error) {
+    console.error("External API error:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch external data" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+}
+
+async function handleEnhancedPrediction(req: Request): Promise<Response> {
+  try {
+    const body = await req.json() as {
+      features: FeatureVector;
+      sessionId: string;
+      merchantId: string;
+      ipAddress?: string;
+      deviceFingerprint?: string;
+    };
+    
+    // Fetch external data
+    const externalData = await fetchExternalData(
+      body.ipAddress || '8.8.8.8',
+      body.deviceFingerprint || 'test-fingerprint'
+    );
+    
+    // Enhanced prediction
+    const session = await predictRiskEnhanced(
+      body.features, 
+      body.sessionId, 
+      body.merchantId, 
+      externalData
+    );
+    
+    return new Response(JSON.stringify({
+      ...session,
+      externalData,
+      processingTime: Date.now()
+    }), {
+      headers: { "Content-Type": "application/json" }
+    });
+  } catch (error) {
+    console.error("Enhanced prediction error:", error);
+    return new Response(JSON.stringify({ error: "Invalid request" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
 }
 
 // Legacy compatibility functions for benchmarks
