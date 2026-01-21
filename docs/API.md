@@ -2,13 +2,48 @@
 
 ## Overview
 
-The Windsurf Project provides a comprehensive fraud detection API with real-time monitoring capabilities. This document describes the available endpoints, data structures, and usage examples.
+The Windsurf Project provides a comprehensive fraud detection API with real-time monitoring capabilities, network optimization, and enterprise-grade configuration management. This document describes the available endpoints, data structures, and usage examples.
 
 ## Base URL
 
 ```
-http://localhost:3001
+http://0.0.0.0:3051
 ```
+
+**Dynamic Configuration:**
+- **Port**: Configurable via `PORT`, `BUN_PORT`, or `NODE_PORT` environment variables
+- **Hostname**: Configurable via `HOST` environment variable (default: `0.0.0.0`)
+- **Server Properties**: Accessible via `server.port` and `server.url` (Bun compliant)
+
+## Enhanced Features
+
+### Network Optimization & External API Integration
+
+The API now includes advanced network optimization and external intelligence integration:
+
+- **Preconnect Connections**: Early DNS, TCP, TLS setup for reduced latency
+- **Connection Pooling**: HTTP keep-alive and connection reuse
+- **Batch Fetch**: Parallel API calls with retry logic
+- **External Intelligence**: 12+ third-party APIs for enhanced fraud detection
+- **Performance Metrics**: Real-time network performance monitoring
+
+### Matrix Configuration System
+
+Enterprise-grade configuration with comprehensive property matrix columns:
+
+#### **Feature Matrix Columns:**
+1. **Basic Properties**: `name`, `weight`, `threshold`, `description`, `impact`
+2. **Data Characteristics**: `data_type`, `collection_method`, `refresh_rate`, `reliability`, `cost`
+3. **Privacy & Compliance**: `privacy_level`, `retention_days`, `gdpr_sensitive`, `pci_required`, `hipaa_phi`
+4. **Engineering**: `normalization`, `encoding`, `validation`, `drift_detection`
+5. **Performance**: `importance_score`, `feature_correlation`, `stability_index`, `latency_ms`
+6. **Business**: `business_impact`, `cost_benefit_ratio`, `risk_contribution`, `regulatory_flag`
+
+#### **Ensemble Models Matrix:**
+- **Model Info**: `name`, `type`, `version`, `accuracy`, `specialization`
+- **Performance**: `inference_time_ms`, `memory_mb`, `cpu_usage`, `gpu_required`
+- **Training**: `dataset_size`, `training_time_hours`, `last_retrained`, `validation_accuracy`
+- **Deployment**: `scaling_factor`, `cost_per_1000_predictions`, `sla_requirement`, `regions`
 
 ## Authentication
 
@@ -69,6 +104,197 @@ http://localhost:3001
 | **POST** | `/api/admin/config` | Admin | Yes | 5/hr | 10KB | 2KB | No | v1.0 | Stable | Config Store | 5s | 1 attempt | Configuration |
 | **GET** | `/api/audit/logs` | Audit | Yes | 15/hr | N/A | 500KB | 1h | v1.0 | Stable | Audit DB | 20s | Exponential | Audit review |
 | **WebSocket** | `/ws/risk-live` | Real-time | Yes | 10/min | N/A | Stream | No | v1.0 | Stable | Event System | N/A | Auto-reconnect | Live monitoring |
+| **POST** | `/api/risk/enhanced` | Risk | Yes | 100/hr | 5KB | 2KB | No | v2.0 | Stable | ML Engine | 10ms | 2 attempts | Enhanced risk scoring |
+| **GET** | `/api/network/metrics` | Monitoring | Yes | 60/hr | N/A | 10KB | 30s | v2.0 | Stable | Network Monitor | 5s | Exponential | Network performance |
+| **POST** | `/api/external/data` | External | Yes | 50/hr | 10KB | 15KB | No | v2.0 | Beta | External APIs | 15s | 3 attempts | External intelligence |
+
+### Enhanced Risk Scoring (v2.0)
+
+Calculate enhanced fraud risk score with external API integration and network optimization.
+
+```http
+POST /api/risk/enhanced
+```
+
+**Request Body:**
+```json
+{
+  "sessionId": "session-123",
+  "merchantId": "merchant-456",
+  "features": {
+    "root_detected": 0,
+    "vpn_active": 1,
+    "thermal_spike": 15.2,
+    "biometric_fail": 2,
+    "proxy_hop_count": 3
+  },
+  "enableExternalAPIs": true,
+  "networkOptimization": true,
+  "externalSources": [
+    "device_intelligence",
+    "geolocation",
+    "threat_intelligence",
+    "identity_verification"
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "sessionId": "session-123",
+  "merchantId": "merchant-456",
+  "riskScore": 0.947,
+  "riskLevel": "critical",
+  "blocked": true,
+  "reason": "High-risk external intelligence match",
+  "timestamp": "2024-01-21T16:45:00Z",
+  "features": {
+    "root_detected": { "value": 0, "weight": 0.28, "impact": "none" },
+    "vpn_active": { "value": 1, "weight": 0.22, "impact": "high" },
+    "thermal_spike": { "value": 15.2, "weight": 0.15, "impact": "medium" },
+    "biometric_fail": { "value": 2, "weight": 0.18, "impact": "high" },
+    "proxy_hop_count": { "value": 3, "weight": 0.17, "impact": "high" }
+  },
+  "externalData": {
+    "device_intelligence": { "risk_score": 0.89, "compromised": false },
+    "geolocation": { "suspicious": true, "velocity": 1200 },
+    "threat_intelligence": { "blacklisted": false, "reputation": 0.92 },
+    "identity_verification": { "verified": false, "confidence": 0.67 }
+  },
+  "networkMetrics": {
+    "totalLatency": 45,
+    "apiCallCount": 4,
+    "successRate": 1.0,
+    "optimizationEnabled": true
+  },
+  "modelConfig": {
+    "threshold": 0.92,
+    "ensemble_weight": 0.85,
+    "external_weight": 0.15
+  }
+}
+```
+
+### Network Performance Metrics
+
+Get real-time network performance and optimization metrics.
+
+```http
+GET /api/network/metrics
+```
+
+**Response:**
+```json
+{
+  "timestamp": "2024-01-21T16:45:00Z",
+  "performance": {
+    "averageLatency": 23.5,
+    "successRate": 0.987,
+    "totalRequests": 1247,
+    "activeConnections": 12,
+    "optimizationEnabled": true
+  },
+  "externalAPIs": {
+    "device_intelligence": {
+      "latency": 18,
+      "successRate": 0.995,
+      "requests": 342,
+      "errors": 2
+    },
+    "geolocation": {
+      "latency": 12,
+      "successRate": 1.0,
+      "requests": 298,
+      "errors": 0
+    },
+    "threat_intelligence": {
+      "latency": 31,
+      "successRate": 0.982,
+      "requests": 276,
+      "errors": 5
+    },
+    "identity_verification": {
+      "latency": 45,
+      "successRate": 0.967,
+      "requests": 331,
+      "errors": 11
+    }
+  },
+  "optimization": {
+    "preconnectEnabled": true,
+    "connectionPooling": true,
+    "batchFetchEnabled": true,
+    "retryAttempts": 3,
+    "backoffMultiplier": 2.0,
+    "cacheHitRate": 0.743
+  }
+}
+```
+
+### External API Testing
+
+Test external API connectivity and performance.
+
+```http
+POST /api/external/data
+```
+
+**Request Body:**
+```json
+{
+  "testEndpoints": [
+    "device_intelligence",
+    "geolocation", 
+    "threat_intelligence",
+    "identity_verification"
+  ],
+  "testData": {
+    "sessionId": "test-session-123",
+    "deviceId": "test-device-456",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0..."
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "testId": "test-789",
+  "timestamp": "2024-01-21T16:45:00Z",
+  "results": {
+    "device_intelligence": {
+      "status": "success",
+      "latency": 18,
+      "response": { "risk_score": 0.12, "device_type": "mobile" }
+    },
+    "geolocation": {
+      "status": "success", 
+      "latency": 12,
+      "response": { "country": "US", "city": "New York", "risk": "low" }
+    },
+    "threat_intelligence": {
+      "status": "success",
+      "latency": 31,
+      "response": { "blacklisted": false, "reputation": 0.94 }
+    },
+    "identity_verification": {
+      "status": "partial_success",
+      "latency": 45,
+      "response": { "verified": false, "confidence": 0.67 },
+      "warnings": ["Partial data available"]
+    }
+  },
+  "summary": {
+    "totalTests": 4,
+    "successful": 4,
+    "failed": 0,
+    "averageLatency": 26.5,
+    "totalDuration": 156
+  }
+}
+```
 
 ### Health Check
 

@@ -2,19 +2,21 @@
 
 ## Overview
 
-The AI module provides advanced fraud detection capabilities using machine learning models, real-time anomaly detection, and predictive analytics. This module is the core intelligence engine of the Windsurf fraud detection system.
+The AI module provides advanced fraud detection capabilities using machine learning models, real-time anomaly detection, and predictive analytics. This module is the core intelligence engine of the Windsurf fraud detection system, featuring enterprise-grade configuration management with comprehensive property matrix columns.
 
 ## Architecture
 
 ```
 ai/
 ├── README.md                    # This documentation
-├── anomaly-predict.ts           # Core prediction engine
+├── anomaly-predict.ts           # Core prediction engine with network optimization
+├── network-optimizer.ts         # Network performance optimization module
 ├── anomaly-bench.ts             # Performance benchmarking suite
-├── model-config.json            # Model configuration and weights
+├── model-config-enhanced.json   # Enhanced model configuration with matrix columns
+├── model-config.json            # Legacy model configuration
 ├── types/                       # TypeScript type definitions
-│   ├── models.ts               # Model interfaces
-│   ├── features.ts             # Feature vector types
+│   ├── models.ts               # Model interfaces and configurations
+│   ├── features.ts             # Feature vector types and metadata
 │   └── predictions.ts          # Prediction result types
 ├── models/                      # ML model implementations
 │   ├── ensemble.ts             # Ensemble model coordinator
@@ -30,23 +32,64 @@ ai/
 │   ├── performance-monitor.ts  # Performance tracking
 │   └── alerting.ts             # Alert system
 └── utils/                       # Utility functions
-    ├── math-utils.ts           # Mathematical utilities
-    ├── validation.ts           # Input validation
-    └── cache.ts                # Caching layer
+   ├── math-utils.ts           # Mathematical utilities
+   ├── validation.ts           # Input validation
+   └── cache.ts                # Caching layer
 ```
 
 ## Core Components
 
 ### 1. Anomaly Prediction Engine (`anomaly-predict.ts`)
 
-The main prediction engine that orchestrates multiple ML models to provide real-time fraud risk scores.
+The main prediction engine that orchestrates multiple ML models to provide real-time fraud risk scores with network optimization and external API integration.
 
 **Key Features:**
 - Real-time risk scoring (< 10ms latency)
 - Ensemble model approach for higher accuracy
+- Network optimization with preconnect and connection pooling
+- External API integration for enhanced intelligence
 - WebSocket streaming for live predictions
 - Built-in caching and performance optimization
 - Comprehensive error handling and fallbacks
+- Dynamic port and hostname configuration (Bun server compliant)
+
+**API Endpoints:**
+- `POST /api/risk/score` - Standard risk scoring
+- `POST /api/risk/enhanced` - Enhanced scoring with external data
+- `GET /api/network/metrics` - Network performance metrics
+- `POST /api/external/data` - External API testing
+- `GET /api/health` - System health and status
+
+### 2. Network Optimizer (`network-optimizer.ts`)
+
+Advanced network performance optimization module for external API integration.
+
+**Features:**
+- Fetch preconnect for early connection setup
+- Connection pooling and HTTP keep-alive
+- Batch fetch with retry logic and exponential backoff
+- Real-time performance metrics and monitoring
+- Support for 12+ external intelligence APIs
+
+### 3. Enhanced Model Configuration (`model-config-enhanced.json`)
+
+Enterprise-grade configuration with comprehensive property matrix columns.
+
+**Matrix Column Structure:**
+
+#### **Feature Matrix Columns:**
+1. **Basic Properties**: `name`, `weight`, `threshold`, `description`, `impact`
+2. **Data Characteristics**: `data_type`, `collection_method`, `refresh_rate`, `reliability`, `cost`
+3. **Privacy & Compliance**: `privacy_level`, `retention_days`, `gdpr_sensitive`, `pci_required`, `hipaa_phi`
+4. **Engineering**: `normalization`, `encoding`, `validation`, `drift_detection`
+5. **Performance**: `importance_score`, `feature_correlation`, `stability_index`, `latency_ms`
+6. **Business**: `business_impact`, `cost_benefit_ratio`, `risk_contribution`, `regulatory_flag`
+
+#### **Ensemble Models Matrix:**
+- **Model Info**: `name`, `type`, `version`, `accuracy`, `specialization`
+- **Performance**: `inference_time_ms`, `memory_mb`, `cpu_usage`, `gpu_required`
+- **Training**: `dataset_size`, `training_time_hours`, `last_retrained`, `validation_accuracy`
+- **Deployment**: `scaling_factor`, `cost_per_1000_predictions`, `sla_requirement`, `regions`
 
 **Performance Metrics:**
 - **Accuracy**: 97% target
