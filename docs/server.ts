@@ -17,7 +17,7 @@ interface PatternResult {
   matches: boolean;
   groups: string;
   hasRegExpGroups: boolean;
-  extracted: Record<string, string>;
+  extracted: Record<string, string | undefined>;
 }
 
 console.log(`🚀 Starting URLPattern Showcase Server...`);
