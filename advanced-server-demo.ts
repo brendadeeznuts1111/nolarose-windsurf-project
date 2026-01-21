@@ -155,9 +155,9 @@ const httpServer = Bun.serve({
   }
 });
 
-// Unix Domain Socket server for internal services
+// Unix Domain Socket server for internal services (using port 0 for random free TCP port)
 const unixServer = Bun.serve({
-  unix: config.unixSocket,
+  port: 0, // Random free TCP port instead of unix socket
   
   fetch(req) {
     const url = new URL(req.url);
@@ -173,8 +173,8 @@ const unixServer = Bun.serve({
     if (url.pathname === '/internal/metrics') {
       return Response.json({
         internalMetrics: securityMetrics,
-        socketType: 'unix-domain',
-        path: config.unixSocket
+        socketType: 'tcp-port', // Changed from unix-domain
+        port: unixServer.port // Return actual port
       });
     }
     
@@ -182,10 +182,9 @@ const unixServer = Bun.serve({
   }
 });
 
-// Abstract namespace socket for high-performance inter-process communication (Linux only)
-// On macOS, we'll use a regular Unix socket instead
+// Abstract namespace socket server (using port 0 for random free TCP port)
 const abstractServer = Bun.serve({
-  unix: process.platform === 'linux' ? config.abstractSocket : '/tmp/fraud-detection-abstract.sock',
+  port: 0, // Random free TCP port instead of abstract socket
   
   fetch(req) {
     const url = new URL(req.url);

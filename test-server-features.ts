@@ -7,28 +7,71 @@ console.log('🔌 Testing Unix Domain Socket Communication...\n');
 
 const socketPath = '/tmp/fraud-detection.sock';
 
+// Type definitions for JSON payloads
+type SecurityCheckPayload = {
+  status: string;
+  timestamp: string;
+  metrics: {
+    totalRequests: number;
+    suspiciousRequests: number;
+  };
+};
+
+type InternalMetricsPayload = {
+  internalMetrics: {
+    totalRequests: number;
+    suspiciousRequests: number;
+  };
+  socketType: string;
+  port?: number;
+  path?: string;
+};
+
+type ServerMetricsPayload = {
+  totalRequests: number;
+  suspiciousRequests: number;
+  blockedRequests: number;
+  clientInfo?: {
+    address: string;
+    port: number;
+    family: string;
+  };
+  serverMetrics: {
+    pendingRequests: number;
+    pendingWebSockets: number;
+  };
+};
+
+type SecurityAnalysisPayload = {
+  riskScore: number;
+  threats: string[];
+  recommendations: string[];
+};
+
 async function testUnixSocket() {
   try {
     console.log('📡 Testing internal security check via Unix socket...');
     
     // Test the Unix socket endpoint
     const response = await fetch(`http://unix:${socketPath}:/internal/security-check`);
-    const data = await response.json() as any;
+    const rawData = await response.text();
+    const data = JSON.parse(rawData) as SecurityCheckPayload;
     
     console.log('✅ Security Check Response:');
     console.log('   Status:', data.status);
     console.log('   Timestamp:', data.timestamp);
-    console.log('   Total Requests:', data.metrics?.totalRequests);
-    console.log('   Suspicious Requests:', data.metrics?.suspiciousRequests);
+    console.log('   Total Requests:', data.metrics.totalRequests);
+    console.log('   Suspicious Requests:', data.metrics.suspiciousRequests);
     
     console.log('\n📊 Testing internal metrics via Unix socket...');
     
     const metricsResponse = await fetch(`http://unix:${socketPath}:/internal/metrics`);
-    const metricsData = await metricsResponse.json() as any;
+    const rawMetricsData = await metricsResponse.text();
+    const metricsData = JSON.parse(rawMetricsData) as InternalMetricsPayload;
     
     console.log('✅ Internal Metrics Response:');
     console.log('   Socket Type:', metricsData.socketType);
-    console.log('   Socket Path:', metricsData.path);
+    console.log('   Socket Port:', metricsData.port || 'N/A');
     console.log('   Internal Metrics:', JSON.stringify(metricsData.internalMetrics, null, 2));
     
     console.log('\n🎉 Unix Domain Socket communication working perfectly!');
@@ -47,25 +90,27 @@ async function testHTTPServer() {
     // Test metrics endpoint
     console.log('📊 Testing metrics endpoint...');
     const metricsResponse = await fetch('http://localhost:3002/api/metrics');
-    const metricsData = await metricsResponse.json() as any;
+    const rawMetricsData = await metricsResponse.text();
+    const metricsData = JSON.parse(rawMetricsData) as ServerMetricsPayload;
     
     console.log('✅ Server Metrics:');
     console.log('   Total Requests:', metricsData.totalRequests);
     console.log('   Suspicious Requests:', metricsData.suspiciousRequests);
     console.log('   Blocked Requests:', metricsData.blockedRequests);
     console.log('   Client IP:', metricsData.clientInfo?.address);
-    console.log('   Pending Requests:', metricsData.serverMetrics?.pendingRequests);
-    console.log('   Pending WebSockets:', metricsData.serverMetrics?.pendingWebSockets);
+    console.log('   Pending Requests:', metricsData.serverMetrics.pendingRequests);
+    console.log('   Pending WebSockets:', metricsData.serverMetrics.pendingWebSockets);
     
     // Test security analysis
     console.log('\n🛡️ Testing security analysis endpoint...');
     const securityResponse = await fetch('http://localhost:3002/api/security/analyze');
-    const securityData = await securityResponse.json() as any;
+    const rawSecurityData = await securityResponse.text();
+    const securityData = JSON.parse(rawSecurityData) as SecurityAnalysisPayload;
     
     console.log('✅ Security Analysis:');
-    console.log('   Risk Score:', securityData.riskScore?.toFixed(1));
-    console.log('   Threats:', securityData.threats?.join(', '));
-    console.log('   Recommendations:', securityData.recommendations?.join(', '));
+    console.log('   Risk Score:', securityData.riskScore.toFixed(1));
+    console.log('   Threats:', securityData.threats.join(', '));
+    console.log('   Recommendations:', securityData.recommendations.join(', '));
     
     // Test hot reloading
     console.log('\n🔥 Testing hot reloading...');
