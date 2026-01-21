@@ -1,0 +1,14 @@
+[install.scopes]
+# as a string
+# "@myorg1" = "https://usertitle:password@registry.myorg.com/"
+
+# as an object with username/password
+# you can reference environment variables
+# "@myorg2" = {
+#   username = "myusername",
+#   password = "$npm_pass",
+#   url = "https://registry.myorg.com/"
+# }
+
+# as an object with token (currently active)
+"@nolarose" = { token = "$npm_token", url = "https://registry.npmjs.org/" }

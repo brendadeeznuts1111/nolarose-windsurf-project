@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factory Wager - Fraud Detection Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes pulse-red {
+            0%, 100% { background-color: rgba(239, 68, 68, 0.1); }
+            50% { background-color: rgba(239, 68, 68, 0.3); }
+        }
+        
+        .fraud-alert {
+            animation: pulse-red 2s infinite;
+        }
+        
+        .risk-critical { background: linear-gradient(135deg, #991b1b, #dc2626); }
+        .risk-high { background: linear-gradient(135deg, #b45309, #f59e0b); }
+        .risk-medium { background: linear-gradient(135deg, #a16207, #eab308); }
+        .risk-low { background: linear-gradient(135deg, #14532d, #22c55e); }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .neon-glow {
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+        
+        #riskHeatmap {
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold text-blue-400 neon-glow">Factory Wager</h1>
+                <span class="text-gray-400">|</span>
+                <h2 class="text-xl font-semibold">Fraud Detection Dashboard</h2>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="connectionStatus" class="px-3 py-1 bg-green-600 text-white rounded-full text-sm">
+                    ● Connected
+                </span>
+                <span id="lastUpdate" class="text-gray-400 text-sm">
+                    Last Update: --
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="p-6">
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="metric-card glass-effect rounded-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Active Sessions</p>
+                        <p id="activeSessions" class="text-3xl font-bold text-white">0</p>
+                    </div>
+                    <div class="text-blue-400 text-4xl">👥</div>
+                </div>
+            </div>
+            
+            <div class="metric-card glass-effect rounded-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Blocked Sessions</p>
+                        <p id="blockedSessions" class="text-3xl font-bold text-red-400">0</p>
+                    </div>
+                    <div class="text-red-400 text-4xl">🚫</div>
+                </div>
+            </div>
+            
+            <div class="metric-card glass-effect rounded-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Avg Risk Score</p>
+                        <p id="avgRiskScore" class="text-3xl font-bold text-yellow-400">0.00</p>
+                    </div>
+                    <div class="text-yellow-400 text-4xl">⚡</div>
+                </div>
+            </div>
+            
+            <div class="metric-card glass-effect rounded-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm">Detection Rate</p>
+                        <p id="detectionRate" class="text-3xl font-bold text-green-400">98.7%</p>
+                    </div>
+                    <div class="text-green-400 text-4xl">🎯</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Risk Heatmap and Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Risk Heatmap -->
+            <div class="glass-effect rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Real-Time Risk Heatmap</h3>
+                <canvas id="riskHeatmap" width="400" height="300"></canvas>
+                <div class="mt-4 flex justify-between text-sm text-gray-400">
+                    <span>Live fraud pattern visualization</span>
+                    <span id="heatmapPoints">0 points</span>
+                </div>
+            </div>
+            
+            <!-- Risk Distribution Chart -->
+            <div class="glass-effect rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Risk Distribution</h3>
+                <canvas id="riskChart" width="400" height="300"></canvas>
+                <div class="mt-4 flex justify-between text-sm text-gray-400">
+                    <span>Risk level breakdown</span>
+                    <span id="chartUpdateTime">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="glass-effect rounded-lg p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-blue-400">Recent Fraud Alerts</h3>
+            <div id="alertsContainer" class="space-y-2 max-h-64 overflow-y-auto">
+                <p class="text-gray-400 text-center py-8">No alerts yet. Waiting for data...</p>
+            </div>
+        </div>
+
+        <!-- Feature Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Feature Contributions -->
+            <div class="glass-effect rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Feature Contributions</h3>
+                <canvas id="featureChart" width="300" height="200"></canvas>
+            </div>
+            
+            <!-- Performance Metrics -->
+            <div class="glass-effect rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Performance</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Inference Latency</span>
+                        <span id="inferenceLatency" class="text-green-400 font-mono">0.4ms</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">WebSocket Latency</span>
+                        <span id="wsLatency" class="text-green-400 font-mono">38ms</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Sessions/sec</span>
+                        <span id="sessionsPerSec" class="text-blue-400 font-mono">4096</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Memory Usage</span>
+                        <span id="memoryUsage" class="text-yellow-400 font-mono">45MB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- System Status -->
+            <div class="glass-effect rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">System Status</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">GNN Oracle</span>
+                        <span class="px-2 py-1 bg-green-600 text-white rounded text-xs">ONLINE</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">Ghost Shield</span>
+                        <span class="px-2 py-1 bg-green-600 text-white rounded text-xs">ACTIVE</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">Pattern Detector</span>
+                        <span class="px-2 py-1 bg-green-600 text-white rounded text-xs">RUNNING</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400">WebSocket Server</span>
+                        <span class="px-2 py-1 bg-green-600 text-white rounded text-xs">LISTENING</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Fraud Alert Modal -->
+    <div id="fraudAlertModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4 border-2 border-red-500">
+            <div class="flex items-center mb-4">
+                <div class="text-red-500 text-3xl mr-3">🚨</div>
+                <h3 class="text-xl font-bold text-red-400">Critical Fraud Alert</h3>
+            </div>
+            <div id="fraudAlertContent" class="text-gray-300 mb-6">
+                <!-- Alert content will be inserted here -->
+            </div>
+            <button onclick="closeFraudAlert()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                Acknowledge Alert
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import and initialize dashboard components
+        import { RiskHeatmap, createRiskHeatmap } from './risk-heatmap.js';
+        
+        // Global state
+        let websocket = null;
+        let riskHeatmap = null;
+        let riskChart = null;
+        let featureChart = null;
+        let alertCount = 0;
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeHeatmap();
+            initializeCharts();
+            connectWebSocket();
+            startMetricsUpdate();
+        });
+        
+        // Initialize risk heatmap
+        function initializeHeatmap() {
+            try {
+                riskHeatmap = createRiskHeatmap('riskHeatmap', {
+                    width: 400,
+                    height: 300,
+                    cellSize: 15,
+                    colorScheme: 'viridis',
+                    showGrid: true,
+                    showLabels: true,
+                    animationSpeed: 2000
+                });
+                console.log('🗺️ Risk heatmap initialized');
+            } catch (error) {
+                console.error('Failed to initialize heatmap:', error);
+            }
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Risk distribution pie chart
+            const riskCtx = document.getElementById('riskChart').getContext('2d');
+            riskChart = new Chart(riskCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Critical', 'High', 'Medium', 'Low'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: [
+                            '#ef4444',
+                            '#f59e0b', 
+                            '#eab308',
+                            '#22c55e'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#1f2937'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e5e7eb',
+                                padding: 10
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Feature contributions bar chart
+            const featureCtx = document.getElementById('featureChart').getContext('2d');
+            featureChart = new Chart(featureCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Root', 'VPN', 'Thermal', 'Bio', 'Proxy'],
+                    datasets: [{
+                        label: 'Contribution',
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#1d4ed8',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e5e7eb'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#e5e7eb'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Connect to WebSocket server
+        function connectWebSocket() {
+            const wsUrl = 'ws://localhost:3001/ws/risk-live';
+            
+            try {
+                websocket = new WebSocket(wsUrl);
+                
+                websocket.onopen = () => {
+                    console.log('🔗 Connected to fraud detection WebSocket');
+                    updateConnectionStatus(true);
+                };
+                
+                websocket.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    handleWebSocketMessage(data);
+                };
+                
+                websocket.onclose = () => {
+                    console.log('❌ WebSocket connection closed');
+                    updateConnectionStatus(false);
+                    // Attempt to reconnect after 5 seconds
+                    setTimeout(connectWebSocket, 5000);
+                };
+                
+                websocket.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    updateConnectionStatus(false);
+                };
+                
+            } catch (error) {
+                console.error('Failed to connect to WebSocket:', error);
+                updateConnectionStatus(false);
+            }
+        }
+        
+        // Handle WebSocket messages
+        function handleWebSocketMessage(data) {
+            switch (data.event) {
+                case 'risk:baseline':
+                    console.log('📊 Risk baseline received:', data);
+                    break;
+                    
+                case 'risk:score':
+                    updateRiskScore(data);
+                    break;
+                    
+                case 'fraud:detected':
+                    handleFraudDetected(data);
+                    break;
+                    
+                case 'fraud:blocked':
+                    handleFraudBlocked(data);
+                    break;
+                    
+                default:
+                    console.log('Unknown WebSocket event:', data);
+            }
+            
+            updateLastUpdateTime();
+        }
+        
+        // Update risk score display
+        function updateRiskScore(data) {
+            // Update heatmap
+            if (riskHeatmap) {
+                riskHeatmap.addDataPoint({
+                    sessionId: data.sessionId,
+                    merchantId: 'unknown',
+                    score: data.score,
+                    riskLevel: data.riskLevel,
+                    blocked: data.blocked,
+                    timestamp: Date.now(),
+                    features: {}
+                });
+            }
+            
+            // Update metrics
+            updateMetrics();
+        }
+        
+        // Handle fraud detection
+        function handleFraudDetected(data) {
+            addAlert({
+                type: 'warning',
+                message: `Fraud detected: ${data.sessionId} (Score: ${data.score.toFixed(3)})`,
+                timestamp: new Date().toLocaleTimeString(),
+                sessionId: data.sessionId
+            });
+        }
+        
+        // Handle fraud block
+        function handleFraudBlocked(data) {
+            addAlert({
+                type: 'critical',
+                message: `Session blocked: ${data.sessionId} (Score: ${data.score.toFixed(3)}) - ${data.reason}`,
+                timestamp: new Date().toLocaleTimeString(),
+                sessionId: data.sessionId
+            });
+            
+            // Show modal for critical alerts
+            if (data.score > 0.95) {
+                showFraudAlert(data);
+            }
+        }
+        
+        // Add alert to the alerts container
+        function addAlert(alert) {
+            const container = document.getElementById('alertsContainer');
+            
+            // Remove placeholder if present
+            const placeholder = container.querySelector('.text-gray-400');
+            if (placeholder) {
+                placeholder.remove();
+            }
+            
+            const alertElement = document.createElement('div');
+            alertElement.className = `p-3 rounded-lg border-l-4 ${
+                alert.type === 'critical' ? 'bg-red-900 bg-opacity-20 border-red-500 fraud-alert' :
+                alert.type === 'warning' ? 'bg-yellow-900 bg-opacity-20 border-yellow-500' :
+                'bg-blue-900 bg-opacity-20 border-blue-500'
+            }`;
+            
+            alertElement.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="mr-2">${alert.type === 'critical' ? '🚨' : '⚠️'}</span>
+                        <span class="text-sm">${alert.message}</span>
+                    </div>
+                    <span class="text-xs text-gray-400">${alert.timestamp}</span>
+                </div>
+            `;
+            
+            container.insertBefore(alertElement, container.firstChild);
+            
+            // Keep only last 50 alerts
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+            
+            alertCount++;
+        }
+        
+        // Show fraud alert modal
+        function showFraudAlert(data) {
+            const modal = document.getElementById('fraudAlertModal');
+            const content = document.getElementById('fraudAlertContent');
+            
+            content.innerHTML = `
+                <div class="space-y-2">
+                    <p><strong>Session ID:</strong> ${data.sessionId}</p>
+                    <p><strong>Risk Score:</strong> <span class="text-red-400 font-bold">${data.score.toFixed(3)}</span></p>
+                    <p><strong>Risk Level:</strong> <span class="text-red-400 font-bold">${data.riskLevel.toUpperCase()}</span></p>
+                    <p><strong>Reason:</strong> ${data.reason}</p>
+                    <p><strong>Merchant:</strong> ${data.merchantId}</p>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        
+        // Close fraud alert modal
+        window.closeFraudAlert = function() {
+            const modal = document.getElementById('fraudAlertModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+        
+        // Update connection status
+        function updateConnectionStatus(connected) {
+            const status = document.getElementById('connectionStatus');
+            if (connected) {
+                status.className = 'px-3 py-1 bg-green-600 text-white rounded-full text-sm';
+                status.textContent = '● Connected';
+            } else {
+                status.className = 'px-3 py-1 bg-red-600 text-white rounded-full text-sm';
+                status.textContent = '● Disconnected';
+            }
+        }
+        
+        // Update last update time
+        function updateLastUpdateTime() {
+            const element = document.getElementById('lastUpdate');
+            element.textContent = `Last Update: ${new Date().toLocaleTimeString()}`;
+        }
+        
+        // Update metrics
+        async function updateMetrics() {
+            try {
+                const response = await fetch('http://localhost:3001/api/health');
+                const data = await response.json();
+                
+                document.getElementById('activeSessions').textContent = data.active_sessions;
+                document.getElementById('avgRiskScore').textContent = data.avg_risk_score.toFixed(3);
+                
+                // Update heatmap points counter
+                if (riskHeatmap) {
+                    const points = riskHeatmap.getDataPoints();
+                    document.getElementById('heatmapPoints').textContent = `${points.length} points`;
+                }
+                
+            } catch (error) {
+                console.error('Failed to update metrics:', error);
+            }
+        }
+        
+        // Start metrics update loop
+        function startMetricsUpdate() {
+            updateMetrics();
+            setInterval(updateMetrics, 5000); // Update every 5 seconds
+        }
+        
+        // Simulate some initial data for demonstration
+        function simulateInitialData() {
+            // Simulate some risk scores
+            const mockData = [
+                { riskLevel: 'low', count: 45 },
+                { riskLevel: 'medium', count: 12 },
+                { riskLevel: 'high', count: 5 },
+                { riskLevel: 'critical', count: 2 }
+            ];
+            
+            if (riskChart) {
+                riskChart.data.datasets[0].data = mockData.map(d => d.count);
+                riskChart.update();
+            }
+            
+            // Simulate feature contributions
+            if (featureChart) {
+                featureChart.data.datasets[0].data = [2.4, 1.8, 1.2, 1.9, 2.1];
+                featureChart.update();
+            }
+        }
+        
+        // Initialize with mock data after a short delay
+        setTimeout(simulateInitialData, 1000);
+    </script>
+</body>
+</html>

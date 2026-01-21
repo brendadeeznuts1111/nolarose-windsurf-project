@@ -1,0 +1,14 @@
+{
+  "name": "@nolarose/windsurf-project",
+  "version": "1.0.0",
+  "bin": {
+    "windsurf-cli": "dist/index.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

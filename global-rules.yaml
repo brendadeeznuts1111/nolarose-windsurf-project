@@ -1,0 +1,577 @@
+# Enhanced Global Rules for Factory Wager QR Onboarding System
+# Version: 2.1
+# Domain: ONBOARDING
+# Scope: ENTERPRISE-DASHBOARD
+# Reference: CASCADE-RULES-001
+
+global:
+  # Security-First Framework
+  security-first:
+    name: "security-first"
+    description: "Always prioritize security over convenience"
+    priority: 100
+    conditions:
+      - "when: handling_device_data"
+      - "when: generating_tokens"
+      - "when: pushing_configurations"
+      - "when: processing_payments"
+      - "when: accessing_merchant_data"
+    actions:
+      - "enforce: mTLS"
+      - "enforce: JWT_expiry_5min"
+      - "require: biometric_verification"
+      - "implement: zero_trust_architecture"
+      - "enable: real_time_threat_detection"
+      - "audit: all_access_attempts"
+      - "encrypt: data_at_rest_and_transit"
+      - "validate: all_input_parameters"
+      - "monitor: anomaly_detection"
+      - "enforce: rate_limiting"
+      - "require: multi_factor_auth"
+      - "implement: session_timeout"
+      - "log: security_events"
+      - "enable: ip_whitelisting"
+      - "validate: ssl_certificates"
+
+  # Enhanced Device Health Validation
+  device-health-validation:
+    name: "device-health-validation"
+    description: "Comprehensive device health monitoring with AI-driven insights"
+    priority: 90
+    conditions:
+      - "device: any"
+      - "onboarding: started"
+      - "device: connected"
+      - "session: active"
+    actions:
+      - "run: os_version_check"
+      - "run: browser_compatibility"
+      - "run: network_performance"
+      - "run: storage_validation"
+      - "run: camera_test"
+      - "run: biometric_check"
+      - "run: security_posture"
+      - "run: webauthn_validation"
+      - "run: processor_performance"
+      - "run: root_detection"
+      - "run: app_integrity"
+      - "run: encryption_support"
+      - "run: vpn_detection"
+      - "run: patch_level"
+      - "run: enterprise_readiness"
+      - "run: battery_health_check"
+      - "run: memory_leak_detection"
+      - "run: thermal_monitoring"
+      - "run: connectivity_stability"
+      - "run: hardware_compatibility"
+      - "run: firmware_validation"
+
+  # Advanced UI/UX Consistency
+  hex-color-consistency:
+    name: "hex-color-consistency"
+    description: "Maintain consistent color scheme with accessibility compliance"
+    priority: 80
+    conditions:
+      - "ui: dashboard"
+      - "ui: qr_panel"
+      - "ui: status_indicator"
+      - "ui: mobile_app"
+      - "ui: web_interface"
+    actions:
+      - "use: #3b82f6 for enterprise"
+      - "use: #22c55e for success"
+      - "use: #f59e0b for warning"
+      - "use: #ef4444 for error"
+      - "use: #1f2937 for background"
+      - "ensure: wcag_aa_compliance"
+      - "implement: dark_mode_support"
+      - "validate: contrast_ratios"
+      - "optimize: color_blind_accessibility"
+      - "maintain: brand_consistency"
+      - "implement: responsive_design"
+      - "optimize: loading_states"
+      - "ensure: cross_platform_consistency"
+
+  # Advanced ROI Tracking & Analytics
+  roi-tracking:
+    name: "roi-tracking"
+    description: "Advanced ROI tracking with predictive analytics and ML insights"
+    priority: 70
+    conditions:
+      - "action: device_paired"
+      - "action: merchant_activated"
+      - "action: tier_upgraded"
+      - "action: transaction_processed"
+      - "action: user_engaged"
+    actions:
+      - "calculate: mrr_impact"
+      - "log: roi_metrics"
+      - "report: daily_summary"
+      - "predict: churn_probability"
+      - "analyze: customer_lifetime_value"
+      - "track: feature_adoption"
+      - "measure: user_satisfaction"
+      - "optimize: pricing_strategy"
+      - "forecast: revenue_growth"
+      - "segment: user_behavior"
+      - "analyze: conversion_funnel"
+      - "track: engagement_metrics"
+      - "measure: support_ticket_impact"
+      - "calculate: net_promoter_score"
+
+  # Performance Optimization Framework
+  performance-optimization:
+    name: "28-second-rule"
+    description: "Target 28-second onboarding with AI-optimized performance"
+    priority: 60
+    conditions:
+      - "process: qr_onboarding"
+      - "process: device_setup"
+      - "process: merchant_verification"
+    actions:
+      - "optimize: parallel_checks"
+      - "cache: frequent_operations"
+      - "prefetch: config_profiles"
+      - "implement: lazy_loading"
+      - "optimize: network_requests"
+      - "compress: data_transfers"
+      - "implement: progressive_loading"
+      - "optimize: database_queries"
+      - "enable: cdn_caching"
+      - "implement: background_sync"
+      - "optimize: image_compression"
+      - "enable: service_workers"
+      - "implement: predictive_prefetching"
+      - "monitor: performance_metrics"
+      - "optimize: bundle_size"
+
+  # Compliance & Regulatory Framework
+  compliance-framework:
+    name: "compliance-first"
+    description: "Ensure regulatory compliance across all operations"
+    priority: 95
+    conditions:
+      - "processing: payments"
+      - "handling: pii_data"
+      - "operating: regulated_markets"
+      - "processing: cross_border_transactions"
+    actions:
+      - "comply: pci_dss_4.0"
+      - "comply: gdpr_regulations"
+      - "comply: ccpa_requirements"
+      - "comply: sox_compliance"
+      - "implement: data_retention_policies"
+      - "enable: audit_logging"
+      - "require: consent_management"
+      - "implement: privacy_by_design"
+      - "ensure: right_to_deletion"
+      - "enable: data_portability"
+      - "implement: breach_notification"
+      - "validate: vendor_compliance"
+      - "conduct: regular_audits"
+      - "maintain: compliance_documentation"
+
+  # AI-Powered Monitoring & Alerting
+  ai-monitoring:
+    name: "ai-driven-monitoring"
+    description: "Proactive monitoring with machine learning insights"
+    priority: 85
+    conditions:
+      - "system: active"
+      - "users: online"
+      - "transactions: processing"
+    actions:
+      - "implement: anomaly_detection"
+      - "enable: predictive_alerts"
+      - "monitor: system_health"
+      - "analyze: user_behavior_patterns"
+      - "predict: system_failures"
+      - "optimize: resource_allocation"
+      - "enable: automated_scaling"
+      - "implement: intelligent_routing"
+      - "monitor: security_threats"
+      - "analyze: performance_trends"
+      - "enable: self_healing"
+      - "optimize: cost_efficiency"
+      - "track: business_metrics"
+      - "implement: smart_notifications"
+
+workspace:
+  # Factory Wager Specific Rules
+  factory-wager-specific:
+    name: "factory-wager-enterprise"
+    description: "Enterprise-grade rules for factory-wager.com domain"
+    conditions:
+      - "domain: factory-wager.com"
+      - "merchant_type: enterprise"
+      - "tier: premium_or_above"
+    actions:
+      - "enforce: enterprise_tier_features"
+      - "require: mTLS_for_all_devices"
+      - "apply: blue_color_scheme"
+      - "track: 65%_mrr_baseline"
+      - "enable: priority_support"
+      - "implement: advanced_analytics"
+      - "provide: dedicated_account_manager"
+      - "enable: custom_integrations"
+      - "implement: white_label_options"
+      - "ensure: sla_guarantees"
+      - "provide: advanced_reporting"
+      - "enable: bulk_operations"
+      - "implement: custom_workflows"
+      - "ensure: data_export_capabilities"
+
+  # Duoplus Integration Rules
+  duoplus-integration:
+    name: "duoplus-family-accounts"
+    description: "Enhanced rules for duoplus.com integration with Venmo family"
+    conditions:
+      - "domain: duoplus.com"
+      - "integration: venmo_family"
+      - "account_type: family"
+    actions:
+      - "sync: venmo_merchant_data"
+      - "apply: purple_color_scheme"
+      - "enable: dispute_handling"
+      - "track: family_account_metrics"
+      - "implement: shared_payment_methods"
+      - "enable: family_spending_limits"
+      - "provide: parental_controls"
+      - "implement: allowance_management"
+      - "enable: family_analytics"
+      - "provide: shared_dashboard"
+      - "implement: emergency_access"
+      - "enable: family_chat_integration"
+      - "track: intergenerational_usage"
+      - "optimize: family_onboarding"
+
+  # ASCII Dashboard Specific Rules
+  ascii-dashboard-enhancement:
+    name: "ascii-dashboard-pro"
+    description: "Advanced rules for ASCII dashboard with Bun integration"
+    conditions:
+      - "platform: ascii_dashboard"
+      - "runtime: bun"
+      - "environment: production"
+    actions:
+      - "implement: real_time_updates"
+      - "enable: websocket_streaming"
+      - "optimize: terminal_rendering"
+      - "implement: memory_efficiency"
+      - "enable: concurrent_processing"
+      - "optimize: bundle_size"
+      - "implement: hot_reload"
+      - "enable: performance_monitoring"
+      - "optimize: ascii_art_generation"
+      - "implement: responsive_layouts"
+      - "enable: cross_platform_support"
+      - "optimize: startup_time"
+      - "implement: plugin_system"
+      - "enable: custom_themes"
+      - "optimize: resource_usage"
+
+  # Bun-Native Performance & Features
+  bun-native-optimization:
+    name: "bun-native-performance"
+    description: "Leverage Bun's native features for maximum performance"
+    priority: 85
+    conditions:
+      - "runtime: bun"
+      - "environment: production_or_development"
+      - "task: performance_critical"
+    actions:
+      - "use: bun_sqlite_for_database"
+      - "implement: bun_websocket_server"
+      - "enable: bun_file_system_api"
+      - "use: bun_memory_mapped_files"
+      - "implement: bun_concurrent_processing"
+      - "enable: bun_builtin_test_runner"
+      - "use: bun_fast_json_parser"
+      - "implement: bun_native_crypto"
+      - "enable: bun_http_server"
+      - "use: bun_transpiler_api"
+      - "implement: bun_hot_reload"
+      - "enable: bun_bundle_optimizer"
+      - "use: bun_sempahore_concurrency"
+      - "implement: bun_streaming_api"
+      - "enable: bun_worker_threads"
+      - "use: bun_native_regex"
+      - "implement: bun_file_watcher"
+      - "enable: bun_tcp_server"
+      - "use: bun_dns_resolver"
+      - "implement: bun_compression_api"
+      - "enable: bun_environment_variables"
+      - "use: bun_process_management"
+      - "implement: bun_signal_handling"
+      - "enable: bun_terminal_api"
+      - "use: bun_path_operations"
+      - "implement: bun_network_utilities"
+      - "enable: bun_crypto_hashing"
+      - "use: bun_base64_encoding"
+      - "implement: bun_utf8_handling"
+      - "enable: bun_binary_operations"
+      - "use: bun_async_iterators"
+      - "implement: bun_stream_processing"
+      - "enable: bun_buffer_operations"
+      - "use: bun_performance_timing"
+      - "implement: bun_memory_management"
+      - "enable: bun_garbage_collection"
+      - "use: bun_profiling_tools"
+      - "implement: bun_debugging_features"
+      - "enable: bun_error_handling"
+      - "use: bun_stack_traces"
+      - "implement: bun_logging_system"
+      - "enable: bun_metrics_collection"
+      - "use: bun_performance_monitoring"
+      - "implement: bun_resource_tracking"
+      - "enable: bun_optimization_hints"
+      - "use: bun_jit_compilation"
+      - "implement: bun_native_modules"
+      - "enable: bun_plugin_system"
+      - "use: bun_extension_api"
+      - "implement: bun_custom_resolvers"
+      - "enable: bun_module_caching"
+      - "use: bun_dependency_injection"
+      - "implement: bun_service_discovery"
+      - "enable: bun_microservices"
+      - "use: bun_graphql_server"
+      - "implement: bun_rest_api"
+      - "enable: bun_real_time_features"
+      - "use: bun_event_streaming"
+      - "implement: bun_message_queue"
+      - "enable: bun_background_jobs"
+      - "use: bun_task_scheduling"
+      - "implement: bun_cron_jobs"
+      - "enable: bun_periodic_tasks"
+      - "use: bun_distributed_computing"
+      - "implement: bun_cluster_management"
+      - "enable: bun_load_balancing"
+      - "use: bun_fault_tolerance"
+      - "implement: bun_circuit_breaker"
+      - "enable: bun_retry_mechanisms"
+      - "use: bun_rate_limiting"
+      - "implement: bun_throttling"
+      - "enable: bun_backpressure_handling"
+      - "use: bun_flow_control"
+      - "implement: bun_resource_limits"
+      - "enable: bun_quota_management"
+      - "use: bun_billing_integration"
+      - "implement: bun_usage_tracking"
+      - "enable: bun_cost_optimization"
+      - "use: bun_resource_efficiency"
+      - "implement: bun_green_computing"
+      - "enable: bun_sustainability_features"
+      - "use: bun_carbon_footprint"
+      - "implement: bun_energy_monitoring"
+      - "enable: bun_eco_friendly_ops"
+
+  # Developer Experience Rules
+  developer-experience:
+    name: "dx-first"
+    description: "Prioritize developer experience and productivity"
+    conditions:
+      - "environment: development"
+      - "user: developer"
+      - "task: coding_or_debugging"
+    actions:
+      - "enable: intelligent_autocompletion"
+      - "implement: context_aware_suggestions"
+      - "provide: inline_documentation"
+      - "enable: real_time_error_detection"
+      - "implement: automated_refactoring"
+      - "provide: code_generation"
+      - "enable: smart_testing"
+      - "implement: performance_profiling"
+      - "provide: debugging_assistance"
+      - "enable: collaborative_features"
+      - "implement: version_control_integration"
+      - "provide: deployment_automation"
+      - "enable: monitoring_dashboard"
+      - "optimize: build_performance"
+
+  # LSP Support & Intelligence (Streamlined)
+  lsp-support:
+    name: "lsp-intelligence"
+    description: "Essential Language Server Protocol support for development productivity"
+    priority: 75
+    conditions:
+      - "ide: active"
+      - "language: typescript_or_javascript"
+      - "file: source_code"
+    actions:
+      - "implement: intelligent_code_completion"
+      - "enable: context_aware_suggestions"
+      - "provide: real_time_type_checking"
+      - "enable: semantic_highlighting"
+      - "implement: smart_import_organizing"
+      - "provide: code_action_suggestions"
+      - "enable: hover_documentation"
+      - "implement: go_to_definition"
+      - "enable: find_all_references"
+      - "provide: rename_symbol_support"
+      - "implement: format_on_save"
+      - "enable: lint_on_the_fly"
+      - "provide: code_snippet_expansion"
+      - "implement: error_highlighting"
+      - "enable: auto_import_detection"
+      - "provide: jumpto_error_support"
+      - "implement: signature_help"
+      - "enable: workspace_symbols"
+      - "provide: document_symbols"
+      - "implement: code_folding"
+      - "enable: bracket_matching"
+      - "provide: auto_closing_pairs"
+      - "implement: multi_cursor_support"
+      - "enable: semantic_tokens"
+      - "provide: inlay_hints"
+      - "implement: code_lens_support"
+      - "enable: call_hierarchy"
+      - "provide: type_hierarchy"
+      - "implement: linked_editing"
+      - "enable: selection_range"
+      - "provide: document_color"
+      - "implement: folding_range"
+      - "enable: prepare_rename"
+      - "provide: code_actions_resolve"
+      - "implement: completion_resolve"
+      - "enable: declaration_link"
+      - "provide: implementation_link"
+      - "implement: type_definition_link"
+      - "enable: workspace_configuration"
+      - "provide: file_operations"
+      - "implement: text_document_sync"
+      - "enable: workspace_diagnostics"
+      - "provide: progress_reporting"
+      - "implement: work_done_progress"
+      - "enable: workspace_symbols_resolve"
+      - "provide: workspace_edit"
+      - "implement: will_save_wait_until"
+      - "enable: did_change_watched_files"
+      - "provide: workspace_folders"
+      - "implement: configuration_sync"
+      - "enable: pull_configuration"
+      - "provide: push_configuration"
+      - "implement: workspace_capabilities"
+      - "enable: server_capabilities"
+      - "provide: client_capabilities"
+      - "implement: initialization_options"
+      - "enable: trace_options"
+      - "provide: experimental_features"
+      - "implement: custom_protocols"
+      - "enable: extension_support"
+      - "provide: plugin_system"
+      - "implement: language_features"
+      - "enable: workspace_features"
+      - "provide: debug_features"
+      - "implement: telemetry_features"
+      - "enable: performance_features"
+      - "provide: security_features"
+      - "implement: compliance_features"
+      - "enable: accessibility_features"
+      - "provide: localization_support"
+      - "implement: internationalization"
+      - "enable: multi_language_support"
+      - "provide: translation_services"
+
+  # Error Handling & Recovery Framework
+  error-handling-framework:
+    name: "error-resilience"
+    description: "Comprehensive error handling and recovery mechanisms"
+    priority: 88
+    conditions:
+      - "system: active"
+      - "operations: critical"
+      - "users: impacted"
+    actions:
+      - "implement: graceful_degradation"
+      - "enable: automatic_retry_with_backoff"
+      - "provide: circuit_breaker_patterns"
+      - "implement: bulkhead_isolation"
+      - "enable: timeout_management"
+      - "provide: error_categorization"
+      - "implement: user_friendly_error_messages"
+      - "enable: error_logging_and_tracking"
+      - "provide: rollback_mechanisms"
+      - "implement: health_check_endpoints"
+      - "enable: disaster_recovery_procedures"
+      - "provide: data_backup_strategies"
+      - "implement: point_in_time_recovery"
+      - "enable: replication_failover"
+      - "provide: incident_response_automation"
+
+  # Advanced Security Framework
+  advanced-security:
+    name: "zero-trust-advanced"
+    description: "Advanced security measures beyond basic compliance"
+    priority: 98
+    conditions:
+      - "data: sensitive"
+      - "access: external"
+      - "operations: high_risk"
+    actions:
+      - "implement: api_key_rotation"
+      - "enable: webhook_security_validation"
+      - "provide: pii_data_masking"
+      - "implement: field_level_encryption"
+      - "enable: behavioral_analysis"
+      - "provide: threat_intelligence_integration"
+      - "implement: zero_trust_network_access"
+      - "enable: continuous_security_monitoring"
+      - "provide: automated_security_testing"
+      - "implement: vulnerability_management"
+      - "enable: security_posture_assessment"
+      - "provide: incident_response_automation"
+      - "implement: forensic_data_collection"
+      - "enable: compliance_automation"
+      - "provide: security_metrics_dashboard"
+
+  # Performance Optimization Framework
+  performance-framework:
+    name: "performance-excellence"
+    description: "Advanced performance optimization with specific thresholds"
+    priority: 92
+    conditions:
+      - "system: production"
+      - "load: high"
+      - "users: active"
+    actions:
+      - "implement: memory_usage_monitoring"
+      - "enable: database_connection_pooling"
+      - "provide: cache_invalidation_strategies"
+      - "implement: query_optimization"
+      - "enable: load_balancing_algorithms"
+      - "provide: resource_quota_management"
+      - "implement: auto_scaling_policies"
+      - "enable: performance_profiling"
+      - "provide: bottleneck_detection"
+      - "implement: predictive_scaling"
+      - "enable: cost_optimization"
+      - "provide: sla_monitoring"
+      - "implement: uptime_guarantees"
+      - "enable: disaster_recovery_testing"
+      - "provide: performance_benchmarks"
+
+# Rule Enforcement Configuration
+enforcement:
+  strict_mode: true
+  audit_frequency: "real_time"
+  violation_handling: "immediate_block"
+  recovery_procedures: "automated"
+  escalation_matrix: "tiered"
+  compliance_reporting: "continuous"
+  
+# Performance Metrics
+metrics:
+  onboarding_time_target: 28  # seconds
+  uptime_requirement: 99.99   # percentage
+  response_time_max: 200      # milliseconds
+  error_rate_max: 0.01        # percentage
+  security_score_min: 95      # percentage
+  
+# Integration Points
+integrations:
+  payment_gateways: ["stripe", "paypal", "venmo"]
+  analytics: ["mixpanel", "amplitude", "segment"]
+  monitoring: ["datadog", "new_relic", "prometheus"]
+  security: ["snyk", "veracode", "owasp_zap"]
+  communication: ["slack", "teams", "discord"]
