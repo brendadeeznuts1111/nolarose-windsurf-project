@@ -166,10 +166,10 @@ export class ProxyDetector {
     // Simulate traceroute results (in production, this would be actual network tracing)
     const simulatedHops = this.generateSimulatedHops(clientIP);
     
-    for (let i = 0; i < simulatedHops.length; i++) {
-      const hopData = simulatedHops[i];
+    for (let hopIndex = 0; hopIndex < simulatedHops.length; hopIndex++) {
+      const hopData = simulatedHops[hopIndex];
       const hop: ProxyHop = {
-        hopNumber: i + 1,
+        hopNumber: hopIndex + 1,
         ipAddress: hopData.ip,
         hostname: hopData.hostname,
         asn: hopData.asn,
@@ -210,15 +210,15 @@ export class ProxyDetector {
     // Simulate intermediate hops
     const hopCount = Math.floor(Math.random() * 6) + 1; // 1-6 hops
     
-    for (let i = 1; i < hopCount; i++) {
-      const ip = `192.0.2.${i + 1}`; // Example IP range
+    for (let hopNumber = 1; hopNumber < hopCount; hopNumber++) {
+      const ipAddress = `192.0.2.${hopNumber + 1}`; // Example IP range
       hops.push({
-        ip,
-        hostname: `hop-${i}.example.com`,
-        asn: `AS${1000 + i * 100}`,
-        organization: i % 2 === 0 ? 'ISP Network' : 'Datacenter',
-        country: i % 3 === 0 ? 'DE' : 'US',
-        latency: 10 + i * 5
+        ip: ipAddress,
+        hostname: `hop-${hopNumber}.example.com`,
+        asn: `AS${1000 + hopNumber * 100}`,
+        organization: hopNumber % 2 === 0 ? 'ISP Network' : 'Datacenter',
+        country: hopNumber % 3 === 0 ? 'DE' : 'US',
+        latency: 10 + hopNumber * 5
       });
     }
     
@@ -235,21 +235,21 @@ export class ProxyDetector {
     let totalDistance = 0;
     let impossibleVelocity = false;
     
-    for (let i = 0; i < hops.length; i++) {
-      if (hops[i].country) {
-        countries.add(hops[i].country);
+    for (let hopIndex = 0; hopIndex < hops.length; hopIndex++) {
+      if (hops[hopIndex].country) {
+        countries.add(hops[hopIndex].country);
       }
       
       // Calculate distance between consecutive hops
-      if (i > 0 && hops[i-1].country && hops[i].country) {
+      if (hopIndex > 0 && hops[hopIndex-1].country && hops[hopIndex].country) {
         const distance = this.calculateDistance(
-          hops[i-1].country || 'US',
-          hops[i].country || 'US'
+          hops[hopIndex-1].country || 'US',
+          hops[hopIndex].country || 'US'
         );
         totalDistance += distance;
         
         // Check for impossible velocity
-        const timeDiff = (hops[i].latency - hops[i-1].latency) / 1000; // Convert to seconds
+        const timeDiff = (hops[hopIndex].latency - hops[hopIndex-1].latency) / 1000; // Convert to seconds
         if (timeDiff > 0 && distance / timeDiff > 800) { // 800 km/h threshold
           impossibleVelocity = true;
         }

@@ -105,13 +105,13 @@ AIBenchRunner.bench("Batch Prediction (1000 Sessions)", async () => {
   const scenarios = generateTestScenarios();
   const promises = [];
   
-  for (let i = 0; i < 1000; i++) {
-    const scenario = i % 4 === 0 ? scenarios.fraudulent :
-                    i % 4 === 1 ? scenarios.suspicious :
-                    i % 4 === 2 ? scenarios.new_device :
+  for (let testIndex = 0; testIndex < 1000; testIndex++) {
+    const scenario = testIndex % 4 === 0 ? scenarios.fraudulent :
+                    testIndex % 4 === 1 ? scenarios.suspicious :
+                    testIndex % 4 === 2 ? scenarios.new_device :
                     scenarios.legitimate;
     
-    promises.push(predictAnomaly(scenario, `bench-batch-${i}`));
+    promises.push(predictAnomaly(scenario, `bench-batch-${testIndex}`));
   }
   
   await Promise.all(promises);
@@ -121,20 +121,20 @@ AIBenchRunner.bench("Batch Prediction (1000 Sessions)", async () => {
 AIBenchRunner.bench("Fraud Detection Accuracy Test", async () => {
   const scenarios = generateTestScenarios();
   const results = {
-    legitimate_blocked: 0,
-    fraudulent_allowed: 0,
-    total_tests: 100
+    falsePositives: 0,
+    falseNegatives: 0,
+    totalTests: 100
   };
   
-  for (let i = 0; i < results.total_tests; i++) {
-    const isFraudulent = i < 50; // 50% fraudulent for testing
+  for (let testIndex = 0; testIndex < results.totalTests; testIndex++) {
+    const isFraudulent = testIndex < 50; // 50% fraudulent for testing
     const scenario = isFraudulent ? scenarios.fraudulent : scenarios.legitimate;
-    const prediction = await predictAnomaly(scenario, `accuracy-test-${i}`);
+    const prediction = await predictAnomaly(scenario, `accuracy-test-${testIndex}`);
     
     if (isFraudulent && !prediction.blocked) {
-      results.fraudulent_allowed++;
+      results.falseNegatives++;
     } else if (!isFraudulent && prediction.blocked) {
-      results.legitimate_blocked++;
+      results.falsePositives++;
     }
   }
   

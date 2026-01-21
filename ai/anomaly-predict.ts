@@ -59,8 +59,8 @@ async function runGNNInference(weightedFeatures: Float32Array): Promise<number> 
   
   // Mock GNN computation - in reality this would be ONNX/TensorFlow.js
   let score = 0.0;
-  for (let i = 0; i < weightedFeatures.length; i++) {
-    score += (weightedFeatures[i] || 0) * (0.8 + Math.random() * 0.4); // Add some variance
+  for (let featureIndex = 0; featureIndex < weightedFeatures.length; featureIndex++) {
+    score += (weightedFeatures[featureIndex] || 0) * (0.8 + Math.random() * 0.4); // Add some variance
   }
   
   // Apply non-linear activation and normalize
