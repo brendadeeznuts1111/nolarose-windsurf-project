@@ -4,11 +4,20 @@
   "bin": {
     "windsurf-cli": "dist/index.js"
   },
+  "scripts": {
+    "build": "bun build cli/risk-hunter.ts --outdir dist --target node",
+    "test": "bun test",
+    "type-check": "tsc --noEmit",
+    "lint": "bunx @biomejs/biome check .",
+    "format": "bunx @biomejs/biome format .",
+    "prepublishOnly": "bun run build",
+    "version": "bun run build",
+    "release": "bun version patch && git push && git push --tags"
+  },
   "dependencies": {},
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
+    "@types/bun": "latest",
+    "@biomejs/biome": "latest",
     "typescript": "^5.9.3"
   }
 }
