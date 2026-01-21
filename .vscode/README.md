@@ -258,8 +258,8 @@ Select specific columns to display:
 
 - [Bun Documentation](https://bun.sh/docs)
 - [Enhanced Fraud Detection System](../README.md)
-- [CLI Tools](../cli/README.md)
-- [API Reference](../docs/api.md)
+- [CLI Tools](../cli/risk-hunter.ts)
+- [API Reference](../docs/API.md)
 
 ---
 
