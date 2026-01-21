@@ -809,6 +809,8 @@ setInterval(() => {
 console.log(`🚀 Anomaly Prediction Engine Started`);
 console.log(`🎯 0.92 Block Threshold Active`);
 console.log(`⚡ 5-Feature Weighted Oracle Ready`);
-console.log(`🌐 WebSocket Server: ws://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/ws/risk-live`);
-console.log(`🔗 API Endpoint: http://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/api/risk/score`);
-console.log(`📈 Health Check: http://${process.env.HOST || '0.0.0.0'}:${process.env.PORT || '3051'}/api/health`);
+console.log(`🌐 Server URL: ${server.url}`);
+console.log(`🔗 Server Port: ${server.port}`);
+console.log(`📡 WebSocket Server: ${server.url}/ws/risk-live`);
+console.log(`🔗 API Endpoint: ${server.url}/api/risk/score`);
+console.log(`📈 Health Check: ${server.url}/api/health`);
