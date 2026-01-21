@@ -1,7 +1,7 @@
 ---
 name: 🐛 Bug Report
 about: Create a report to help us improve
-title: '[BUG] '
+title: '\[BUG\] '
 labels: 'bug'
 assignees: ''
 
@@ -24,10 +24,10 @@ A clear and concise description of what you expected to happen.
 A clear and concise description of what actually happened.
 
 ## 📊 Environment
-- **OS**: [e.g. macOS, Linux, Windows]
-- **Bun Version**: [e.g. v1.3.6]
-- **Node Version**: [if applicable]
-- **Browser**: [if applicable]
+- **OS**: e.g., macOS, Linux, Windows
+- **Bun Version**: e.g., v1.3.6
+- **Node Version**: if applicable
+- **Browser**: if applicable
 
 ## 📝 Additional Context
 Add any other context about the problem here.

@@ -1,7 +1,7 @@
 ---
 name: 🚀 Feature Request
 about: Suggest an idea for this project
-title: '[FEATURE] '
+title: '\[FEATURE\] '
 labels: 'enhancement'
 assignees: ''
 
@@ -23,9 +23,9 @@ Describe any alternative solutions or features you've considered.
 Add any other context, mockups, or screenshots about the feature request here.
 
 ## 🎯 Acceptance Criteria
-- [ ] Criteria 1
-- [ ] Criteria 2
-- [ ] Criteria 3
+- \[ ] Criteria 1
+- \[ ] Criteria 2
+- \[ ] Criteria 3
 
 ## 🔗 Related Issues
 List any related issues or pull requests.
