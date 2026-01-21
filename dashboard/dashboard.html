@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Factory Wager - Fraud Detection Dashboard</title>
+    <script>
+        // Configuration - can be modified during deployment
+        const CONFIG = {
+            HOST: 'localhost', // Set to your host or use environment variable
+            PORT: '3001',      // Set to your port or use environment variable
+        };
+        
+        // Construct URLs
+        const WS_URL = `ws://${CONFIG.HOST}:${CONFIG.PORT}/ws/risk-live`;
+        const API_BASE = `http://${CONFIG.HOST}:${CONFIG.PORT}`;
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -334,7 +345,7 @@
         
         // Connect to WebSocket server
         function connectWebSocket() {
-            const wsUrl = 'ws://localhost:3001/ws/risk-live';
+            const wsUrl = WS_URL;
             
             try {
                 websocket = new WebSocket(wsUrl);
@@ -521,7 +532,7 @@
         // Update metrics
         async function updateMetrics() {
             try {
-                const response = await fetch('http://localhost:3001/api/health');
+                const response = await fetch(`${API_BASE}/api/health`);
                 const data = await response.json();
                 
                 document.getElementById('activeSessions').textContent = data.active_sessions;

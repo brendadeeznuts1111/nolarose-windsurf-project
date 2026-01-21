@@ -51,8 +51,8 @@ export class RiskHunterCLI {
   
   constructor(config: Partial<RiskHunterConfig> = {}) {
     this.config = {
-      apiEndpoint: 'http://localhost:3001',
-      wsEndpoint: 'ws://localhost:3001/ws/risk-live',
+      apiEndpoint: `http://${process.env.HOST || 'localhost'}:${process.env.PORT || '3001'}`,
+      wsEndpoint: `ws://${process.env.HOST || 'localhost'}:${process.env.PORT || '3001'}/ws/risk-live`,
       outputFormat: 'table',
       maxResults: 100,
       realTime: false,
