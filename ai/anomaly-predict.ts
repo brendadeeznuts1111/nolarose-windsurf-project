@@ -60,7 +60,7 @@ async function runGNNInference(weightedFeatures: Float32Array): Promise<number> 
   // Mock GNN computation - in reality this would be ONNX/TensorFlow.js
   let score = 0.0;
   for (let i = 0; i < weightedFeatures.length; i++) {
-    score += weightedFeatures[i] * (0.8 + Math.random() * 0.4); // Add some variance
+    score += (weightedFeatures[i] || 0) * (0.8 + Math.random() * 0.4); // Add some variance
   }
   
   // Apply non-linear activation and normalize
@@ -193,7 +193,7 @@ async function blockSessionAction(sessionId: string, score: number, reason: stri
 }
 
 // Websocket server for real-time fraud alerts
-const websocketClients = new Set<WebSocket>();
+const websocketClients = new Set<ServerWebSocket<any>>();
 
 function broadcastFraudAlert(session: FraudSession): void {
   const alert = {
@@ -249,7 +249,7 @@ class AnomalyPredictionModel {
 // HTTP/WebSocket server
 const server = serve({
   port: 3051,
-  fetch(req: Request, server: Server) {
+  fetch(req: Request, server: Server<any>) {
     const url = new URL(req.url);
     
     // WebSocket upgrade
