@@ -4,8 +4,11 @@
 
 import { serve } from "bun";
 
+console.log("🚀 Demonstrating server.port and server.url property access");
+console.log("=========================================================");
+
 // Example 1: Fixed port configuration
-console.log("🚀 Testing fixed port configuration...");
+console.log("\n📍 Example 1: Fixed port configuration");
 const server1 = serve({
   port: 3000,
   hostname: "localhost",
@@ -14,11 +17,13 @@ const server1 = serve({
   },
 });
 
-console.log(`📍 Server 1 URL: ${server1.url}`);
-console.log(`🔢 Server 1 Port: ${server1.port}`);
+console.log(`✅ Server started with port: 3000`);
+console.log(`🔗 Accessing server.port property: ${server1.port}`);
+console.log(`🌐 Accessing server.url property: ${server1.url}`);
+console.log(`💡 This demonstrates how to view the chosen port via server.port`);
 
 // Example 2: Random port configuration (as shown in Bun docs)
-console.log("\n🎲 Testing random port configuration...");
+console.log("\n🎲 Example 2: Random port configuration");
 const server2 = serve({
   port: 0, // random port
   hostname: "localhost",
@@ -27,11 +32,13 @@ const server2 = serve({
   },
 });
 
-console.log(`📍 Server 2 URL: ${server2.url}`);
-console.log(`🔢 Server 2 Port: ${server2.port}`);
+console.log(`✅ Server started with port: 0 (random)`);
+console.log(`🔗 Accessing server.port property: ${server2.port}`);
+console.log(`🌐 Accessing server.url property: ${server2.url}`);
+console.log(`💡 This shows how to view the randomly selected port`);
 
 // Example 3: Environment variable configuration
-console.log("\n🌍 Testing environment variable configuration...");
+console.log("\n🌍 Example 3: Environment variable configuration");
 const server3 = serve({
   port: process.env.PORT ? parseInt(process.env.PORT) : 3051,
   hostname: process.env.HOST || "0.0.0.0",
@@ -40,15 +47,35 @@ const server3 = serve({
   },
 });
 
-console.log(`📍 Server 3 URL: ${server3.url}`);
-console.log(`🔢 Server 3 Port: ${server3.port}`);
+console.log(`✅ Server started with environment variables`);
+console.log(`🔗 Accessing server.port property: ${server3.port}`);
+console.log(`🌐 Accessing server.url property: ${server3.url}`);
+console.log(`💡 This demonstrates viewing the actual port after env var resolution`);
 
-// Cleanup after 2 seconds
+// Example 4: Programmatic port access
+console.log("\n⚙️ Example 4: Programmatic port access demonstration");
+const servers = [
+  serve({ port: 0, fetch: () => new Response("Server A") }),
+  serve({ port: 0, fetch: () => new Response("Server B") }),
+  serve({ port: 0, fetch: () => new Response("Server C") })
+];
+
+console.log(`🔢 Started ${servers.length} servers with random ports:`);
+servers.forEach((server, index) => {
+  console.log(`   Server ${index + 1}: port ${server.port} at ${server.url}`);
+});
+
+console.log(`\n💡 All ports accessed via server.port property as per Bun documentation`);
+
+// Cleanup after 3 seconds
 setTimeout(() => {
   server1.stop();
   server2.stop();
   server3.stop();
+  servers.forEach(server => server.stop());
   console.log("\n✅ All test servers stopped");
-}, 2000);
+  console.log("🎯 Demonstrated complete server.port and server.url property access");
+}, 3000);
 
-console.log("\n📊 All servers following official Bun documentation patterns");
+console.log("\n📋 Following official Bun documentation patterns exactly");
+console.log("🔗 Reference: https://bun.com/docs/runtime/http/server#changing-the-port-and-hostname");
