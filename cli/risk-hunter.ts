@@ -3,7 +3,7 @@
 // Advanced command-line interface for fraud detection and risk hunting
 // Real-time session monitoring, pattern analysis, and threat hunting
 
-import { predictRisk } from "../ai/anomaly-predict";
+import { predictRisk, FeatureVector } from '../ai/anomaly-predict.js';
 import { fraudRiskOracle } from "../fraud-oracle/risk-scoring";
 import { ghostShield } from "../ghost-shield/privacy-handler";
 import { proxyDetector } from "../ghost-shield/proxy-detector";
@@ -35,6 +35,7 @@ interface RiskSession {
 interface CLIOptions {
   command: 'hunt' | 'analyze' | 'monitor' | 'report' | 'test';
   since?: string;
+  parseSince?: string;
   threshold?: number;
   merchant?: string;
   sessionId?: string;
@@ -118,7 +119,7 @@ export class RiskHunterCLI {
           i++;
           break;
         case '--threshold':
-          options.threshold = parseFloat(nextArg);
+          options.threshold = parseFloat(nextArg || '0');
           i++;
           break;
         case '--merchant':
@@ -170,7 +171,7 @@ export class RiskHunterCLI {
     try {
       // Fetch recent sessions from API
       const response = await fetch(`${this.config.apiEndpoint}/api/risk/heatmap`);
-      const data = await response.json();
+      const data = await response.json() as { sessions: RiskSession[] };
       
       // Filter high-risk sessions
       const highRiskSessions = data.sessions
@@ -343,7 +344,13 @@ export class RiskHunterCLI {
       const healthData = await healthResponse.json();
       
       const heatmapResponse = await fetch(`${this.config.apiEndpoint}/api/risk/heatmap`);
-      const heatmapData = await heatmapResponse.json();
+      const heatmapData = await heatmapResponse.json() as {
+        total_active: number;
+        blocked_sessions: number;
+        avg_score: number;
+        high_risk_count: number;
+        patterns: any[];
+      };
       
       // Generate report
       const report = {
@@ -428,19 +435,16 @@ export class RiskHunterCLI {
   }
   
   // Parse features from string
-  private parseFeatures(featuresStr: string): Record<string, number> {
-    const features: Record<string, number> = {};
+  private parseFeatures(featuresStr: string): FeatureVector {
     const values = featuresStr.split(',').map(v => v.trim());
     
-    const featureNames = ['root_detected', 'vpn_active', 'thermal_spike', 'biometric_fail', 'proxy_hop_count'];
-    
-    featureNames.forEach((name, index) => {
-      if (values[index]) {
-        features[name] = parseFloat(values[index]);
-      }
-    });
-    
-    return features;
+    return {
+      root_detected: parseFloat(values[0] || '0'),
+      vpn_active: parseFloat(values[1] || '0'),
+      thermal_spike: parseFloat(values[2] || '0'),
+      biometric_fail: parseFloat(values[3] || '0'),
+      proxy_hop_count: parseFloat(values[4] || '0'),
+    };
   }
   
   // Parse since time string
