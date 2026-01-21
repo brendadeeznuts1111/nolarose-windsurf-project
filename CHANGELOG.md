@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
 
 ### Added
 - Comprehensive AI/ML module with enterprise-grade architecture
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented auto-scaling with 2-50 instance range
 - Added intelligent caching with 85% hit rate target
 
-## [1.0.0] - 2024-01-21
+## 1.0.0 - 2024-01-21
 
 ### Added
 - Initial release of windsurf-project fraud detection system
@@ -101,7 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Audit**: Comprehensive logging with 7-year retention
 - **Threat Protection**: Defense against adversarial attacks and model poisoning
 
-## [0.9.0] - 2024-01-15
+## 0.9.0 - 2024-01-15
 
 ### Added
 - Beta release of fraud detection system
@@ -124,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Limited documentation coverage
 - Performance optimization needed
 
-## [0.8.0] - 2024-01-10
+## 0.8.0 - 2024-01-10
 
 ### Added
 - Development environment setup with TypeScript
@@ -145,7 +145,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Git hooks for code quality
 - Initial CI/CD pipeline setup
 
-## [0.7.0] - 2024-01-05
+## 0.7.0 - 2024-01-05
 
 ### Added
 - Project initialization with repository setup
