@@ -426,6 +426,291 @@ export async function blockSession(sessionId: string, reason?: string): Promise<
   }
 }
 
+// ============================================================================
+// ENHANCED PREDICTION WITH EXTERNAL API INTEGRATION
+// ============================================================================
+
+/**
+ * Enhanced risk prediction with external API data enrichment
+ */
+export async function predictRiskEnhanced(
+  features: FeatureVector, 
+  sessionId: string, 
+  merchantId: string,
+  externalData?: ExternalDataSources
+): Promise<FraudSession> {
+  const startTime = performance.now();
+  
+  try {
+    // Get base risk score
+    const baseSession = await predictRisk(features, sessionId, merchantId);
+    
+    // Enrich with external data if available
+    if (externalData) {
+      const enrichedScore = await enrichWithExternalData(baseSession, externalData);
+      return enrichedScore;
+    }
+    
+    return baseSession;
+    
+  } catch (error) {
+    console.error('Enhanced prediction failed:', error);
+    // Fallback to base prediction
+    return predictRisk(features, sessionId, merchantId);
+  }
+}
+
+/**
+ * Fetch external data from multiple sources with network optimization
+ */
+export async function fetchExternalData(ipAddress: string, deviceFingerprint: string): Promise<ExternalDataSources> {
+  const startTime = performance.now();
+  
+  try {
+    // Batch fetch all external APIs concurrently
+    const requests = [
+      ...EXTERNAL_APIS.device_intelligence.map(url => 
+        optimizedFetch(`${url}?fingerprint=${deviceFingerprint}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        })
+      ),
+      ...EXTERNAL_APIS.geolocation.map(url => 
+        optimizedFetch(`${url}?ip=${ipAddress}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        })
+      ),
+      ...EXTERNAL_APIS.threat_intelligence.map(url => 
+        optimizedFetch(`${url}?query=${ipAddress}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        })
+      )
+    ];
+    
+    const responses = await batchFetch(requests);
+    
+    // Parse responses
+    const externalData: ExternalDataSources = {
+      deviceIntelligence: await parseDeviceIntelligence(responses.slice(0, 2)),
+      geolocation: await parseGeolocation(responses.slice(2, 4)),
+      threatIntelligence: await parseThreatIntelligence(responses.slice(4, 6))
+    };
+    
+    const duration = performance.now() - startTime;
+    console.log(`🌐 External data fetched in ${duration.toFixed(2)}ms`);
+    
+    return externalData;
+    
+  } catch (error) {
+    console.error('Failed to fetch external data:', error);
+    return getDefaultExternalData();
+  }
+}
+
+/**
+ * Enrich risk score with external data
+ */
+async function enrichWithExternalData(
+  session: FraudSession, 
+  externalData: ExternalDataSources
+): Promise<FraudSession> {
+  let riskAdjustment = 0;
+  const reasons: string[] = [];
+  
+  // Device intelligence analysis
+  if (externalData.deviceIntelligence.riskScore > 0.7) {
+    riskAdjustment += 0.15;
+    reasons.push('high_device_risk');
+  }
+  
+  // Geolocation analysis
+  if (externalData.geolocation.isHighRiskCountry) {
+    riskAdjustment += 0.1;
+    reasons.push('high_risk_geolocation');
+  }
+  
+  // Threat intelligence
+  if (externalData.threatIntelligence.maliciousScore > 0.8) {
+    riskAdjustment += 0.2;
+    reasons.push('known_threat_actor');
+  }
+  
+  // Apply risk adjustment
+  const enrichedSession = {
+    ...session,
+    score: Math.min(1.0, session.score + riskAdjustment),
+    reason: session.reason ? `${session.reason}, ${reasons.join(', ')}` : reasons.join(', ')
+  };
+  
+  // Re-evaluate risk level
+  if (enrichedSession.score >= RISK_THRESHOLDS.CRITICAL_BLOCK) {
+    enrichedSession.riskLevel = 'critical';
+    enrichedSession.blocked = true;
+    enrichedSession.reason = enrichedSession.reason || 'critical_external_threat';
+  } else if (enrichedSession.score >= RISK_THRESHOLDS.HIGH_RISK && enrichedSession.riskLevel !== 'high') {
+    enrichedSession.riskLevel = 'high';
+    enrichedSession.reason = enrichedSession.reason || 'elevated_external_risk';
+  }
+  
+  return enrichedSession;
+}
+
+/**
+ * Real-time streaming prediction with WebSocket
+ */
+export async function streamRiskPrediction(
+  features: FeatureVector,
+  sessionId: string,
+  merchantId: string,
+  wsConnection: ServerWebSocket<any>
+): Promise<void> {
+  try {
+    // Send initial prediction
+    const initialSession = await predictRisk(features, sessionId, merchantId);
+    wsConnection.send(JSON.stringify({
+      type: 'prediction',
+      data: initialSession,
+      timestamp: Date.now()
+    }));
+    
+    // Fetch external data asynchronously
+    const externalData = await fetchExternalData(
+      features.vpn_active ? '8.8.8.8' : '127.0.0.1', // Placeholder IP
+      'device-fingerprint-placeholder'
+    );
+    
+    // Send enriched prediction
+    const enrichedSession = await enrichWithExternalData(initialSession, externalData);
+    wsConnection.send(JSON.stringify({
+      type: 'prediction_enhanced',
+      data: enrichedSession,
+      timestamp: Date.now()
+    }));
+    
+  } catch (error) {
+    wsConnection.send(JSON.stringify({
+      type: 'error',
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: Date.now()
+    }));
+  }
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+async function parseDeviceIntelligence(responses: Response[]): Promise<DeviceIntelligence> {
+  try {
+    const data = await Promise.all(responses.map(r => r.json()));
+    return {
+      riskScore: Math.max(...data.map(d => d.riskScore || 0)),
+      isEmulator: data.some(d => d.isEmulator),
+      isRooted: data.some(d => d.isRooted),
+      trustScore: Math.min(...data.map(d => d.trustScore || 1))
+    };
+  } catch {
+    return getDefaultDeviceIntelligence();
+  }
+}
+
+async function parseGeolocation(responses: Response[]): Promise<Geolocation> {
+  try {
+    const data = await Promise.all(responses.map(r => r.json()));
+    const primary = data[0];
+    return {
+      country: primary.country || 'unknown',
+      isHighRiskCountry: primary.isHighRisk || false,
+      vpnProbability: primary.vpnProbability || 0,
+      proxyScore: primary.proxyScore || 0
+    };
+  } catch {
+    return getDefaultGeolocation();
+  }
+}
+
+async function parseThreatIntelligence(responses: Response[]): Promise<ThreatIntelligence> {
+  try {
+    const data = await Promise.all(responses.map(r => r.json()));
+    return {
+      maliciousScore: Math.max(...data.map(d => d.maliciousScore || 0)),
+      isKnownAttacker: data.some(d => d.isKnownAttacker),
+      threatTypes: data.flatMap(d => d.threatTypes || []),
+      confidence: Math.max(...data.map(d => d.confidence || 0))
+    };
+  } catch {
+    return getDefaultThreatIntelligence();
+  }
+}
+
+function getDefaultExternalData(): ExternalDataSources {
+  return {
+    deviceIntelligence: getDefaultDeviceIntelligence(),
+    geolocation: getDefaultGeolocation(),
+    threatIntelligence: getDefaultThreatIntelligence()
+  };
+}
+
+function getDefaultDeviceIntelligence(): DeviceIntelligence {
+  return {
+    riskScore: 0,
+    isEmulator: false,
+    isRooted: false,
+    trustScore: 1.0
+  };
+}
+
+function getDefaultGeolocation(): Geolocation {
+  return {
+    country: 'unknown',
+    isHighRiskCountry: false,
+    vpnProbability: 0,
+    proxyScore: 0
+  };
+}
+
+function getDefaultThreatIntelligence(): ThreatIntelligence {
+  return {
+    maliciousScore: 0,
+    isKnownAttacker: false,
+    threatTypes: [],
+    confidence: 0
+  };
+}
+
+// ============================================================================
+// INTERFACES
+// ============================================================================
+
+export interface ExternalDataSources {
+  deviceIntelligence: DeviceIntelligence;
+  geolocation: Geolocation;
+  threatIntelligence: ThreatIntelligence;
+}
+
+export interface DeviceIntelligence {
+  riskScore: number;
+  isEmulator: boolean;
+  isRooted: boolean;
+  trustScore: number;
+}
+
+export interface Geolocation {
+  country: string;
+  isHighRiskCountry: boolean;
+  vpnProbability: number;
+  proxyScore: number;
+}
+
+export interface ThreatIntelligence {
+  maliciousScore: number;
+  isKnownAttacker: boolean;
+  threatTypes: string[];
+  confidence: number;
+}
+
 // Performance monitoring
 setInterval(() => {
   const activeCount = activeSessions.size;
