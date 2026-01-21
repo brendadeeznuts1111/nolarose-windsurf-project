@@ -4,6 +4,7 @@
 
 import { serve } from "bun";
 import type { Server, ServerWebSocket } from "bun";
+import { networkOptimizer, optimizedFetch, batchFetch } from "./network-optimizer";
 
 // Feature weight configuration aligned with global rules (5-feature weighted oracle)
 export const FEATURE_WEIGHTS = {
@@ -26,6 +27,32 @@ export const GHOST_WHITELIST = {
   privacy_com_ranges: ['199.102.106.', '199.102.107.', '199.102.108.'],
   duoplus_vm_fingerprints: ['duoplus-vm-', 'family-account-'],
   legitimate_proxy_services: ['cloudflare-', 'aws-', 'gcp-']
+} as const;
+
+// External API endpoints for enhanced fraud detection
+export const EXTERNAL_APIS = {
+  device_intelligence: [
+    'https://api.deviceatlas.com/v1/device/fingerprint',
+    'https://api.fingerprintjs.com/v1/fingerprint'
+  ],
+  geolocation: [
+    'https://maxmind.com/v1/geoip',
+    'https://ipinfo.io/v1/json'
+  ],
+  threat_intelligence: [
+    'https://api.crowdstrike.com/v1/threats',
+    'https://api.mandiant.com/v1/indicators'
+  ],
+  identity_verification: [
+    'https://veriff.com/v1/verify',
+    'https://api.jumio.com/v1/identity',
+    'https://api.onfido.com/v1/check'
+  ],
+  payment_processors: [
+    'https://api.stripe.com/v1/charges',
+    'https://api.paypal.com/v1/payments',
+    'https://api.square.com/v2/payments'
+  ]
 } as const;
 
 // Real-time fraud detection session storage
