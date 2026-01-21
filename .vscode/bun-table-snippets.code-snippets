@@ -1,0 +1,207 @@
+{
+  "Bun.inspect.table() - Basic": {
+    "prefix": ["bun-table", "bun-inspect-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table([",
+      "    { name: 'Alice', age: 30, city: 'New York' },",
+      "    { name: 'Bob', age: 25, city: 'San Francisco' },",
+      "    { name: 'Charlie', age: 35, city: 'Chicago' }",
+      "  ])",
+      ")"
+    ],
+    "description": "Create a basic Bun.inspect.table() for displaying arrays of objects"
+  },
+  
+  "Bun.inspect.table() - Fraud Detection": {
+    "prefix": ["bun-fraud-table", "bun-security-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    transactions.map(t => ({",
+      "      transactionId: t.id,",
+      "      amount: t.amount,",
+      "      riskScore: t.riskScore.toFixed(3),",
+      "      riskLevel: t.riskLevel,",
+      "      status: t.blocked ? '🚫 BLOCKED' : '✅ APPROVED',",
+      "      timestamp: new Date(t.timestamp).toLocaleString()",
+      "    })),",
+      "    { maxWidth: 120 }",
+      "  )",
+      ")"
+    ],
+    "description": "Create a fraud detection table with risk analysis"
+  },
+
+  "Bun.inspect.table() - Performance Metrics": {
+    "prefix": ["bun-metrics-table", "bun-performance-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table([",
+      "    { metric: 'Accuracy', value: 95.3, unit: '%', status: '🟢 Excellent' },",
+      "    { metric: 'Latency', value: 150, unit: 'ms', status: '🟢 Good' },",
+      "    { metric: 'Throughput', value: 145, unit: 'eps', status: '🟢 Optimal' },",
+      "    { metric: 'False Positives', value: 1.8, unit: '%', status: '🟡 Low' }",
+      "  ], { maxWidth: 100 })",
+      ")"
+    ],
+    "description": "Create a performance metrics table with status indicators"
+  },
+
+  "Bun.inspect.table() - Custom Columns": {
+    "prefix": ["bun-custom-table", "bun-columns-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    data.map(item => ({",
+      "      id: item.id,",
+      "      name: item.name,",
+      "      value: item.value,",
+      "      status: item.status,",
+      "      timestamp: item.timestamp,",
+      "      // Hidden columns available but not displayed",
+      "      hidden: item.hiddenData",
+      "      metadata: item.metadata",
+      "    })),",
+      "    { ",
+      "      maxWidth: 200, ",
+      "      columns: ['id', 'name', 'value', 'status', 'timestamp']",
+      "    }",
+      "  )",
+      ")"
+    ],
+    "description": "Create a table with custom column selection and width control"
+  },
+
+  "Bun.inspect.table() - Mathematical Data": {
+    "prefix": ["bun-math-table", "bun-number-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    Array.from({ length: 10 }, (_, i) => {",
+      "      const n = i + 1;",
+      "      return {",
+      "        n,",
+      "        sq: n ** 2,",
+      "        cube: n ** 3,",
+      "        sqrt: Math.sqrt(n).toFixed(3),",
+      "        isEven: n % 2 === 0,",
+      "        isPrime: ((x) => {",
+      "          if (x < 2) return false;",
+      "          for (let j = 2; j <= Math.sqrt(x); j++) if (x % j === 0) return false;",
+      "          return true;",
+      "        })(n)",
+      "      };",
+      "    }),",
+      "    { maxWidth: 150 }",
+      "  )",
+      ")"
+    ],
+    "description": "Create a mathematical properties table with complex calculations"
+  },
+
+  "Bun.inspect.table() - Security Analysis": {
+    "prefix": ["bun-security-table", "bun-threat-table"],
+    "body": [
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    securityEvents.map(event => ({",
+      "      eventId: event.id,",
+      "      type: event.type,",
+      "      severity: event.severity,",
+      "      riskScore: event.riskScore.toFixed(3),",
+      "      source: event.sourceIP,",
+      "      blocked: event.blocked ? '🚫' : '⚠️',",
+      "      action: event.recommendedAction,",
+      "      timestamp: new Date(event.timestamp).toLocaleString()",
+      "    })),",
+      "    { maxWidth: 180, columns: [",
+      "      'eventId', 'type', 'severity', 'riskScore', 'source', 'blocked', 'action'",
+      "    ] }",
+      "  )",
+      ")"
+    ],
+    "description": "Create a security analysis table for threat detection"
+  },
+
+  "Bun.inspect.table() - Real-time Data": {
+    "prefix": ["bun-realtime-table", "bun-stream-table"],
+    "body": [
+      "// Real-time table updates",
+      "const displayRealTimeData = (data) => {",
+      "  console.clear();",
+      "  console.log('🔄 Real-time Fraud Detection Monitor');",
+      "  console.log('='.repeat(50));",
+      "  console.log('');",
+      "  ",
+      "  console.log(",
+      "    Bun.inspect.table(",
+      "      data.map(item => ({",
+      "        id: item.id,",
+      "        score: item.riskScore.toFixed(3),",
+      "        level: item.riskLevel,",
+      "        status: item.blocked ? '🚫' : '✅',",
+      "        time: new Date(item.timestamp).toLocaleTimeString()",
+      "      })),",
+      "      { maxWidth: 100 }",
+      "    )",
+      "  );",
+      "  console.log('');",
+      "  console.log(`Last updated: ${new Date().toLocaleString()}`);",
+      "};",
+      "",
+      "// Usage: displayRealTimeData(realTimeData);"
+    ],
+    "description": "Create a real-time monitoring table with auto-refresh capability"
+  },
+
+  "Bun.inspect.table() - Complete Report": {
+    "prefix": ["bun-report-table", "bun-comprehensive-table"],
+    "body": [
+      "console.log('📊 Enhanced Fraud Detection Report');",
+      "console.log('='.repeat(60));",
+      "console.log('');",
+      "",
+      "// Summary Table",
+      "console.log('📈 Summary Metrics:');",
+      "console.log(",
+      "  Bun.inspect.table([",
+      "    { metric: 'Total Transactions', value: report.total, trend: '📈' },",
+      "    { metric: 'Blocked Transactions', value: report.blocked, trend: '📊' },",
+      "    { metric: 'Detection Rate', value: report.detectionRate + '%', trend: '🎯' },",
+      "    { metric: 'False Positive Rate', value: report.falsePositiveRate + '%', trend: '📉' }",
+      "  ])",
+      ");",
+      "console.log('');",
+      "",
+      "// Risk Distribution",
+      "console.log('🎯 Risk Distribution:');",
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    Object.entries(report.riskDistribution).map(([level, count]) => ({",
+      "      level: level.toUpperCase(),",
+      "      count,",
+      "      percentage: ((count / report.total) * 100).toFixed(1) + '%'",
+      "    }))",
+      "  )",
+      ");",
+      "console.log('');",
+      "",
+      "// High Risk Transactions",
+      "console.log('🚨 High Risk Transactions:');",
+      "console.log(",
+      "  Bun.inspect.table(",
+      "    report.highRiskTransactions.slice(0, 5).map(tx => ({",
+      "      id: tx.id,",
+      "      amount: '$' + tx.amount.toLocaleString(),",
+      "      score: tx.riskScore.toFixed(3),",
+      "      factors: tx.riskFactors.join(', '),",
+      "      action: tx.recommendedAction",
+      "    })),",
+      "    { maxWidth: 120 }",
+      "  )",
+      ");"
+    ],
+    "description": "Create a comprehensive fraud detection report with multiple tables"
+  }
+}
