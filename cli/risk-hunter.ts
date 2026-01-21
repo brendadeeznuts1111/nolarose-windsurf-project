@@ -3,7 +3,7 @@
 // Advanced command-line interface for fraud detection and risk hunting
 // Real-time session monitoring, pattern analysis, and threat hunting
 
-import { predictRisk, FeatureVector } from '../ai/anomaly-predict.js';
+import { predictRisk, type FeatureVector } from '../ai/anomaly-predict.js';
 import { fraudRiskOracle } from "../fraud-oracle/risk-scoring";
 import { ghostShield } from "../ghost-shield/privacy-handler";
 import { proxyDetector } from "../ghost-shield/proxy-detector";
@@ -350,6 +350,7 @@ export class RiskHunterCLI {
         avg_score: number;
         high_risk_count: number;
         patterns: any[];
+        sessions: RiskSession[];
       };
       
       // Generate report
