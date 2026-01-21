@@ -912,6 +912,9 @@ export class RiskHunterCLI {
 		}
 
 		console.log("💡 Recommendations:");
+		report.recommendations.forEach((rec: string, index: number) => {
+			console.log(`   ${index + 1}. ${rec}`);
+		});
 	}
 
 	// Show network performance metrics
