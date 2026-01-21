@@ -50,7 +50,13 @@
     "demo:depth-5": "bun --console-depth 5 run console-depth-demo.js",
     "demo:depth-7": "bun --console-depth 7 run console-depth-demo.js",
     "demo:depth-all": "./test-depths.sh",
-    "demo:depth-comparison": "echo '=== Console Depth Comparison ===' && echo 'Depth 1:' && bun --console-depth 1 run simple-demo.js && echo '' && echo 'Depth 2 (default):' && bun --console-depth 2 run simple-demo.js && echo '' && echo 'Depth 4:' && bun --console-depth 4 run simple-demo.js && echo '' && echo 'Depth 10:' && bun --console-depth 10 run deep-demo.js"
+    "demo:depth-comparison": "echo '=== Console Depth Comparison ===' && echo 'Depth 1:' && bun --console-depth 1 run simple-demo.js && echo '' && echo 'Depth 2 (default):' && bun --console-depth 2 run simple-demo.js && echo '' && echo 'Depth 4:' && bun --console-depth 4 run simple-demo.js && echo '' && echo 'Depth 10:' && bun --console-depth 10 run deep-demo.js",
+    "demo:smol": "bun --smol run smol-demo.tsx",
+    "demo:smol-comparison": "./smol-comparison.sh",
+    "dev:smol": "bun --smol run cli/risk-hunter.ts",
+    "build:smol": "bun --smol build cli/risk-hunter.ts --outfile dist/index.js --target bun",
+    "test:smol": "bun --smol test",
+    "server:smol": "bun --smol run ai/anomaly-predict.ts"
 	},
 	"keywords": [
 		"fraud-detection",
