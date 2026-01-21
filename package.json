@@ -56,7 +56,14 @@
     "dev:smol": "bun --smol run cli/risk-hunter.ts",
     "build:smol": "bun --smol build cli/risk-hunter.ts --outfile dist/index.js --target bun",
     "test:smol": "bun --smol test",
-    "server:smol": "bun --smol run ai/anomaly-predict.ts"
+    "server:smol": "bun --smol run ai/anomaly-predict.ts",
+    "enhanced:ai": "bun run ai/enhanced-ai-model.ts",
+    "enhanced:network": "bun run ai/enhanced-network-optimizer.ts",
+    "enhanced:streaming": "bun run ai/realtime-fraud-detector.ts",
+    "enhanced:cli": "bun run cli/enhanced-cli.ts analytics --realTime",
+    "enhanced:monitoring": "bun run monitoring/monitoring-system.ts",
+    "enhanced:security": "bun run security/advanced-security.ts",
+    "demo:enhanced": "echo '=== Enhanced Features Demo ===' && echo '1. Enhanced AI Model:' && bun run enhanced:ai && echo '' && echo '2. Network Optimization:' && bun run enhanced:network && echo '' && echo '3. Real-time Detection:' && bun run enhanced:streaming && echo '' && echo '4. Analytics Dashboard:' && bun run enhanced:cli && echo '' && echo '5. Monitoring System:' && bun run enhanced:monitoring && echo '' && echo '6. Security Features:' && bun run enhanced:security"
 	},
 	"keywords": [
 		"fraud-detection",
