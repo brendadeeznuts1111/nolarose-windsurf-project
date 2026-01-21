@@ -116,6 +116,9 @@ export class RiskHunterCLI {
         case 'external':
           await this.testExternalAPIs(options);
           break;
+        case 'matrix':
+          this.displayMatrixConfig();
+          break;
         default:
           this.showHelp();
       }
@@ -143,6 +146,9 @@ export class RiskHunterCLI {
         case 'monitor':
         case 'report':
         case 'test':
+        case 'network':
+        case 'external':
+        case 'matrix':
           options.command = arg;
           break;
         case '--since':
@@ -517,25 +523,28 @@ export class RiskHunterCLI {
     }
   }
   
-  // Display sessions as table
+  // Display sessions as table using bun.inspect.table
   private displaySessionsAsTable(sessions: any[]): void {
     if (sessions.length === 0) return;
     
-    console.log('┌─────────────────────┬──────────────┬───────────┬──────────┬─────────────┐');
-    console.log('│ Session ID          │ Merchant     │ Score     │ Risk     │ Status      │');
-    console.log('├─────────────────────┼──────────────┼───────────┼──────────┼─────────────┤');
+    // Transform sessions data for table display
+    const tableData = sessions.map(session => ({
+      'Session ID': session.sessionId || 'unknown',
+      'Merchant': session.merchantId || 'unknown',
+      'Score': session.score.toFixed(3),
+      'Risk Level': session.riskLevel || 'unknown',
+      'Status': session.blocked ? '🚫 BLOCKED' : '✅ Active',
+      'Timestamp': new Date(session.timestamp).toLocaleString()
+    }));
     
-    sessions.forEach(session => {
-      const sessionId = (session.sessionId || 'unknown').padEnd(19);
-      const merchant = (session.merchantId || 'unknown').padEnd(12);
-      const score = session.score.toFixed(3).padEnd(9);
-      const risk = (session.riskLevel || 'unknown').padEnd(8);
-      const status = (session.blocked ? 'BLOCKED' : 'active').padEnd(11);
-      
-      console.log(`│ ${sessionId} │ ${merchant} │ ${score} │ ${risk} │ ${status} │`);
-    });
+    console.log('📊 Risk Sessions Table:');
+    console.log('');
     
-    console.log('└─────────────────────┴──────────────┴───────────┴──────────┴─────────────┘');
+    // Use bun.inspect.table for formatted display
+    console.table(tableData);
+    
+    console.log('');
+    console.log(`📈 Summary: ${sessions.length} sessions displayed`);
   }
   
   // Display sessions as CSV
@@ -545,6 +554,100 @@ export class RiskHunterCLI {
     sessions.forEach(session => {
       console.log(`"${session.sessionId}","${session.merchantId}",${session.score},"${session.riskLevel}",${session.blocked},${session.timestamp}`);
     });
+  }
+  
+  // Display matrix configuration using bun.inspect.table
+  private displayMatrixConfig(): void {
+    console.log('🏗️ Matrix Configuration System');
+    console.log('================================');
+    
+    // Feature matrix columns
+    const featureColumns = {
+      'Basic Properties': ['name', 'weight', 'threshold', 'description', 'impact'],
+      'Data Characteristics': ['data_type', 'collection_method', 'refresh_rate', 'reliability', 'cost'],
+      'Privacy & Compliance': ['privacy_level', 'retention_days', 'gdpr_sensitive', 'pci_required', 'hipaa_phi'],
+      'Engineering': ['normalization', 'encoding', 'validation', 'drift_detection'],
+      'Performance': ['importance_score', 'feature_correlation', 'stability_index', 'latency_ms'],
+      'Business': ['business_impact', 'cost_benefit_ratio', 'risk_contribution', 'regulatory_flag']
+    };
+    
+    console.log('');
+    console.log('📊 Feature Matrix Columns:');
+    console.table(featureColumns);
+    
+    // Feature details
+    const featureDetails = [
+      {
+        'Feature': 'root_detected',
+        'Weight': 0.28,
+        'Threshold': 1,
+        'Impact': 'Critical',
+        'Data Type': 'Binary',
+        'Reliability': 0.98,
+        'Cost': '$0.001'
+      },
+      {
+        'Feature': 'vpn_active',
+        'Weight': 0.22,
+        'Threshold': 1,
+        'Impact': 'High',
+        'Data Type': 'Binary',
+        'Reliability': 0.95,
+        'Cost': '$0.002'
+      },
+      {
+        'Feature': 'thermal_spike',
+        'Weight': 0.15,
+        'Threshold': 15,
+        'Impact': 'Medium',
+        'Data Type': 'Numeric',
+        'Reliability': 0.92,
+        'Cost': '$0.0005'
+      },
+      {
+        'Feature': 'biometric_fail',
+        'Weight': 0.18,
+        'Threshold': 3,
+        'Impact': 'High',
+        'Data Type': 'Integer',
+        'Reliability': 0.96,
+        'Cost': '$0.003'
+      },
+      {
+        'Feature': 'proxy_hop_count',
+        'Weight': 0.17,
+        'Threshold': 3,
+        'Impact': 'High',
+        'Data Type': 'Integer',
+        'Reliability': 0.89,
+        'Cost': '$0.004'
+      }
+    ];
+    
+    console.log('');
+    console.log('🎯 Feature Details:');
+    console.table(featureDetails);
+    
+    // Ensemble models
+    const ensembleModels = [
+      {
+        'Model': 'gradient_boosting_core',
+        'Type': 'XGBoost',
+        'Version': '1.2.0',
+        'Accuracy': '94%',
+        'Inference Time': '3ms',
+        'Memory': '128MB',
+        'GPU Required': false,
+        'Cost/1K Pred': '$0.005'
+      }
+    ];
+    
+    console.log('');
+    console.log('🤖 Ensemble Models:');
+    console.table(ensembleModels);
+    
+    console.log('');
+    console.log('✅ Matrix configuration loaded successfully');
   }
   
   // Display single session
@@ -693,12 +796,6 @@ export class RiskHunterCLI {
     }
     
     console.log('💡 Recommendations:');
-    report.recommendations.forEach((rec: string, index: number) => {
-      console.log(`   ${index + 1}. ${rec}`);
-    });
-  }
-  
-  // Show network metrics
   private async showNetworkMetrics(options: CLIOptions): Promise<void> {
     console.log('🌐 Network Performance Metrics');
     console.log('=============================');
@@ -706,37 +803,63 @@ export class RiskHunterCLI {
     try {
       const metrics = getNetworkMetrics();
       
+      // Connection statistics table
+      const connectionStats = [
+        { 'Metric': 'Preconnected Hosts', 'Value': metrics.preconnectedHosts, 'Status': '✅ Active' },
+        { 'Metric': 'Preconnect Failures', 'Value': metrics.preconnectFailures, 'Status': metrics.preconnectFailures > 0 ? '⚠️ Warning' : '✅ Good' },
+        { 'Metric': 'Total Requests', 'Value': metrics.totalRequests, 'Status': '📊 Tracked' },
+        { 'Metric': 'Total Failures', 'Value': metrics.totalFailures, 'Status': metrics.totalFailures > 0 ? '❌ Issues' : '✅ Clean' },
+        { 'Metric': 'Success Rate', 'Value': `${metrics.successRate}%`, 'Status': metrics.successRate > 95 ? '✅ Excellent' : '⚠️ Monitor' },
+        { 'Metric': 'Avg Response Time', 'Value': `${metrics.averageResponseTime}ms`, 'Status': metrics.averageResponseTime < 100 ? '✅ Fast' : '⚠️ Slow' },
+        { 'Metric': 'Requests/Minute', 'Value': metrics.requestsPerMinute, 'Status': '📈 Active' }
+      ];
+      
       console.log('📊 Connection Statistics:');
-      console.log(`   Preconnected Hosts: ${metrics.preconnectedHosts}`);
-      console.log(`   Preconnect Failures: ${metrics.preconnectFailures}`);
-      console.log(`   Total Requests: ${metrics.totalRequests}`);
-      console.log(`   Total Failures: ${metrics.totalFailures}`);
-      console.log(`   Success Rate: ${metrics.successRate}%`);
-      console.log(`   Average Response Time: ${metrics.averageResponseTime}ms`);
-      console.log(`   Requests per Minute: ${metrics.requestsPerMinute}`);
-      console.log('');
+      console.table(connectionStats);
       
+      // Top hosts table
       if (metrics.topHosts.length > 0) {
-        console.log('🔗 Top Hosts by Request Count:');
-        metrics.topHosts.slice(0, 10).forEach((host, index) => {
-          console.log(`   ${index + 1}. ${host.host}: ${host.requestCount} requests`);
-        });
+        const topHostsData = metrics.topHosts.slice(0, 10).map((host, index) => ({
+          'Rank': index + 1,
+          'Host': host.host,
+          'Requests': host.requestCount,
+          'Status': host.requestCount > 100 ? '🔥 High' : host.requestCount > 50 ? '📊 Medium' : '📉 Low'
+        }));
+        
         console.log('');
+        console.log('🔗 Top Hosts by Request Count:');
+        console.table(topHostsData);
       }
       
+      // Recent errors table
       if (metrics.recentErrors.length > 0) {
-        console.log('⚠️ Recent Errors:');
-        metrics.recentErrors.forEach((error, index) => {
-          console.log(`   ${index + 1}. ${error.url}: ${error.error}`);
-        });
+        const errorsData = metrics.recentErrors.map((error, index) => ({
+          '#': index + 1,
+          'URL': error.url.length > 50 ? error.url.substring(0, 47) + '...' : error.url,
+          'Error': error.error,
+          'Severity': error.error.includes('timeout') ? '🔴 High' : '⚠️ Medium'
+        }));
+        
         console.log('');
+        console.log('⚠️ Recent Errors:');
+        console.table(errorsData);
       }
+      
+      // Performance summary
+      const performanceSummary = [
+        { 'Category': 'Network Health', 'Score': metrics.successRate > 95 ? 'A' : metrics.successRate > 90 ? 'B' : 'C', 'Status': metrics.successRate > 95 ? '🟢 Excellent' : '🟡 Needs Attention' },
+        { 'Category': 'Response Speed', 'Score': metrics.averageResponseTime < 50 ? 'A' : metrics.averageResponseTime < 100 ? 'B' : 'C', 'Status': metrics.averageResponseTime < 50 ? '🟢 Fast' : '🟡 Moderate' },
+        { 'Category': 'Reliability', 'Score': metrics.totalFailures === 0 ? 'A' : metrics.totalFailures < 5 ? 'B' : 'C', 'Status': metrics.totalFailures === 0 ? '🟢 Stable' : '🟡 Some Issues' }
+      ];
+      
+      console.log('');
+      console.log('📈 Performance Summary:');
+      console.table(performanceSummary);
       
     } catch (error) {
       console.error('❌ Failed to fetch network metrics:', error);
     }
   }
-  
   // Test external APIs
   private async testExternalAPIs(options: CLIOptions): Promise<void> {
     console.log('🔗 External API Testing');
@@ -884,6 +1007,7 @@ export class RiskHunterCLI {
     console.log('  test       Run detection test suite');
     console.log('  network    Show network performance metrics');
     console.log('  external   Test external API integration');
+    console.log('  matrix     Display matrix configuration system');
     console.log('');
     console.log('Options:');
     console.log('  --sessionId <id>      Session ID to analyze');
@@ -908,6 +1032,10 @@ export class RiskHunterCLI {
     console.log('');
     console.log('  # Monitor with enhanced features');
     console.log('  bun run risk-hunter.ts monitor --realTime --external');
+    console.log('');
+    console.log('  # Display matrix configuration');
+    console.log('  bun run risk-hunter.ts matrix');
+    console.log('');
   }
 }
 

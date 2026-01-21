@@ -27,7 +27,17 @@
     "docs:serve": "bunx http-server docs -p 8080",
     "security:audit": "bun audit",
     "deps:update": "bun update",
-    "deps:check": "bun outdated"
+    "deps:check": "bun outdated",
+    "cli:matrix": "bun --console-depth 4 run cli/risk-hunter.ts matrix",
+    "cli:network": "bun --console-depth 3 run cli/risk-hunter.ts network",
+    "cli:analyze": "bun --console-depth 5 run cli/risk-hunter.ts analyze --features '{\"root_detected\":1,\"vpn_active\":0}' --output table",
+    "cli:external": "bun --console-depth 4 run cli/risk-hunter.ts external --features '{\"root_detected\":1}'",
+    "server:start": "bun --console-depth 3 run ai/anomaly-predict.ts",
+    "server:custom": "HOST=localhost PORT=3000 bun --console-depth 3 run ai/anomaly-predict.ts",
+    "filter:test": "bun run --filter 'test*' test",
+    "filter:bench": "bun run --filter 'bench*' bench:all",
+    "demo:table": "echo 'console.table([{name: \"Feature A\", weight: 0.28, impact: \"Critical\"}, {name: \"Feature B\", weight: 0.22, impact: \"High\"}])' | bun run -",
+    "demo:inspect": "echo 'console.log({ nested: { a: { b: { c: \"deep value\" } } } })' | bun --console-depth 5 run -"
   },
   "keywords": [
     "fraud-detection",
