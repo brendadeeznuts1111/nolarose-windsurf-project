@@ -2,539 +2,625 @@
 // Enterprise-grade network performance optimization for fraud detection systems
 
 interface NetworkHost {
-  hostname: string;
-  port: number;
-  protocol: 'http' | 'https' | 'ws' | 'wss';
-  priority: number;
-  lastAccessed: number;
-  accessFrequency: number;
-  averageLatency: number;
-  successRate: number;
-  isPreconnected: boolean;
-  connectionPool: number[];
+	hostname: string;
+	port: number;
+	protocol: "http" | "https" | "ws" | "wss";
+	priority: number;
+	lastAccessed: number;
+	accessFrequency: number;
+	averageLatency: number;
+	successRate: number;
+	isPreconnected: boolean;
+	connectionPool: number[];
 }
 
 interface CacheEntry {
-  key: string;
-  data: any;
-  timestamp: number;
-  ttl: number;
-  accessCount: number;
-  size: number;
-  hits: number;
-  lastAccessed: number;
+	key: string;
+	data: any;
+	timestamp: number;
+	ttl: number;
+	accessCount: number;
+	size: number;
+	hits: number;
+	lastAccessed: number;
 }
 
 interface PredictiveModel {
-  hostPatterns: Map<string, number>;
-  timePatterns: Map<string, number[]>;
-  accessSequences: string[][];
-  confidence: number;
+	hostPatterns: Map<string, number>;
+	timePatterns: Map<string, number[]>;
+	accessSequences: string[][];
+	confidence: number;
 }
 
 interface NetworkMetrics {
-  totalRequests: number;
-  cacheHitRate: number;
-  averageLatency: number;
-  preconnectionSuccessRate: number;
-  bandwidthSaved: number;
-  connectionsReused: number;
-  predictionAccuracy: number;
+	totalRequests: number;
+	cacheHitRate: number;
+	averageLatency: number;
+	preconnectionSuccessRate: number;
+	bandwidthSaved: number;
+	connectionsReused: number;
+	predictionAccuracy: number;
 }
 
 class EnhancedNetworkOptimizer {
-  private hosts: Map<string, NetworkHost> = new Map();
-  private cache: Map<string, CacheEntry> = new Map();
-  private predictiveModel: PredictiveModel;
-  private metrics: NetworkMetrics;
-  private maxCacheSize: number = 100 * 1024 * 1024; // 100MB
-  private currentCacheSize: number = 0;
-  private maxConnectionsPerHost: number = 10;
-  private preconnectionThreshold: number = 0.7;
-  private learningEnabled: boolean = true;
+	private hosts: Map<string, NetworkHost> = new Map();
+	private cache: Map<string, CacheEntry> = new Map();
+	private predictiveModel: PredictiveModel;
+	private metrics: NetworkMetrics;
+	private maxCacheSize: number = 100 * 1024 * 1024; // 100MB
+	private currentCacheSize: number = 0;
+	private maxConnectionsPerHost: number = 10;
+	private preconnectionThreshold: number = 0.7;
+	private learningEnabled: boolean = true;
 
-  constructor() {
-    this.predictiveModel = {
-      hostPatterns: new Map(),
-      timePatterns: new Map(),
-      accessSequences: [],
-      confidence: 0.5
-    };
+	constructor() {
+		this.predictiveModel = {
+			hostPatterns: new Map(),
+			timePatterns: new Map(),
+			accessSequences: [],
+			confidence: 0.5,
+		};
 
-    this.metrics = {
-      totalRequests: 0,
-      cacheHitRate: 0,
-      averageLatency: 0,
-      preconnectionSuccessRate: 0,
-      bandwidthSaved: 0,
-      connectionsReused: 0,
-      predictionAccuracy: 0
-    };
+		this.metrics = {
+			totalRequests: 0,
+			cacheHitRate: 0,
+			averageLatency: 0,
+			preconnectionSuccessRate: 0,
+			bandwidthSaved: 0,
+			connectionsReused: 0,
+			predictionAccuracy: 0,
+		};
 
-    this.initializeCommonHosts();
-    this.startPredictiveLearning();
-  }
+		this.initializeCommonHosts();
+		this.startPredictiveLearning();
+	}
 
-  private initializeCommonHosts(): void {
-    // Initialize commonly accessed hosts for fraud detection
-    const commonHosts = [
-      { hostname: 'api.fraud-detection.com', port: 443, protocol: 'https' as const, priority: 1 },
-      { hostname: 'ml.models.api.com', port: 443, protocol: 'https' as const, priority: 2 },
-      { hostname: 'risk.scores.com', port: 443, protocol: 'https' as const, priority: 1 },
-      { hostname: 'device.fingerprint.com', port: 443, protocol: 'https' as const, priority: 2 },
-      { hostname: 'network.intelligence.com', port: 443, protocol: 'https' as const, priority: 3 },
-      { hostname: 'cache.redis.local', port: 6379, protocol: 'http' as const, priority: 1 },
-      { hostname: 'streaming.data.com', port: 443, protocol: 'wss' as const, priority: 2 },
-      { hostname: 'auth.tokens.com', port: 443, protocol: 'https' as const, priority: 1 }
-    ];
+	private initializeCommonHosts(): void {
+		// Initialize commonly accessed hosts for fraud detection
+		const commonHosts = [
+			{
+				hostname: "api.fraud-detection.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 1,
+			},
+			{
+				hostname: "ml.models.api.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 2,
+			},
+			{
+				hostname: "risk.scores.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 1,
+			},
+			{
+				hostname: "device.fingerprint.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 2,
+			},
+			{
+				hostname: "network.intelligence.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 3,
+			},
+			{
+				hostname: "cache.redis.local",
+				port: 6379,
+				protocol: "http" as const,
+				priority: 1,
+			},
+			{
+				hostname: "streaming.data.com",
+				port: 443,
+				protocol: "wss" as const,
+				priority: 2,
+			},
+			{
+				hostname: "auth.tokens.com",
+				port: 443,
+				protocol: "https" as const,
+				priority: 1,
+			},
+		];
 
-    commonHosts.forEach(host => {
-      this.hosts.set(`${host.protocol}://${host.hostname}:${host.port}`, {
-        ...host,
-        lastAccessed: Date.now(),
-        accessFrequency: 0,
-        averageLatency: 0,
-        successRate: 1.0,
-        isPreconnected: false,
-        connectionPool: []
-      });
-    });
-  }
+		commonHosts.forEach((host) => {
+			this.hosts.set(`${host.protocol}://${host.hostname}:${host.port}`, {
+				...host,
+				lastAccessed: Date.now(),
+				accessFrequency: 0,
+				averageLatency: 0,
+				successRate: 1.0,
+				isPreconnected: false,
+				connectionPool: [],
+			});
+		});
+	}
 
-  // Intelligent caching with adaptive TTL
-  public async cacheData(key: string, data: any, ttl?: number): Promise<void> {
-    const dataSize = this.calculateSize(data);
-    
-    // Check if we need to evict cache entries
-    if (this.currentCacheSize + dataSize > this.maxCacheSize) {
-      await this.evictCache(dataSize);
-    }
+	// Intelligent caching with adaptive TTL
+	public async cacheData(key: string, data: any, ttl?: number): Promise<void> {
+		const dataSize = this.calculateSize(data);
 
-    const adaptiveTTL = ttl || this.calculateAdaptiveTTL(key, data);
-    
-    const entry: CacheEntry = {
-      key,
-      data,
-      timestamp: Date.now(),
-      ttl: adaptiveTTL,
-      accessCount: 0,
-      size: dataSize,
-      hits: 0,
-      lastAccessed: Date.now()
-    };
+		// Check if we need to evict cache entries
+		if (this.currentCacheSize + dataSize > this.maxCacheSize) {
+			await this.evictCache(dataSize);
+		}
 
-    this.cache.set(key, entry);
-    this.currentCacheSize += dataSize;
+		const adaptiveTTL = ttl || this.calculateAdaptiveTTL(key, data);
 
-    // Update predictive model based on caching patterns
-    this.updateCachePatterns(key);
-  }
+		const entry: CacheEntry = {
+			key,
+			data,
+			timestamp: Date.now(),
+			ttl: adaptiveTTL,
+			accessCount: 0,
+			size: dataSize,
+			hits: 0,
+			lastAccessed: Date.now(),
+		};
 
-  public async getCachedData(key: string): Promise<any | null> {
-    const entry = this.cache.get(key);
-    
-    if (!entry) {
-      return null;
-    }
+		this.cache.set(key, entry);
+		this.currentCacheSize += dataSize;
 
-    // Check if entry has expired
-    if (Date.now() - entry.timestamp > entry.ttl) {
-      this.cache.delete(key);
-      this.currentCacheSize -= entry.size;
-      return null;
-    }
+		// Update predictive model based on caching patterns
+		this.updateCachePatterns(key);
+	}
 
-    // Update access statistics
-    entry.accessCount++;
-    entry.hits++;
-    entry.lastAccessed = Date.now();
+	public async getCachedData(key: string): Promise<any | null> {
+		const entry = this.cache.get(key);
 
-    // Update metrics
-    this.metrics.cacheHitRate = this.calculateCacheHitRate();
+		if (!entry) {
+			return null;
+		}
 
-    return entry.data;
-  }
+		// Check if entry has expired
+		if (Date.now() - entry.timestamp > entry.ttl) {
+			this.cache.delete(key);
+			this.currentCacheSize -= entry.size;
+			return null;
+		}
 
-  private calculateSize(data: any): number {
-    // Rough estimation of data size in bytes
-    return JSON.stringify(data).length * 2; // UTF-16 characters
-  }
+		// Update access statistics
+		entry.accessCount++;
+		entry.hits++;
+		entry.lastAccessed = Date.now();
 
-  private calculateAdaptiveTTL(key: string, data: any): number {
-    // Adaptive TTL based on access patterns and data importance
-    const entry = this.cache.get(key);
-    const baseTTL = 5 * 60 * 1000; // 5 minutes base
-    
-    if (!entry) {
-      return baseTTL;
-    }
+		// Update metrics
+		this.metrics.cacheHitRate = this.calculateCacheHitRate();
 
-    // Longer TTL for frequently accessed data
-    const accessMultiplier = Math.min(3.0, 1 + (entry.accessCount / 10));
-    
-    // Longer TTL for important data (based on key patterns)
-    const importanceMultiplier = key.includes('critical') ? 2.0 : 1.0;
-    
-    return baseTTL * accessMultiplier * importanceMultiplier;
-  }
+		return entry.data;
+	}
 
-  private async evictCache(requiredSpace: number): Promise<void> {
-    // Sort cache entries by eviction priority (LFU with time decay)
-    const entries = Array.from(this.cache.entries()).sort((a, b) => {
-      const scoreA = this.calculateEvictionScore(a[1]);
-      const scoreB = this.calculateEvictionScore(b[1]);
-      return scoreA - scoreB;
-    });
+	private calculateSize(data: any): number {
+		// Rough estimation of data size in bytes
+		return JSON.stringify(data).length * 2; // UTF-16 characters
+	}
 
-    let freedSpace = 0;
-    for (const [key, entry] of entries) {
-      if (freedSpace >= requiredSpace) break;
-      
-      this.cache.delete(key);
-      this.currentCacheSize -= entry.size;
-      freedSpace += entry.size;
-    }
-  }
+	private calculateAdaptiveTTL(key: string, data: any): number {
+		// Adaptive TTL based on access patterns and data importance
+		const entry = this.cache.get(key);
+		const baseTTL = 5 * 60 * 1000; // 5 minutes base
 
-  private calculateEvictionScore(entry: CacheEntry): number {
-    const now = Date.now();
-    const age = now - entry.timestamp;
-    const timeSinceAccess = now - entry.lastAccessed;
-    
-    // Lower score = higher eviction priority
-    const frequencyScore = entry.accessCount / Math.max(1, age / 1000);
-    const recencyScore = 1 / Math.max(1, timeSinceAccess / 1000);
-    
-    return frequencyScore + recencyScore;
-  }
+		if (!entry) {
+			return baseTTL;
+		}
 
-  // Predictive preconnection
-  public async predictAndPreconnect(): Promise<void> {
-    if (!this.learningEnabled) return;
+		// Longer TTL for frequently accessed data
+		const accessMultiplier = Math.min(3.0, 1 + entry.accessCount / 10);
 
-    const predictions = this.generatePredictions();
-    
-    for (const prediction of predictions) {
-      if (prediction.confidence >= this.preconnectionThreshold) {
-        await this.preconnectHost(prediction.hostname);
-      }
-    }
-  }
+		// Longer TTL for important data (based on key patterns)
+		const importanceMultiplier = key.includes("critical") ? 2.0 : 1.0;
 
-  private generatePredictions(): Array<{ hostname: string; confidence: number }> {
-    const predictions: Array<{ hostname: string; confidence: number }> = [];
-    const currentHour = new Date().getHours();
-    
-    for (const [hostKey, host] of this.hosts) {
-      // Time-based prediction
-      const timePattern = this.predictiveModel.timePatterns.get(hostKey);
-      let timeConfidence = 0;
-      
-      if (timePattern) {
-        const hourFrequency = timePattern[currentHour] || 0;
-        timeConfidence = hourFrequency / Math.max(...timePattern);
-      }
-      
-      // Pattern-based prediction
-      const patternConfidence = this.predictiveModel.hostPatterns.get(hostKey) || 0;
-      
-      // Recency-based prediction
-      const recencyScore = Math.exp(-(Date.now() - host.lastAccessed) / (60 * 60 * 1000));
-      
-      // Combined confidence
-      const combinedConfidence = (timeConfidence * 0.4 + patternConfidence * 0.4 + recencyScore * 0.2);
-      
-      if (combinedConfidence > 0.3) {
-        predictions.push({
-          hostname: hostKey,
-          confidence: combinedConfidence
-        });
-      }
-    }
-    
-    return predictions.sort((a, b) => b.confidence - a.confidence).slice(0, 5);
-  }
+		return baseTTL * accessMultiplier * importanceMultiplier;
+	}
 
-  private async preconnectHost(hostKey: string): Promise<void> {
-    const host = this.hosts.get(hostKey);
-    if (!host || host.isPreconnected) return;
+	private async evictCache(requiredSpace: number): Promise<void> {
+		// Sort cache entries by eviction priority (LFU with time decay)
+		const entries = Array.from(this.cache.entries()).sort((a, b) => {
+			const scoreA = this.calculateEvictionScore(a[1]);
+			const scoreB = this.calculateEvictionScore(b[1]);
+			return scoreA - scoreB;
+		});
 
-    try {
-      // Simulate preconnection (in real implementation, would establish actual connections)
-      const startTime = Date.now();
-      
-      // Create connection pool
-      const connections: number[] = [];
-      for (let i = 0; i < Math.min(3, this.maxConnectionsPerHost); i++) {
-        connections.push(Date.now() + Math.random() * 1000);
-      }
-      
-      host.connectionPool = connections;
-      host.isPreconnected = true;
-      
-      const latency = Date.now() - startTime;
-      host.averageLatency = (host.averageLatency + latency) / 2;
-      
-      this.metrics.connectionsReused++;
-      console.log(`🔗 Preconnected to ${hostKey} (latency: ${latency}ms)`);
-      
-    } catch (error) {
-      console.error(`❌ Failed to preconnect ${hostKey}:`, error);
-      host.successRate = Math.max(0, host.successRate - 0.1);
-    }
-  }
+		let freedSpace = 0;
+		for (const [key, entry] of entries) {
+			if (freedSpace >= requiredSpace) break;
 
-  public async getConnection(hostKey: string): Promise<number | null> {
-    const host = this.hosts.get(hostKey);
-    if (!host) return null;
+			this.cache.delete(key);
+			this.currentCacheSize -= entry.size;
+			freedSpace += entry.size;
+		}
+	}
 
-    // Try to reuse preconnected connection
-    if (host.connectionPool.length > 0) {
-      const connection = host.connectionPool.pop();
-      host.lastAccessed = Date.now();
-      host.accessFrequency++;
-      
-      // Refill connection pool if needed
-      if (host.connectionPool.length < 2) {
-        setTimeout(() => this.preconnectHost(hostKey), 100);
-      }
-      
-      return connection || null;
-    }
+	private calculateEvictionScore(entry: CacheEntry): number {
+		const now = Date.now();
+		const age = now - entry.timestamp;
+		const timeSinceAccess = now - entry.lastAccessed;
 
-    // No preconnected connection available
-    host.isPreconnected = false;
-    return null;
-  }
+		// Lower score = higher eviction priority
+		const frequencyScore = entry.accessCount / Math.max(1, age / 1000);
+		const recencyScore = 1 / Math.max(1, timeSinceAccess / 1000);
 
-  // Learning and adaptation
-  private startPredictiveLearning(): void {
-    setInterval(() => {
-      this.updatePredictiveModel();
-      this.predictAndPreconnect();
-    }, 60000); // Learn and predict every minute
-  }
+		return frequencyScore + recencyScore;
+	}
 
-  private updatePredictiveModel(): void {
-    const now = Date.now();
-    const currentHour = new Date().getHours();
-    
-    // Update time patterns
-    for (const [hostKey, host] of this.hosts) {
-      if (!this.predictiveModel.timePatterns.has(hostKey)) {
-        this.predictiveModel.timePatterns.set(hostKey, new Array(24).fill(0));
-      }
-      
-      const timePattern = this.predictiveModel.timePatterns.get(hostKey)!;
-      
-      // Update hourly access frequency
-      if (now - host.lastAccessed < 60 * 60 * 1000) { // Accessed within last hour
-        timePattern[currentHour] = Math.min(1.0, timePattern[currentHour] + 0.1);
-      } else {
-        // Decay older patterns
-        for (let i = 0; i < 24; i++) {
-          timePattern[i] *= 0.95;
-        }
-      }
-      
-      // Update host access patterns
-      const accessScore = host.accessFrequency / Math.max(1, (now - host.lastAccessed) / (24 * 60 * 60 * 1000));
-      this.predictiveModel.hostPatterns.set(hostKey, accessScore);
-    }
-    
-    // Update confidence based on prediction accuracy
-    this.updatePredictionConfidence();
-  }
+	// Predictive preconnection
+	public async predictAndPreconnect(): Promise<void> {
+		if (!this.learningEnabled) return;
 
-  private updateCachePatterns(key: string): void {
-    // Extract host pattern from cache key
-    const hostMatch = key.match(/https?:\/\/([^\/]+)/);
-    if (hostMatch) {
-      const hostname = hostMatch[1];
-      const currentFrequency = this.predictiveModel.hostPatterns.get(hostname) || 0;
-      this.predictiveModel.hostPatterns.set(hostname, Math.min(1.0, currentFrequency + 0.01));
-    }
-  }
+		const predictions = this.generatePredictions();
 
-  private updatePredictionAccuracy(): void {
-    // Calculate prediction accuracy based on preconnection success
-    const totalPreconnections = Array.from(this.hosts.values()).filter(h => h.isPreconnected).length;
-    const successfulPreconnections = this.metrics.connectionsReused;
-    
-    this.metrics.predictionAccuracy = totalPreconnections > 0 
-      ? successfulPreconnections / totalPreconnections 
-      : 0;
-  }
+		for (const prediction of predictions) {
+			if (prediction.confidence >= this.preconnectionThreshold) {
+				await this.preconnectHost(prediction.hostname);
+			}
+		}
+	}
 
-  private updatePredictionConfidence(): void {
-    this.updatePredictionAccuracy();
-    
-    // Adjust confidence based on recent accuracy
-    const targetConfidence = this.metrics.predictionAccuracy;
-    this.predictiveModel.confidence = 
-      this.predictiveModel.confidence * 0.9 + targetConfidence * 0.1;
-  }
+	private generatePredictions(): Array<{
+		hostname: string;
+		confidence: number;
+	}> {
+		const predictions: Array<{ hostname: string; confidence: number }> = [];
+		const currentHour = new Date().getHours();
 
-  // Performance monitoring and optimization
-  public recordRequest(hostKey: string, latency: number, success: boolean): void {
-    this.metrics.totalRequests++;
-    
-    const host = this.hosts.get(hostKey);
-    if (host) {
-      host.lastAccessed = Date.now();
-      host.accessFrequency++;
-      host.averageLatency = (host.averageLatency + latency) / 2;
-      
-      if (success) {
-        host.successRate = Math.min(1.0, host.successRate + 0.01);
-      } else {
-        host.successRate = Math.max(0, host.successRate - 0.05);
-      }
-    }
-    
-    // Update overall metrics
-    this.updateOverallMetrics();
-  }
+		for (const [hostKey, host] of this.hosts) {
+			// Time-based prediction
+			const timePattern = this.predictiveModel.timePatterns.get(hostKey);
+			let timeConfidence = 0;
 
-  private updateOverallMetrics(): void {
-    // Calculate average latency across all hosts
-    const latencies = Array.from(this.hosts.values()).map(h => h.averageLatency);
-    this.metrics.averageLatency = latencies.reduce((sum, lat) => sum + lat, 0) / latencies.length;
-    
-    // Calculate preconnection success rate
-    const preconnectedHosts = Array.from(this.hosts.values()).filter(h => h.isPreconnected);
-    this.metrics.preconnectionSuccessRate = preconnectedHosts.length > 0
-      ? preconnectedHosts.reduce((sum, h) => sum + h.successRate, 0) / preconnectedHosts.length
-      : 0;
-    
-    // Estimate bandwidth saved by caching
-    this.metrics.bandwidthSaved = this.currentCacheSize * 0.8; // Rough estimate
-  }
+			if (timePattern) {
+				const hourFrequency = timePattern[currentHour] || 0;
+				timeConfidence = hourFrequency / Math.max(...timePattern);
+			}
 
-  private calculateCacheHitRate(): number {
-    const totalAccesses = Array.from(this.cache.values()).reduce((sum, entry) => sum + entry.accessCount, 0);
-    const totalHits = Array.from(this.cache.values()).reduce((sum, entry) => sum + entry.hits, 0);
-    
-    return totalAccesses > 0 ? totalHits / totalAccesses : 0;
-  }
+			// Pattern-based prediction
+			const patternConfidence =
+				this.predictiveModel.hostPatterns.get(hostKey) || 0;
 
-  // Public API for monitoring and management
-  public getNetworkMetrics(): NetworkMetrics & {
-    cacheSize: number;
-    cacheEntries: number;
-    preconnectedHosts: number;
-    activeConnections: number;
-    modelConfidence: number;
-  } {
-    return {
-      ...this.metrics,
-      cacheSize: this.currentCacheSize,
-      cacheEntries: this.cache.size,
-      preconnectedHosts: Array.from(this.hosts.values()).filter(h => h.isPreconnected).length,
-      activeConnections: Array.from(this.hosts.values()).reduce((sum, h) => sum + h.connectionPool.length, 0),
-      modelConfidence: this.predictiveModel.confidence
-    };
-  }
+			// Recency-based prediction
+			const recencyScore = Math.exp(
+				-(Date.now() - host.lastAccessed) / (60 * 60 * 1000),
+			);
 
-  public getHostStatus(): Array<{
-    key: string;
-    hostname: string;
-    port: number;
-    priority: number;
-    isPreconnected: boolean;
-    connectionPoolSize: number;
-    averageLatency: number;
-    successRate: number;
-    accessFrequency: number;
-  }> {
-    return Array.from(this.hosts.entries()).map(([key, host]) => ({
-      key,
-      hostname: host.hostname,
-      port: host.port,
-      priority: host.priority,
-      isPreconnected: host.isPreconnected,
-      connectionPoolSize: host.connectionPool.length,
-      averageLatency: host.averageLatency,
-      successRate: host.successRate,
-      accessFrequency: host.accessFrequency
-    }));
-  }
+			// Combined confidence
+			const combinedConfidence =
+				timeConfidence * 0.4 + patternConfidence * 0.4 + recencyScore * 0.2;
 
-  public getCacheStatus(): Array<{
-    key: string;
-    size: number;
-    ttl: number;
-    hits: number;
-    accessCount: number;
-    lastAccessed: number;
-  }> {
-    return Array.from(this.cache.entries()).map(([key, entry]) => ({
-      key,
-      size: entry.size,
-      ttl: entry.ttl,
-      hits: entry.hits,
-      accessCount: entry.accessCount,
-      lastAccessed: entry.lastAccessed
-    }));
-  }
+			if (combinedConfidence > 0.3) {
+				predictions.push({
+					hostname: hostKey,
+					confidence: combinedConfidence,
+				});
+			}
+		}
 
-  public async clearCache(): Promise<void> {
-    this.cache.clear();
-    this.currentCacheSize = 0;
-    console.log('🗑️ Cache cleared');
-  }
+		return predictions.sort((a, b) => b.confidence - a.confidence).slice(0, 5);
+	}
 
-  public setPreconnectionThreshold(threshold: number): void {
-    this.preconnectionThreshold = Math.max(0.1, Math.min(1.0, threshold));
-  }
+	private async preconnectHost(hostKey: string): Promise<void> {
+		const host = this.hosts.get(hostKey);
+		if (!host || host.isPreconnected) return;
 
-  public setMaxCacheSize(size: number): void {
-    this.maxCacheSize = size;
-    // Evict if necessary
-    if (this.currentCacheSize > this.maxCacheSize) {
-      this.evictCache(this.currentCacheSize - this.maxCacheSize);
-    }
-  }
+		try {
+			// Simulate preconnection (in real implementation, would establish actual connections)
+			const startTime = Date.now();
 
-  public enableLearning(enabled: boolean): void {
-    this.learningEnabled = enabled;
-  }
+			// Create connection pool
+			const connections: number[] = [];
+			for (let i = 0; i < Math.min(3, this.maxConnectionsPerHost); i++) {
+				connections.push(Date.now() + Math.random() * 1000);
+			}
 
-  public async optimizeNetwork(): Promise<void> {
-    console.log('🚀 Starting network optimization...');
-    
-    // Force predictive learning
-    this.updatePredictiveModel();
-    
-    // Preconnect high-priority hosts
-    await this.predictAndPreconnect();
-    
-    // Optimize cache
-    await this.optimizeCache();
-    
-    console.log('✅ Network optimization complete');
-  }
+			host.connectionPool = connections;
+			host.isPreconnected = true;
 
-  private async optimizeCache(): Promise<void> {
-    // Remove expired entries
-    const now = Date.now();
-    const expiredKeys: string[] = [];
-    
-    for (const [key, entry] of this.cache) {
-      if (now - entry.timestamp > entry.ttl) {
-        expiredKeys.push(key);
-      }
-    }
-    
-    for (const key of expiredKeys) {
-      const entry = this.cache.get(key)!;
-      this.cache.delete(key);
-      this.currentCacheSize -= entry.size;
-    }
-    
-    console.log(`🗑️ Removed ${expiredKeys.length} expired cache entries`);
-  }
+			const latency = Date.now() - startTime;
+			host.averageLatency = (host.averageLatency + latency) / 2;
+
+			this.metrics.connectionsReused++;
+			console.log(`🔗 Preconnected to ${hostKey} (latency: ${latency}ms)`);
+		} catch (error) {
+			console.error(`❌ Failed to preconnect ${hostKey}:`, error);
+			host.successRate = Math.max(0, host.successRate - 0.1);
+		}
+	}
+
+	public async getConnection(hostKey: string): Promise<number | null> {
+		const host = this.hosts.get(hostKey);
+		if (!host) return null;
+
+		// Try to reuse preconnected connection
+		if (host.connectionPool.length > 0) {
+			const connection = host.connectionPool.pop();
+			host.lastAccessed = Date.now();
+			host.accessFrequency++;
+
+			// Refill connection pool if needed
+			if (host.connectionPool.length < 2) {
+				setTimeout(() => this.preconnectHost(hostKey), 100);
+			}
+
+			return connection || null;
+		}
+
+		// No preconnected connection available
+		host.isPreconnected = false;
+		return null;
+	}
+
+	// Learning and adaptation
+	private startPredictiveLearning(): void {
+		setInterval(() => {
+			this.updatePredictiveModel();
+			this.predictAndPreconnect();
+		}, 60000); // Learn and predict every minute
+	}
+
+	private updatePredictiveModel(): void {
+		const now = Date.now();
+		const currentHour = new Date().getHours();
+
+		// Update time patterns
+		for (const [hostKey, host] of this.hosts) {
+			if (!this.predictiveModel.timePatterns.has(hostKey)) {
+				this.predictiveModel.timePatterns.set(hostKey, new Array(24).fill(0));
+			}
+
+			const timePattern = this.predictiveModel.timePatterns.get(hostKey)!;
+
+			// Update hourly access frequency
+			if (now - host.lastAccessed < 60 * 60 * 1000) {
+				// Accessed within last hour
+				timePattern[currentHour] = Math.min(
+					1.0,
+					timePattern[currentHour] + 0.1,
+				);
+			} else {
+				// Decay older patterns
+				for (let i = 0; i < 24; i++) {
+					timePattern[i] *= 0.95;
+				}
+			}
+
+			// Update host access patterns
+			const accessScore =
+				host.accessFrequency /
+				Math.max(1, (now - host.lastAccessed) / (24 * 60 * 60 * 1000));
+			this.predictiveModel.hostPatterns.set(hostKey, accessScore);
+		}
+
+		// Update confidence based on prediction accuracy
+		this.updatePredictionConfidence();
+	}
+
+	private updateCachePatterns(key: string): void {
+		// Extract host pattern from cache key
+		const hostMatch = key.match(/https?:\/\/([^/]+)/);
+		if (hostMatch && hostMatch[1]) {
+			const hostname = hostMatch[1];
+			const currentFrequency =
+				this.predictiveModel.hostPatterns.get(hostname) || 0;
+			this.predictiveModel.hostPatterns.set(
+				hostname,
+				Math.min(1.0, currentFrequency + 0.01),
+			);
+		}
+	}
+
+	private updatePredictionAccuracy(): void {
+		// Calculate prediction accuracy based on preconnection success
+		const totalPreconnections = Array.from(this.hosts.values()).filter(
+			(h) => h.isPreconnected,
+		).length;
+		const successfulPreconnections = this.metrics.connectionsReused;
+
+		this.metrics.predictionAccuracy =
+			totalPreconnections > 0
+				? successfulPreconnections / totalPreconnections
+				: 0;
+	}
+
+	private updatePredictionConfidence(): void {
+		this.updatePredictionAccuracy();
+
+		// Adjust confidence based on recent accuracy
+		const targetConfidence = this.metrics.predictionAccuracy;
+		this.predictiveModel.confidence =
+			this.predictiveModel.confidence * 0.9 + targetConfidence * 0.1;
+	}
+
+	// Performance monitoring and optimization
+	public recordRequest(
+		hostKey: string,
+		latency: number,
+		success: boolean,
+	): void {
+		this.metrics.totalRequests++;
+
+		const host = this.hosts.get(hostKey);
+		if (host) {
+			host.lastAccessed = Date.now();
+			host.accessFrequency++;
+			host.averageLatency = (host.averageLatency + latency) / 2;
+
+			if (success) {
+				host.successRate = Math.min(1.0, host.successRate + 0.01);
+			} else {
+				host.successRate = Math.max(0, host.successRate - 0.05);
+			}
+		}
+
+		// Update overall metrics
+		this.updateOverallMetrics();
+	}
+
+	private updateOverallMetrics(): void {
+		// Calculate average latency across all hosts
+		const latencies = Array.from(this.hosts.values()).map(
+			(h) => h.averageLatency,
+		);
+		this.metrics.averageLatency =
+			latencies.reduce((sum, lat) => sum + lat, 0) / latencies.length;
+
+		// Calculate preconnection success rate
+		const preconnectedHosts = Array.from(this.hosts.values()).filter(
+			(h) => h.isPreconnected,
+		);
+		this.metrics.preconnectionSuccessRate =
+			preconnectedHosts.length > 0
+				? preconnectedHosts.reduce((sum, h) => sum + h.successRate, 0) /
+					preconnectedHosts.length
+				: 0;
+
+		// Estimate bandwidth saved by caching
+		this.metrics.bandwidthSaved = this.currentCacheSize * 0.8; // Rough estimate
+	}
+
+	private calculateCacheHitRate(): number {
+		const totalAccesses = Array.from(this.cache.values()).reduce(
+			(sum, entry) => sum + entry.accessCount,
+			0,
+		);
+		const totalHits = Array.from(this.cache.values()).reduce(
+			(sum, entry) => sum + entry.hits,
+			0,
+		);
+
+		return totalAccesses > 0 ? totalHits / totalAccesses : 0;
+	}
+
+	// Public API for monitoring and management
+	public getNetworkMetrics(): NetworkMetrics & {
+		cacheSize: number;
+		cacheEntries: number;
+		preconnectedHosts: number;
+		activeConnections: number;
+		modelConfidence: number;
+	} {
+		return {
+			...this.metrics,
+			cacheSize: this.currentCacheSize,
+			cacheEntries: this.cache.size,
+			preconnectedHosts: Array.from(this.hosts.values()).filter(
+				(h) => h.isPreconnected,
+			).length,
+			activeConnections: Array.from(this.hosts.values()).reduce(
+				(sum, h) => sum + h.connectionPool.length,
+				0,
+			),
+			modelConfidence: this.predictiveModel.confidence,
+		};
+	}
+
+	public getHostStatus(): Array<{
+		key: string;
+		hostname: string;
+		port: number;
+		priority: number;
+		isPreconnected: boolean;
+		connectionPoolSize: number;
+		averageLatency: number;
+		successRate: number;
+		accessFrequency: number;
+	}> {
+		return Array.from(this.hosts.entries()).map(([key, host]) => ({
+			key,
+			hostname: host.hostname,
+			port: host.port,
+			priority: host.priority,
+			isPreconnected: host.isPreconnected,
+			connectionPoolSize: host.connectionPool.length,
+			averageLatency: host.averageLatency,
+			successRate: host.successRate,
+			accessFrequency: host.accessFrequency,
+		}));
+	}
+
+	public getCacheStatus(): Array<{
+		key: string;
+		size: number;
+		ttl: number;
+		hits: number;
+		accessCount: number;
+		lastAccessed: number;
+	}> {
+		return Array.from(this.cache.entries()).map(([key, entry]) => ({
+			key,
+			size: entry.size,
+			ttl: entry.ttl,
+			hits: entry.hits,
+			accessCount: entry.accessCount,
+			lastAccessed: entry.lastAccessed,
+		}));
+	}
+
+	public async clearCache(): Promise<void> {
+		this.cache.clear();
+		this.currentCacheSize = 0;
+		console.log("🗑️ Cache cleared");
+	}
+
+	public setPreconnectionThreshold(threshold: number): void {
+		this.preconnectionThreshold = Math.max(0.1, Math.min(1.0, threshold));
+	}
+
+	public setMaxCacheSize(size: number): void {
+		this.maxCacheSize = size;
+		// Evict if necessary
+		if (this.currentCacheSize > this.maxCacheSize) {
+			this.evictCache(this.currentCacheSize - this.maxCacheSize);
+		}
+	}
+
+	public enableLearning(enabled: boolean): void {
+		this.learningEnabled = enabled;
+	}
+
+	public async optimizeNetwork(): Promise<void> {
+		console.log("🚀 Starting network optimization...");
+
+		// Force predictive learning
+		this.updatePredictiveModel();
+
+		// Preconnect high-priority hosts
+		await this.predictAndPreconnect();
+
+		// Optimize cache
+		await this.optimizeCache();
+
+		console.log("✅ Network optimization complete");
+	}
+
+	private async optimizeCache(): Promise<void> {
+		// Remove expired entries
+		const now = Date.now();
+		const expiredKeys: string[] = [];
+
+		for (const [key, entry] of this.cache) {
+			if (now - entry.timestamp > entry.ttl) {
+				expiredKeys.push(key);
+			}
+		}
+
+		for (const key of expiredKeys) {
+			const entry = this.cache.get(key)!;
+			this.cache.delete(key);
+			this.currentCacheSize -= entry.size;
+		}
+
+		console.log(`🗑️ Removed ${expiredKeys.length} expired cache entries`);
+	}
 }
 
 // Export the enhanced network optimizer
-export { EnhancedNetworkOptimizer, type NetworkHost, type CacheEntry, type NetworkMetrics };
+export {
+	EnhancedNetworkOptimizer,
+	type NetworkHost,
+	type CacheEntry,
+	type NetworkMetrics,
+};
