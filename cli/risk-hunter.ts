@@ -796,6 +796,9 @@ export class RiskHunterCLI {
     }
     
     console.log('💡 Recommendations:');
+  }
+  
+  // Show network performance metrics
   private async showNetworkMetrics(options: CLIOptions): Promise<void> {
     console.log('🌐 Network Performance Metrics');
     console.log('=============================');
