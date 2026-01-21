@@ -10,6 +10,16 @@ import path from 'path';
 const PORT = 3000;
 const HOST = 'localhost';
 
+// Define type for pattern results
+interface PatternResult {
+  index: number;
+  pattern: string;
+  matches: boolean;
+  groups: string;
+  hasRegExpGroups: boolean;
+  extracted: Record<string, string>;
+}
+
 console.log(`🚀 Starting URLPattern Showcase Server...`);
 console.log(`📁 Serving from: ${path.join(import.meta.dir, 'urlpattern-showcase.html')}`);
 console.log(`🌐 Server will be available at: http://${HOST}:${PORT}`);
@@ -60,7 +70,7 @@ serve({
           '/(items|products)/:id'
         ];
 
-        const results = [];
+        const results: PatternResult[] = [];
         let matchCount = 0;
         let regexCount = 0;
 
@@ -70,13 +80,12 @@ serve({
             const urlPattern = new URLPattern(pattern, 'https://shop.example.com');
             const match = urlPattern.exec(testUrl);
             
-            const result = {
+            const result: PatternResult = {
               index,
               pattern: pattern.replace(/\\\\/g, '\\'),
               matches: !!match,
               groups: match ? Object.keys(match.pathname.groups).join(',') : '',
               hasRegExpGroups: urlPattern.hasRegExpGroups,
-              hasCustomRegExp: urlPattern.hasCustomRegExp,
               extracted: match ? match.pathname.groups : {}
             };
             
@@ -118,8 +127,9 @@ serve({
           }
         });
 
-      } catch (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        return new Response(JSON.stringify({ error: errorMessage }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' }
         });
