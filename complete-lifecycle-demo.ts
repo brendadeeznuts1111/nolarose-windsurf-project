@@ -3,10 +3,10 @@
 // Complete Bun Server Lifecycle Demo
 // Shows all lifecycle methods with proper demonstrations
 
-const server = Bun.serve({
+const completeServer = Bun.serve({
   port: 0,
   development: true,
-  async fetch(req, server) {
+  async fetch(req: Request, server: any) {
     const url = new URL(req.url);
     
     // Log all requests for demonstration
@@ -27,7 +27,7 @@ Available endpoints:
 • /stop?force  - Force shutdown immediately
 • /metrics     - Show server metrics
 
-Current server: ${server.id}
+Current server: ${completeServer.id}
 Process ref/unref status: Active
         `.trim());
       }
@@ -36,7 +36,7 @@ Process ref/unref status: Active
         const ip = server.requestIP(req);
         return Response.json({
           clientIP: ip || { error: 'no ip' },
-          serverID: server.id,
+          serverID: completeServer.id,
           timestamp: new Date().toISOString()
         });
       }
@@ -53,7 +53,7 @@ Process ref/unref status: Active
       case '/reload': {
         console.log('🔄 Hot reloading server handlers...');
         server.reload({
-          async fetch(req, server) {
+          async fetch(req: Request, server: any) {
             const url = new URL(req.url);
             
             if (url.pathname === '/stop') {
@@ -71,10 +71,10 @@ Process ref/unref status: Active
 
       case '/metrics': {
         return Response.json({
-          serverID: server.id,
+          serverID: completeServer.id,
           pendingRequests: server.pendingRequests,
           pendingWebSockets: server.pendingWebSockets,
-          url: server.url,
+          url: completeServer.url,
           uptime: process.uptime(),
           memory: process.memoryUsage()
         });
@@ -86,16 +86,16 @@ Process ref/unref status: Active
   }
 });
 
-console.log(`🚀 Server ${server.id} started at ${server.url}`);
+console.log(`🚀 Server ${completeServer.id} started at ${completeServer.url}`);
 console.log('');
 console.log('📋 Available endpoints:');
-console.log(`  curl ${server.url}           # Show this menu`);
-console.log(`  curl ${server.url}ip         # Client IP detection`);
-console.log(`  curl ${server.url}slow       # Timeout demonstration`);
-console.log(`  curl ${server.url}reload     # Hot reload handlers`);
-console.log(`  curl ${server.url}metrics    # Server metrics`);
-console.log(`  curl ${server.url}stop       # Graceful shutdown`);
-console.log(`  curl ${server.url}stop?force # Force shutdown`);
+console.log(`  curl ${completeServer.url}           # Show this menu`);
+console.log(`  curl ${completeServer.url}ip         # Client IP detection`);
+console.log(`  curl ${completeServer.url}slow       # Timeout demonstration`);
+console.log(`  curl ${completeServer.url}reload     # Hot reload handlers`);
+console.log(`  curl ${completeServer.url}metrics    # Server metrics`);
+console.log(`  curl ${completeServer.url}stop       # Graceful shutdown`);
+console.log(`  curl ${completeServer.url}stop?force # Force shutdown`);
 console.log('');
 
 /* Demo ref/unref behavior */
@@ -103,16 +103,16 @@ console.log('🔧 Demo ref/unref behavior:');
 console.log('   • server.unref() called - process can exit if server is only thing running');
 console.log('   • server.ref() will be restored after 5 seconds');
 
-server.unref();               // allow exit if nothing else running
+completeServer.unref();               // allow exit if nothing else running
 setTimeout(() => {
   console.log('🔧 server.ref() restored - process will now stay alive for server');
-  server.ref();
+  completeServer.ref();
 }, 5_000);
 
 // Graceful shutdown after 60 seconds for demo
 setTimeout(() => {
   console.log('⏰ Demo timeout reached - shutting down gracefully...');
-  server.stop(false);
+  completeServer.stop(false);
 }, 60_000);
 
 console.log('');

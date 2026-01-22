@@ -3,10 +3,10 @@
 // Bun Server Lifecycle Methods Demo
 // Demonstrates all server lifecycle methods in one comprehensive example
 
-const server = Bun.serve({
+const lifecycleServer = Bun.serve({
   port: 0,
   development: true,
-  async fetch(req, server) {
+  async fetch(req: Request, server: any) {
     const url = new URL(req.url);
     switch (url.pathname) {
 
@@ -42,19 +42,19 @@ const server = Bun.serve({
   }
 });
 
-console.log(`Server ${server.id} at ${server.url}`);
+console.log(`Server ${lifecycleServer.id} at ${lifecycleServer.url}`);
 console.log('Try:');
-console.log('  curl ' + server.url + 'ip');
-console.log('  curl ' + server.url + 'slow        # will timeout');
-console.log('  curl ' + server.url + 'reload');
-console.log('  curl ' + server.url + 'stop?force  # kills server');
+console.log('  curl ' + lifecycleServer.url + 'ip');
+console.log('  curl ' + lifecycleServer.url + 'slow        # will timeout');
+console.log('  curl ' + lifecycleServer.url + 'reload');
+console.log('  curl ' + lifecycleServer.url + 'stop?force  # kills server');
 
 /* demo ref/unref */
-server.unref();               // allow exit if nothing else running
-setTimeout(() => server.ref(), 5_000); // restore keep-alive after 5 s
+lifecycleServer.unref();               // allow exit if nothing else running
+setTimeout(() => lifecycleServer.ref(), 5_000); // restore keep-alive after 5 s
 
 // Keep server alive for testing
 setTimeout(() => {
   console.log('Server demo completed - shutting down...');
-  server.stop(true);
+  lifecycleServer.stop(true);
 }, 30000);
