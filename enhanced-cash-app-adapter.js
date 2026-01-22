@@ -5,6 +5,7 @@
 
 import { CashAppVerificationAdapter } from './cash-app-adapter.js';
 import { loadConfig } from './config/config-loader.js';
+import { rateLimiter } from './security/enhanced-rate-limiter.js';
 
 console.log("🛡️ GDPR-Enhanced OnePay Adapter - Loaded");
 
@@ -223,7 +224,7 @@ export class EnhancedCashAppAdapter extends CashAppVerificationAdapter {
     }
 
     /**
-     * Enhanced wallet funding verification with GDPR compliance
+     * Enhanced wallet funding verification with GDPR compliance and rate limiting
      */
     async verifyWalletFunding(userData) {
         const startTime = performance.now();
@@ -231,6 +232,52 @@ export class EnhancedCashAppAdapter extends CashAppVerificationAdapter {
 
         try {
             console.log(`🔍 Starting OnePay verification for user: ${this.maskPII(userData.userId)}`);
+            
+            // Apply multi-dimensional rate limiting
+            const rateLimitRequest = {
+                ip: userData.ip,
+                userId: userData.userId,
+                deviceFingerprint: userData.deviceFingerprint,
+                path: '/api/wallet/funding',
+                method: 'POST',
+                location: userData.location,
+                userAgent: userData.userAgent
+            };
+
+            const rateLimitResult = await rateLimiter.checkRateLimit(rateLimitRequest);
+            
+            if (!rateLimitResult.allowed) {
+                this.metrics.track('rateLimitBlocked', 1);
+                this.gdprLog(`Rate limit exceeded for ${this.maskPII(userData.userId)}: ${rateLimitResult.reason}`, 'IDV-SECURITY-001');
+                
+                return {
+                    success: false,
+                    error: 'RATE_LIMIT_EXCEEDED',
+                    reason: rateLimitResult.reason,
+                    retryAfter: rateLimitResult.retryAfter,
+                    gdprCompliant: true,
+                    blocked: true
+                };
+            }
+
+            // Log suspicious patterns
+            if (rateLimitResult.suspicious) {
+                this.metrics.track('suspiciousPattern', 1);
+                this.gdprLog(`Suspicious pattern detected for ${this.maskPII(userData.userId)}: ${rateLimitResult.patterns.join(', ')}`, 'IDV-SECURITY-002');
+                
+                // Apply additional verification for suspicious requests
+                if (rateLimitResult.riskScore > 40) {
+                    return {
+                        success: false,
+                        error: 'SUSPICIOUS_ACTIVITY',
+                        reason: 'High-risk pattern detected',
+                        riskScore: rateLimitResult.riskScore,
+                        patterns: rateLimitResult.patterns,
+                        gdprCompliant: true,
+                        requiresManualReview: true
+                    };
+                }
+            }
             
             // GDPR Article 6: Check lawful basis by location
             const lawfulBasis = this.determineLawfulBasis(userData);
@@ -497,9 +544,33 @@ export class EnhancedCashAppAdapter extends CashAppVerificationAdapter {
     }
 
     /**
-     * Article 20: Data Portability
+     * Article 20: Data Portability with rate limiting
      */
     async exportUserData(userId) {
+        // Apply strict rate limiting for data exports
+        const rateLimitRequest = {
+            ip: this.currentRequestIP || 'unknown',
+            userId: userId,
+            deviceFingerprint: this.currentDeviceFingerprint || 'unknown',
+            path: '/api/user/export-data',
+            method: 'GET',
+            location: this.userLocation || 'US'
+        };
+
+        const rateLimitResult = await rateLimiter.checkRateLimit(rateLimitRequest);
+        
+        if (!rateLimitResult.allowed) {
+            this.gdprLog(`Data export rate limit exceeded for ${this.maskPII(userId)}: ${rateLimitResult.reason}`, 'IDV-SECURITY-003');
+            
+            return {
+                success: false,
+                error: 'RATE_LIMIT_EXCEEDED',
+                reason: rateLimitResult.reason,
+                retryAfter: rateLimitResult.retryAfter,
+                gdprCompliant: true
+            };
+        }
+
         const pseudonymizedId = this.gdprModule.pseudonymize(userId, 'user');
         
         const data = {
@@ -515,7 +586,11 @@ export class EnhancedCashAppAdapter extends CashAppVerificationAdapter {
             }
         };
         
+        // Track data export for GDPR compliance
+        this.metrics.track('dataExport', 1);
+        
         return {
+            success: true,
             format: 'JSON',
             data,
             size: JSON.stringify(data).length,
