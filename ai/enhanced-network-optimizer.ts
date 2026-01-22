@@ -620,3 +620,93 @@ export {
 	type CacheEntry,
 	type NetworkMetrics,
 };
+
+// Demo and testing section
+async function demonstrateNetworkOptimizer() {
+	console.log("🌐 Enhanced Network Optimizer - Intelligent Caching Demo");
+	console.log("=" .repeat(60));
+
+	// Initialize the enhanced network optimizer
+	const optimizer = new EnhancedNetworkOptimizer({
+		maxCacheSize: 1000,
+		cacheTimeoutMs: 300000, // 5 minutes
+		maxConnections: 50,
+		preconnectThreshold: 0.7,
+		enablePredictiveCaching: true,
+		enableCompression: true,
+	});
+
+	console.log("✅ Enhanced Network Optimizer initialized");
+	const cacheStatus = optimizer.getCacheStatus();
+	const hostStatus = optimizer.getHostStatus();
+	console.log(`📊 Cache entries: ${cacheStatus.length}`);
+	console.log(`🔗 Active hosts: ${hostStatus.length}`);
+
+	// Simulate network operations
+	console.log("\n🚀 Simulating network operations...");
+	
+	// Test caching
+	const testData = { userId: "12345", transactionId: "txn_67890" };
+	const cacheKey = "user_session_12345";
+	
+	// Cache some data
+	await optimizer.cacheData(cacheKey, testData);
+	console.log("💾 Cached user session data");
+	
+	// Retrieve from cache
+	const cachedData = await optimizer.getCachedData(cacheKey);
+	if (cachedData) {
+		console.log("✅ Retrieved data from cache successfully");
+	}
+
+	// Test predictive preconnection
+	console.log("\n🔮 Testing predictive preconnection...");
+	const currentHostStatus = optimizer.getHostStatus();
+	const highPriorityHosts = currentHostStatus.filter(host => host.priority <= 2);
+	console.log(`📈 High priority hosts: ${highPriorityHosts.length}`);
+	
+	for (const host of highPriorityHosts.slice(0, 2)) {
+		const connection = await optimizer.getConnection(host.hostname);
+		console.log(`🔗 Connection to ${host.hostname}: ${connection ? "Active" : "Failed"}`);
+	}
+
+	// Get network metrics
+	console.log("\n📊 Network Performance Metrics:");
+	const metrics = optimizer.getNetworkMetrics();
+	console.log(`   Cache Hit Rate: ${(metrics.cacheHitRate * 100).toFixed(2)}%`);
+	console.log(`   Average Latency: ${metrics.averageLatency.toFixed(2)}ms`);
+	console.log(`   Success Rate: ${(metrics.successRate * 100).toFixed(2)}%`);
+	console.log(`   Active Connections: ${metrics.activeConnections}`);
+	console.log(`   Cached Entries: ${metrics.cachedEntries}`);
+
+	// Test intelligent routing
+	console.log("\n🧭 Testing intelligent routing...");
+	const testRequests = [
+		{ url: "https://api.factory-wager.com/validate", priority: "high" },
+		{ url: "http://fraud-detection.service/check", priority: "medium" },
+		{ url: "ws://realtime.analytics/stream", priority: "low" },
+	];
+
+	for (const request of testRequests) {
+		// Record the request to track metrics
+		optimizer.recordRequest(request.url, 200, 150); // Mock successful request
+		const url = new URL(request.url);
+		console.log(`📍 Processed ${request.url}: ${url.hostname}:${url.port || (url.protocol === 'https:' ? 443 : 80)}`);
+	}
+
+	// Performance optimization
+	console.log("\n⚡ Performance optimization...");
+	await optimizer.optimizeNetwork();
+	
+	const finalMetrics = optimizer.getNetworkMetrics();
+	console.log(`📈 Final cache hit rate: ${(finalMetrics.cacheHitRate * 100).toFixed(2)}%`);
+	console.log(`🔧 Optimized connections: ${finalMetrics.activeConnections}`);
+
+	console.log("\n🎉 Enhanced Network Optimizer Demo Complete!");
+	console.log("💚 Intelligent caching and predictive routing operational!");
+}
+
+// Run the demo if this file is executed directly
+if (import.meta.main) {
+	demonstrateNetworkOptimizer().catch(console.error);
+}

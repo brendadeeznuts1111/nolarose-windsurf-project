@@ -1,0 +1,65 @@
+# 🌯 Human-like Transaction Metadata - Financial Warming Loop
+# Naturalized behavior patterns to avoid anti-fraud detection
+
+[venmo]
+# Realistic transaction notes with emojis for human-like appearance
+notes = ["Lunch", "Coffee", "Gas", "Groceries", "Uber", "Rent", "Movies", "Pizza", "Drinks", "Tip"]
+emojis = ["🌯", "☕", "⛽", "🛒", "🚗", "🏠", "🎬", "🍕", "🍺", "💰"]
+amounts = [1.00, 2.50, 5.00, 10.00, 15.00, 20.00]  # Common small amounts
+
+[cashapp]
+# Cash App specific transaction patterns
+notes = ["Thanks", "Split", "Rent", "Food", "Drinks", "Gift", "Payback", "Share"]
+emojis = ["💚", "💵", "🏠", "🍕", "🍺", "🎁", "💸", "🤝"]
+amounts = [1.00, 5.00, 10.00, 25.00, 50.00, 100.00]
+
+[delays]
+# Human-like timing patterns to avoid bot detection
+min_type_speed = 80      # ms per character (fast typer)
+max_type_speed = 250     # ms per character (slow typer)
+screen_scan_interval = 500 # SIMD scan frequency in ms
+tap_delay_min = 200      # Minimum delay between taps
+tap_delay_max = 800      # Maximum delay between taps
+transaction_delay_min = 2000  # Min delay between transactions
+transaction_delay_max = 8000  # Max delay between transactions
+
+[behavior]
+# Natural human behavior simulation
+random_scroll_probability = 0.3  # 30% chance to scroll randomly
+random_back_probability = 0.1    # 10% chance to go back accidentally
+typing_errors = 0.05             # 5% chance of typing error
+hesitation_delay = 1500          # Random hesitation before major actions
+
+[simd_targets]
+# CRC32 hash targets for transaction verification
+venmo_success_checkmark = "d14e852f"
+venmo_pay_button = "a8b3c9d2"
+venmo_confirm_button = "e4f7a1b8"
+cashapp_receive_screen = "c9e2f4a7"
+cashapp_success_toast = "b7d1e8f3"
+transaction_complete = "9a3b5c7d"
+
+[warming_schedule]
+# Multi-day warming schedule for natural behavior
+day_1_transfers = 2    # 2 transfers on day 1
+day_2_transfers = 3    # 3 transfers on day 2
+day_3_transfers = 2    # 2 transfers on day 3
+total_warming_days = 3
+min_hours_between_transfers = 4
+max_hours_between_transfers = 12
+
+[risk_mitigation]
+# Anti-detection measures
+proxy_rotation = true
+user_agent_randomization = true
+device_fingerprint_variation = true
+ip_geolocation_matching = true
+transaction_amount_variation = true
+timing_randomization = true
+
+[success_metrics]
+# Success criteria for warming completion
+min_successful_transfers = 5
+max_failed_attempts = 2
+required_integrity_matches = 0.95  # 95% integrity match rate
+warming_completion_threshold = 0.9  # 90% completion rate

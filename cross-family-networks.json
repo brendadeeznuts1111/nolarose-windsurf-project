@@ -1,0 +1,117 @@
+[
+  {
+    "teenId": "teen-001",
+    "primaryGuardian": {
+      "id": "guardian-mom-001",
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@email.com",
+      "household": "Primary Household",
+      "role": "PRIMARY",
+      "status": "SUSPENDED",
+      "joinedAt": "2026-01-22T15:24:55.693Z",
+      "lastActive": "2026-01-22T15:24:55.693Z",
+      "permissions": {
+        "canSpend": true,
+        "canViewTransactions": true,
+        "canSetLimits": true,
+        "canApprove": true,
+        "canReceiveAlerts": true
+      }
+    },
+    "guardians": [
+      {
+        "id": "guardian-dad-002",
+        "name": "Mike Johnson",
+        "email": "mike.johnson@email.com",
+        "household": "Ex-Primary",
+        "role": "SECONDARY",
+        "status": "ACTIVE",
+        "joinedAt": "2026-01-22T15:25:20.084Z",
+        "lastActive": "2026-01-22T15:25:10.872Z",
+        "permissions": {
+          "canSpend": true,
+          "canViewTransactions": true,
+          "canSetLimits": true,
+          "canApprove": true,
+          "canReceiveAlerts": true
+        }
+      }
+    ],
+    "edges": {},
+    "networkTension": 0,
+    "lastUpdated": "2026-01-22T15:25:10.872Z",
+    "sharedSettings": {
+      "collectiveSpendLimit": 300,
+      "sharedVisibility": true,
+      "crossHouseholdAlerts": true,
+      "autoFailover": true
+    },
+    "createdAt": "2026-01-22T15:24:55.693Z",
+    "lastFailoverTest": "2026-01-22T15:25:20.085Z",
+    "failoverResults": {
+      "failedGuardian": "guardian-mom-001",
+      "backupCount": 1,
+      "backupGuardians": [
+        "guardian-dad-002"
+      ]
+    }
+  },
+  {
+    "teenId": "teen-002",
+    "primaryGuardian": {
+      "id": "guardian-mom-001",
+      "name": "Jennifer Davis",
+      "email": "jennifer.davis@email.com",
+      "household": "Primary Household",
+      "role": "PRIMARY",
+      "status": "SUSPENDED",
+      "joinedAt": "2026-01-22T15:25:31.921Z",
+      "lastActive": "2026-01-22T15:25:31.921Z",
+      "permissions": {
+        "canSpend": true,
+        "canViewTransactions": true,
+        "canSetLimits": true,
+        "canApprove": true,
+        "canReceiveAlerts": true
+      }
+    },
+    "guardians": [
+      {
+        "id": "guardian-dad-002",
+        "name": "Robert Davis",
+        "email": "robert.davis@email.com",
+        "household": "Paternal Household",
+        "role": "SECONDARY",
+        "status": "ACTIVE",
+        "joinedAt": "2026-01-22T15:25:32.960Z",
+        "lastActive": "2026-01-22T15:25:31.938Z",
+        "permissions": {
+          "canSpend": true,
+          "canViewTransactions": true,
+          "canSetLimits": true,
+          "canApprove": true,
+          "canReceiveAlerts": true
+        },
+        "vpcVerified": "2026-01-22T15:25:32.959Z"
+      }
+    ],
+    "edges": {},
+    "networkTension": 0,
+    "lastUpdated": "2026-01-22T15:25:31.938Z",
+    "sharedSettings": {
+      "collectiveSpendLimit": 300,
+      "sharedVisibility": true,
+      "crossHouseholdAlerts": true,
+      "autoFailover": true
+    },
+    "createdAt": "2026-01-22T15:25:31.921Z",
+    "lastFailoverTest": "2026-01-22T15:25:32.965Z",
+    "failoverResults": {
+      "failedGuardian": "guardian-mom-001",
+      "backupCount": 1,
+      "backupGuardians": [
+        "guardian-dad-002"
+      ]
+    }
+  }
+]

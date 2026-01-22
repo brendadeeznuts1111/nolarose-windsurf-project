@@ -1,0 +1,175 @@
+# Cosmic Bundle Optimization - UI Themes Configuration
+# Generated for Enterprise Dashboard v2026
+
+[performance-polish]
+defer-delay-base = 100
+defer-delay-max = 500
+virtual-row-height = 40
+virtual-buffer-size = 20
+virtual-overscan = 5
+optimistic-probe-ms = 50
+optimistic-rollback-ms = 200
+crc32-interval-ms = 1000
+theme-transition-duration = 300
+
+[themes.light]
+name = "Light Theme"
+primary = "#3b82f6"
+secondary = "#64748b"
+success = "#22c55e"
+warning = "#f59e0b"
+error = "#ef4444"
+background = "#ffffff"
+surface = "#f8fafc"
+text = "#1f2937"
+text-secondary = "#6b7280"
+border = "#e5e7eb"
+shadow = "rgba(0, 0, 0, 0.1)"
+gradient-start = "#3b82f6"
+gradient-end = "#8b5cf6"
+
+[themes.dark]
+name = "Dark Theme"
+primary = "#60a5fa"
+secondary = "#94a3b8"
+success = "#34d399"
+warning = "#fbbf24"
+error = "#f87171"
+background = "#0f172a"
+surface = "#1e293b"
+text = "#f1f5f9"
+text-secondary = "#cbd5e1"
+border = "#334155"
+shadow = "rgba(0, 0, 0, 0.3)"
+gradient-start = "#60a5fa"
+gradient-end = "#a78bfa"
+
+[themes.premium]
+name = "Premium Theme"
+primary = "#6366f1"
+secondary = "#8b5cf6"
+success = "#10b981"
+warning = "#f59e0b"
+error = "#ef4444"
+background = "#ffffff"
+surface = "#f9fafb"
+text = "#111827"
+text-secondary = "#6b7280"
+border = "#e5e7eb"
+shadow = "rgba(99, 102, 241, 0.15)"
+gradient-start = "#6366f1"
+gradient-end = "#ec4899"
+special-effects = { glow = true, animated = true, glassmorphism = true }
+
+[themes.high-contrast]
+name = "High Contrast Theme"
+primary = "#2563eb"
+secondary = "#1e40af"
+success = "#15803d"
+warning = "#d97706"
+error = "#dc2626"
+background = "#ffffff"
+surface = "#f3f4f6"
+text = "#000000"
+text-secondary = "#374151"
+border = "#000000"
+shadow = "rgba(0, 0, 0, 0.5)"
+gradient-start = "#2563eb"
+gradient-end = "#7c3aed"
+accessibility = { contrast_ratio = 7.0, reduced_motion = true, large_text = true }
+
+[themes.enterprise]
+name = "Enterprise Theme"
+primary = "#1e40af"
+secondary = "#3730a3"
+success = "#14532d"
+warning = "#92400e"
+error = "#991b1b"
+background = "#f8fafc"
+surface = "#f1f5f9"
+text = "#0f172a"
+text-secondary = "#475569"
+border = "#cbd5e1"
+shadow = "rgba(30, 64, 175, 0.1)"
+gradient-start = "#1e40af"
+gradient-end = "#7c2d12"
+brand = { logo_primary = "#1e40af", logo_secondary = "#f59e0b", accent = "#dc2626 }
+
+[theme-variants]
+default = "light"
+dark_mode = "dark"
+premium_tier = "premium"
+accessibility = "high-contrast"
+enterprise_brand = "enterprise"
+
+[theme-switching]
+transition_duration = 300
+easing = "cubic-bezier(0.4, 0, 0.2, 1)"
+fade_duration = 200
+slide_duration = 250
+preserve_scroll = true
+eager_load = true
+cache_themes = true
+
+[performance-optimizations]
+lazy_load_themes = true
+preload_critical = ["light", "dark"]
+bundle_themes = { enabled = true, compression = "gzip" }
+css_variables = true
+critical_css_inline = true
+non_critical_css_deferred = true
+
+[accessibility-features]
+high_contrast = { enabled = true, auto_detect = true }
+reduced_motion = { enabled = true, respect_preference = true }
+large_text = { enabled = true, scale_factor = 1.2 }
+focus_visible = { enabled = true, outline_width = 2 }
+screen_reader = { enabled = true, aria_labels = true }
+
+[responsive-breakpoints]
+mobile = "320px"
+tablet = "768px"
+desktop = "1024px"
+wide = "1280px"
+ultrawide = "1536px"
+
+[component-themes]
+matrix = { header_height = 60, row_padding = 12, border_radius = 8 }
+sidebar = { width = 280, collapsed_width = 60, transition = true }
+header = { height = 64, shadow = true, sticky = true }
+cards = { padding = 16, border_radius = 12, shadow = true }
+buttons = { padding = "8px 16px", border_radius = 6, transition = true }
+forms = { input_height = 40, label_size = 14, validation_color = "#ef4444" }
+
+[animation-presets]
+fade_in = { duration = 200, easing = "ease-out" }
+slide_up = { duration = 300, easing = "ease-out" }
+scale_in = { duration = 250, easing = "ease-out" }
+bounce = { duration = 400, easing = "cubic-bezier(0.68, -0.55, 0.265, 1.55)" }
+shimmer = { duration = 1500, easing = "linear", repeat = true }
+
+[custom-properties]
+# CSS Custom Properties for dynamic theming
+[custom-properties.colors]
+primary = "var(--primary-color)"
+secondary = "var(--secondary-color)"
+success = "var(--success-color)"
+warning = "var(--warning-color)"
+error = "var(--error-color)"
+background = "var(--background-color)"
+surface = "var(--surface-color)"
+text = "var(--text-color)"
+border = "var(--border-color)"
+
+[custom-properties.spacing]
+xs = "var(--spacing-xs)"
+sm = "var(--spacing-sm)"
+md = "var(--spacing-md)"
+lg = "var(--spacing-lg)"
+xl = "var(--spacing-xl)"
+
+[custom-properties.typography]
+font_family = "var(--font-family)"
+font_size_base = "var(--font-size-base)"
+line_height = "var(--line-height)"
+letter_spacing = "var(--letter-spacing)"

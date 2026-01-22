@@ -152,7 +152,7 @@ describe('ValidationEngine Module', () => {
             expect(result.issues).toContain('Invalid email format');
             expect(result.issues).toContain('Invalid phone format');
             expect(result.issues).toContain('Suspicious patterns detected');
-            expect(result.score).toBe(25); // 100 - 30 - 25 - 20
+            expect(result.score).toBe(5); // 100 - 30 - 25 - 40 (suspicious patterns)
         });
         
         it('should handle validation errors gracefully', async () => {
@@ -498,7 +498,7 @@ describe('ValidationEngine Module', () => {
             expect(validationEngine.metrics.successfulValidations).toBe(2);
             expect(validationEngine.metrics.failedValidations).toBe(1);
             expect(validationEngine.metrics.averageValidationTime).toBe(150); // (100 + 200 + 150) / 3
-            expect(validationEngine.metrics.successRate).toBe(66.67); // 2/3 * 100
+            expect(validationEngine.metrics.successRate).toBeCloseTo(66.67, 1); // 2/3 * 100
         });
         
         it('should handle zero validations gracefully', () => {

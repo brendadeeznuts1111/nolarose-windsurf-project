@@ -1,0 +1,87 @@
+# Cosmic Bundle Optimization - Feature Flags Configuration
+# Generated for Enterprise Dashboard v2026
+
+[defaults]
+enabled = ["CORE", "PERFORMANCE_POLISH"]
+disabled = ["DEBUG", "PREMIUM", "BETA_FEATURES", "MOCK_API"]
+description = "Default feature set for development builds"
+
+[variants.free]
+enabled = ["CORE", "PERFORMANCE_POLISH"]
+disabled = ["PREMIUM", "DEBUG", "BETA_FEATURES", "MOCK_API"]
+description = "Free tier - minimal bundle, maximum performance"
+optimizations = ["dead-code-elimination", "tree-shaking", "minification"]
+bundle_target = "production"
+performance = { defer_loading = true, virtual_scroll = true, optimistic_ui = true }
+
+[variants.premium]
+enabled = ["CORE", "PREMIUM", "PERFORMANCE_POLISH"]
+disabled = ["DEBUG", "BETA_FEATURES", "MOCK_API"]
+description = "Premium tier - full features, billing included"
+optimizations = ["dead-code-elimination", "tree-shaking", "minification", "code-splitting"]
+bundle_target = "production"
+performance = { defer_loading = true, virtual_scroll = true, optimistic_ui = true, billing_integration = true }
+ui_features = ["advanced-analytics", "team-seats", "priority-support", "custom-themes"]
+
+[variants.debug]
+enabled = ["CORE", "DEBUG", "PERFORMANCE_POLISH"]
+disabled = ["PREMIUM", "BETA_FEATURES", "MOCK_API"]
+description = "Debug build - development tools, traces enabled"
+optimizations = ["source-maps", "debug-info"]
+bundle_target = "development"
+performance = { defer_loading = false, virtual_scroll = true, optimistic_ui = false }
+debug_features = ["pty-console", "verbose-logs", "performance-traces", "hot-reload"]
+
+[variants.beta]
+enabled = ["CORE", "BETA_FEATURES", "PERFORMANCE_POLISH"]
+disabled = ["DEBUG", "PREMIUM", "MOCK_API"]
+description = "Beta build - experimental features"
+optimizations = ["dead-code-elimination", "tree-shaking", "minification"]
+bundle_target = "production"
+performance = { defer_loading = true, virtual_scroll = true, optimistic_ui = true }
+experimental = ["quantum-gnn-predictor", "advanced-matrix-columns", "ai-powered-insights"]
+
+[variants.mock]
+enabled = ["CORE", "MOCK_API", "PERFORMANCE_POLISH"]
+disabled = ["DEBUG", "PREMIUM", "BETA_FEATURES"]
+description = "Mock API build - CI/Testing build"
+optimizations = ["dead-code-elimination", "tree-shaking", "minification"]
+bundle_target = "test"
+performance = { defer_loading = true, virtual_scroll = true, optimistic_ui = true }
+mock_features = ["fake-responses", "instant-success", "deterministic-data"]
+
+[feature-descriptions]
+CORE = "Core dashboard functionality - fraud detection, basic analytics"
+PREMIUM = "Premium features - billing, team seats, advanced analytics"
+DEBUG = "Debug tools - PTY console, verbose traces, performance monitoring"
+BETA_FEATURES = "Experimental features - quantum GNN, advanced matrix columns"
+MOCK_API = "Mock API responses for testing and CI/CD"
+PERFORMANCE_POLISH = "Performance optimizations - deferred loading, virtual scroll, optimistic UI"
+
+[optimization-settings]
+dead-code-elimination = { enabled = true, aggressive = true }
+tree-shaking = { enabled = true, mode = "aggressive" }
+minification = { enabled = true, level = "maximum" }
+code-splitting = { enabled = true, strategy = "feature-based" }
+source-maps = { enabled = false, include_sources = false }
+debug-info = { enabled = false, level = "minimal" }
+
+[performance-tuning]
+defer_loading = { base_delay = 100, max_delay = 500, priority_threshold = 0.7 }
+virtual_scroll = { row_height = 40, buffer_size = 20, overscan = 5 }
+optimistic_ui = { probe_timeout = 50, rollback_delay = 200, success_probability = 0.95 }
+theme_switching = { transition_duration = 300, eager_load = true }
+integrity_checks = { crc32_enabled = true, validation_interval = 1000 }
+
+[cdn-deployment]
+base_url = "https://cdn.enterprise.com/dashboard"
+cache_strategy = "aggressive"
+compression = ["gzip", "brotli"]
+http2_push = ["critical-css", "manifest-json"]
+headers = { "x-cache-status" = "HIT", "x-build-variant" = "dynamic" }
+
+[monitoring]
+bundle_analytics = { enabled = true, track_size = true, track_load_time = true }
+performance_metrics = { enabled = true, sample_rate = 0.1, include_user_agent = false }
+error_tracking = { enabled = true, capture_source_maps = false, group_similar = true }
+feature_flags = { track_usage = true, sample_rate = 0.05, include_variant = true }

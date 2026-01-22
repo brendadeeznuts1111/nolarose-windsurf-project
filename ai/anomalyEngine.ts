@@ -45,7 +45,7 @@ export class AnomalyEngine {
         this.logger.log('info', 'Anomaly engine model initialized');
       });
     } catch (error) {
-      this.logger.log('error', 'Failed to initialize anomaly model', { error: error.message });
+      this.logger.log('error', 'Failed to initialize anomaly model', { error: error instanceof Error ? error.message : String(error) });
     }
   }
   
@@ -77,7 +77,7 @@ export class AnomalyEngine {
         recommendation
       };
     } catch (error) {
-      this.logger.log('error', 'Anomaly engine failed', { error: error.message });
+      this.logger.log('error', 'Anomaly engine failed', { error: error instanceof Error ? error.message : String(error) });
       return {
         score: 0.5, // Fallback to medium risk
         nebulaCode: 'N-AI-ERROR',
@@ -88,18 +88,28 @@ export class AnomalyEngine {
   }
   
   private normalizeSignal(signal: LegSignal): Float32Array {
+    // Validate and sanitize input values
+    const safeAgeDays = isNaN(signal.ageDays) || signal.ageDays < 0 ? 0 : Math.min(365, signal.ageDays);
+    const safeLegAmount = isNaN(signal.legAmount) || signal.legAmount < 0 ? 0 : Math.min(10000, signal.legAmount);
+    const safeLegVelocity = isNaN(signal.legVelocity) || signal.legVelocity < 0 ? 0 : Math.min(200, signal.legVelocity);
+    const safeIpJump = isNaN(signal.ipJump) || signal.ipJump < 0 ? 0 : Math.min(20, signal.ipJump);
+    const safeWalletAgeDelta = isNaN(signal.walletAgeDelta) || signal.walletAgeDelta < 0 ? 0 : Math.min(180, signal.walletAgeDelta);
+    const safeCtrProximity = isNaN(signal.ctrProximity) || signal.ctrProximity < 0 ? 0 : Math.min(10000, signal.ctrProximity);
+    const safeSessionDuration = isNaN(signal.sessionDuration) || signal.sessionDuration < 0 ? 0 : Math.min(1440, signal.sessionDuration);
+    const safeDeviceRiskScore = isNaN(signal.deviceRiskScore) || signal.deviceRiskScore < 0 ? 0 : Math.min(1, signal.deviceRiskScore);
+    
     // Feature scaling 0-1
     return new Float32Array([
-      Math.min(1, signal.ageDays / 365),               // 0-1 (1 year max)
-      Math.min(1, signal.legAmount / 10000),           // 0-1 ($10k max)
-      Math.min(1, signal.legVelocity / 200),           // 0-1 (200 legs/hr max)
-      Math.min(1, signal.ipJump / 20),                 // 0-1 (20 IP changes max)
-      Math.min(1, signal.walletAgeDelta / 180),        // 0-1 (6 months max)
-      Math.min(1, signal.ctrProximity / 10000),        // 0-1 ($10k CTR proximity)
+      safeAgeDays / 365,               // 0-1 (1 year max)
+      safeLegAmount / 10000,           // 0-1 ($10k max)
+      safeLegVelocity / 200,           // 0-1 (200 legs/hr max)
+      safeIpJump / 20,                 // 0-1 (20 IP changes max)
+      safeWalletAgeDelta / 180,        // 0-1 (6 months max)
+      safeCtrProximity / 10000,        // 0-1 ($10k CTR proximity)
       signal.chargebackHistory ? 1 : 0,                // Binary
-      Math.min(1, signal.sessionDuration / 1440),      // 0-1 (24h max)
+      safeSessionDuration / 1440,      // 0-1 (24h max)
       signal.geoMismatch ? 1 : 0,                      // Binary
-      signal.deviceRiskScore                           // Already 0-1
+      safeDeviceRiskScore                           // Already 0-1
     ]);
   }
   

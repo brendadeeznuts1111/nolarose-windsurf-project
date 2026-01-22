@@ -1,5 +1,42 @@
 # Security Policy
 
+## 🔐 Bun Lifecycle Script Security
+
+This project uses Bun's **default-secure** lifecycle script model to prevent supply-chain attacks. Only explicitly trusted packages can execute code during installation.
+
+### Security Model
+- **DEFAULT**: All lifecycle scripts BLOCKED
+- **ZERO-TRUST**: No code execution without explicit trust
+- **SUPPLY CHAIN PROTECTION**: Malicious scripts automatically blocked
+
+### Trusted Dependencies
+```json
+{
+  "trustedDependencies": [
+    "node-sass",           // Native Sass compilation
+    "sharp",               // Image processing binaries  
+    "prisma",              // Database client generation
+    "@tensorflow/tfjs-node", // ML model native bindings
+    "onnxruntime-web"      // AI inference engine
+  ]
+}
+```
+
+### Security Benefits
+✅ **BLOCKS** malicious postinstall scripts
+✅ **PREVENTS** crypto-mining malware
+✅ **STOPS** data exfiltration attempts  
+✅ **PROTECTS** build environment integrity
+✅ **ENSURES** enterprise compliance
+
+### Security Commands
+```bash
+bun install                    # Safe installation
+bun install --dry-run          # Preview changes
+bun audit                      # Security audit
+bun install --trusted          # Show trusted deps
+```
+
 ## Supported Versions
 
 | Version | Release Date | Supported Until | Security Updates | Bug Fixes | Features | LTS Status | EOL Support | Platform Support | Migration Path |

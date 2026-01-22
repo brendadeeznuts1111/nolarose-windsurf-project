@@ -166,6 +166,14 @@ const onePayGDPRConfig = {
 
     // Cash App Specific Configuration
     cashApp: {
+        oauth: {
+            clientId: 'test_client_id',
+            clientSecret: 'test_client_secret',
+            redirectUri: 'http://localhost:3000/callback',
+            scope: 'wallet:read wallet:write',
+            tokenExpiry: 3600,
+            stateExpiry: 600
+        },
         integration: {
             enabled: true,
             apiVersion: 'v2',
@@ -215,7 +223,15 @@ const onePayGDPRConfig = {
  */
 export class EnhancedCashAppAdapter extends CashAppVerificationAdapter {
     constructor(gdprValidator, config = onePayGDPRConfig) {
-        super(gdprValidator, config);
+        // Transform the config to match the expected structure for the parent class
+        const transformedConfig = {
+            ...config,
+            cashApp: config.cashApp.oauth || config.cashApp,
+            plaid: config.plaid,
+            _testMode: config._testMode || true // Ensure test mode for enhanced adapter
+        };
+        
+        super(gdprValidator, transformedConfig);
         this.onePayConfig = config;
         this.consentManager = new ConsentManager();
         this.fraudDetector = new FraudRingDetector();

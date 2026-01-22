@@ -1,0 +1,1070 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="291" assertions="0" failures="0" skipped="273" time="0.083426">
+  <testsuite name="basic.test.ts" file="basic.test.ts" tests="2" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+    <testcase name="basic sanity check" classname="" time="0" file="basic.test.ts" line="3" assertions="0">
+      <skipped />
+    </testcase>
+    <testcase name="package configuration" classname="" time="0" file="basic.test.ts" line="7" assertions="0" />
+  </testsuite>
+  <testsuite name="__tests__/enhanced-rate-limiter.test.js" file="__tests__/enhanced-rate-limiter.test.js" tests="28" assertions="0" failures="0" skipped="27" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="EnhancedRateLimiter - Multi-Dimensional Protection" file="__tests__/enhanced-rate-limiter.test.js" line="11" tests="28" assertions="0" failures="0" skipped="27" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Basic Rate Limiting" file="__tests__/enhanced-rate-limiter.test.js" line="22" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should allow requests within limits" classname="Basic Rate Limiting &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="23" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should block requests exceeding IP limits" classname="Basic Rate Limiting &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="43" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should block requests exceeding user ID limits" classname="Basic Rate Limiting &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="64" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should block requests exceeding device fingerprint limits" classname="Basic Rate Limiting &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="85" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Endpoint-Specific Limits" file="__tests__/enhanced-rate-limiter.test.js" line="107" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should apply stricter limits to funding endpoints" classname="Endpoint-Specific Limits &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="108" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should apply GDPR-critical limits to data export endpoints" classname="Endpoint-Specific Limits &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="141" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should apply consent-specific limits" classname="Endpoint-Specific Limits &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="159" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Multi-Scope Enforcement" file="__tests__/enhanced-rate-limiter.test.js" line="178" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should block when any scope exceeds limits" classname="Multi-Scope Enforcement &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="179" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should track multiple scopes independently" classname="Multi-Scope Enforcement &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="200" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Suspicious Pattern Detection" file="__tests__/enhanced-rate-limiter.test.js" line="234" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should detect IP rotation patterns" classname="Suspicious Pattern Detection &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="235" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should detect user rotation patterns" classname="Suspicious Pattern Detection &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="255" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should detect bot-like timing patterns" classname="Suspicious Pattern Detection &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="275" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should detect geographic anomalies" classname="Suspicious Pattern Detection &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="295" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Block Management" file="__tests__/enhanced-rate-limiter.test.js" line="317" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track blocked entities" classname="Block Management &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="318" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should allow manual blocking" classname="Block Management &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="341" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should allow manual unblocking" classname="Block Management &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="351" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Statistics and Monitoring" file="__tests__/enhanced-rate-limiter.test.js" line="363" tests="2" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should provide comprehensive statistics" classname="Statistics and Monitoring &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="364" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should export configuration for monitoring" classname="Statistics and Monitoring &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0.000242" file="__tests__/enhanced-rate-limiter.test.js" line="376" assertions="0" />
+      </testsuite>
+      <testsuite name="Middleware Integration" file="__tests__/enhanced-rate-limiter.test.js" line="386" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should create functional middleware" classname="Middleware Integration &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="387" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle blocked requests in middleware" classname="Middleware Integration &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="411" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Privacy and Security" file="__tests__/enhanced-rate-limiter.test.js" line="442" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should hash sensitive data in logs" classname="Privacy and Security &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="443" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should hash IPs consistently" classname="Privacy and Security &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="462" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should hash values consistently" classname="Privacy and Security &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="471" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Cleanup and Maintenance" file="__tests__/enhanced-rate-limiter.test.js" line="481" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should cleanup expired data" classname="Cleanup and Maintenance &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="482" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should stop cleanup interval" classname="Cleanup and Maintenance &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="496" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Edge Cases" file="__tests__/enhanced-rate-limiter.test.js" line="505" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle requests without identifiers" classname="Edge Cases &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="506" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle unknown endpoints" classname="Edge Cases &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="517" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle malformed requests gracefully" classname="Edge Cases &amp;gt; EnhancedRateLimiter - Multi-Dimensional Protection" time="0" file="__tests__/enhanced-rate-limiter.test.js" line="529" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/validation-engine.test.js" file="__tests__/validation-engine.test.js" tests="48" assertions="0" failures="0" skipped="45" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="ValidationEngine Module" file="__tests__/validation-engine.test.js" line="12" tests="48" assertions="0" failures="0" skipped="45" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Module Initialization" file="__tests__/validation-engine.test.js" line="31" tests="4" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize with correct configuration" classname="Module Initialization &amp;gt; ValidationEngine Module" time="0.000285" file="__tests__/validation-engine.test.js" line="32" assertions="0" />
+        <testcase name="should validate configuration thresholds" classname="Module Initialization &amp;gt; ValidationEngine Module" time="0.000101" file="__tests__/validation-engine.test.js" line="40" assertions="0" />
+        <testcase name="should initialize stores and metrics" classname="Module Initialization &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="50" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should not initialize twice" classname="Module Initialization &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="56" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="preScreenUser" file="__tests__/validation-engine.test.js" line="65" tests="8" assertions="0" failures="0" skipped="8" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should pass valid user data" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="66" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid email" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="78" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid phone" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="90" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid user ID" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="102" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should detect suspicious patterns" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="114" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should enforce rate limiting" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="127" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle multiple validation issues" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="142" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle validation errors gracefully" classname="preScreenUser &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="158" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="crossValidateAll" file="__tests__/validation-engine.test.js" line="172" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should cross-validate successfully with all sources" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="173" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle missing Cash App result" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="189" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle missing Plaid result" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="201" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject on low consistency" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="212" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate cross-validation scores correctly" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="234" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle validation errors gracefully" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="265" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should cache verification results" classname="crossValidateAll &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="280" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Fuzzy Matching" file="__tests__/validation-engine.test.js" line="293" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should match identical strings" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="294" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle case differences" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="299" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle whitespace differences" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="304" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate Levenshtein distance correctly" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="309" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle empty strings" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="314" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should measure fuzzy similarity" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="322" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should update fuzzy match metrics" classname="Fuzzy Matching &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="331" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Phone Number Comparison" file="__tests__/validation-engine.test.js" line="341" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should match identical phone numbers" classname="Phone Number Comparison &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="342" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should normalize different formats" classname="Phone Number Comparison &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="347" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle country code differences" classname="Phone Number Comparison &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="352" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle invalid phone numbers" classname="Phone Number Comparison &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="357" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should normalize phone numbers correctly" classname="Phone Number Comparison &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="364" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Email Validation" file="__tests__/validation-engine.test.js" line="375" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should validate correct email formats" classname="Email Validation &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="376" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid email formats" classname="Email Validation &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="382" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Phone Validation" file="__tests__/validation-engine.test.js" line="391" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should validate correct phone formats" classname="Phone Validation &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="392" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid phone formats" classname="Phone Validation &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="399" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Suspicious Pattern Detection" file="__tests__/validation-engine.test.js" line="406" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should detect test patterns" classname="Suspicious Pattern Detection &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="407" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should allow legitimate patterns" classname="Suspicious Pattern Detection &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="417" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Rate Limiting" file="__tests__/validation-engine.test.js" line="428" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track user attempts correctly" classname="Rate Limiting &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="429" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should clean old attempts" classname="Rate Limiting &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="443" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="getVerificationStatus" file="__tests__/validation-engine.test.js" line="455" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return verification status for valid ID" classname="getVerificationStatus &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="456" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should return not found for invalid ID" classname="getVerificationStatus &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="474" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Metrics" file="__tests__/validation-engine.test.js" line="482" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track metrics correctly" classname="Metrics &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="483" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle zero validations gracefully" classname="Metrics &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="504" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Health Check" file="__tests__/validation-engine.test.js" line="513" tests="3" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return healthy status" classname="Health Check &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="514" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should return unhealthy status on error" classname="Health Check &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="523" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should include configuration summary" classname="Health Check &amp;gt; ValidationEngine Module" time="0.000069" file="__tests__/validation-engine.test.js" line="534" assertions="0" />
+      </testsuite>
+      <testsuite name="Cleanup" file="__tests__/validation-engine.test.js" line="544" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should cleanup expired verifications" classname="Cleanup &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="545" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should shutdown gracefully" classname="Cleanup &amp;gt; ValidationEngine Module" time="0" file="__tests__/validation-engine.test.js" line="565" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/oauth-handler.test.js" file="__tests__/oauth-handler.test.js" tests="39" assertions="0" failures="0" skipped="36" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="OAuthHandler Module" file="__tests__/oauth-handler.test.js" line="12" tests="39" assertions="0" failures="0" skipped="36" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Module Initialization" file="__tests__/oauth-handler.test.js" line="31" tests="4" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize with correct configuration" classname="Module Initialization &amp;gt; OAuthHandler Module" time="0.000204" file="__tests__/oauth-handler.test.js" line="32" assertions="0" />
+        <testcase name="should validate required configuration" classname="Module Initialization &amp;gt; OAuthHandler Module" time="0.000158" file="__tests__/oauth-handler.test.js" line="40" assertions="0" />
+        <testcase name="should initialize token and state stores" classname="Module Initialization &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="59" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should not initialize twice" classname="Module Initialization &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="65" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="initiateCashAppFlow" file="__tests__/oauth-handler.test.js" line="74" tests="8" assertions="0" failures="0" skipped="8" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initiate OAuth flow successfully" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="75" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should create verification token" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="89" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate secure state token" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="98" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should store state for callback validation" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="108" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should build correct authorization URL" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="122" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle initialization errors" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="135" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should update metrics on successful flow" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="149" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle flow errors gracefully" classname="initiateCashAppFlow &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="161" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="handleCashAppCallback" file="__tests__/oauth-handler.test.js" line="179" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle callback successfully" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="180" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid state" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="212" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject expired state" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="222" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle token exchange errors" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="242" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should cache tokens after successful callback" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="264" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should clean up state after successful callback" classname="handleCashAppCallback &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="294" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Token Management" file="__tests__/oauth-handler.test.js" line="319" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should cache tokens correctly" classname="Token Management &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="320" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should return null for non-existent tokens" classname="Token Management &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="335" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should clean up expired tokens" classname="Token Management &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="340" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should refresh tokens successfully" classname="Token Management &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="364" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle refresh token errors" classname="Token Management &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="389" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Utility Functions" file="__tests__/oauth-handler.test.js" line="407" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should create verification token" classname="Utility Functions &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="408" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate state token" classname="Utility Functions &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="421" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should build authorization URL correctly" classname="Utility Functions &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="433" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should mask PII correctly" classname="Utility Functions &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="448" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate random IDs" classname="Utility Functions &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="455" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Token Exchange" file="__tests__/oauth-handler.test.js" line="466" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should exchange code for tokens successfully" classname="Token Exchange &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="467" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle token request errors" classname="Token Exchange &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="496" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should make token request with correct parameters" classname="Token Exchange &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="507" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Metrics" file="__tests__/oauth-handler.test.js" line="526" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track metrics correctly" classname="Metrics &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="527" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate success rate correctly" classname="Metrics &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="549" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle zero flows gracefully" classname="Metrics &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="557" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Health Check" file="__tests__/oauth-handler.test.js" line="566" tests="3" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return healthy status" classname="Health Check &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="567" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should return unhealthy status on error" classname="Health Check &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="576" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should include configuration summary" classname="Health Check &amp;gt; OAuthHandler Module" time="0.00009" file="__tests__/oauth-handler.test.js" line="587" assertions="0" />
+      </testsuite>
+      <testsuite name="Cleanup" file="__tests__/oauth-handler.test.js" line="596" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should cleanup expired data" classname="Cleanup &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="597" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should shutdown gracefully" classname="Cleanup &amp;gt; OAuthHandler Module" time="0" file="__tests__/oauth-handler.test.js" line="616" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/enhanced-adapter.test.js" file="__tests__/enhanced-adapter.test.js" tests="30" assertions="0" failures="0" skipped="27" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="EnhancedCashAppAdapter - GDPR Compliance" file="__tests__/enhanced-adapter.test.js" line="12" tests="22" assertions="0" failures="0" skipped="21" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="GDPR Compliance" file="__tests__/enhanced-adapter.test.js" line="50" tests="8" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize with GDPR configuration" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0.000451" file="__tests__/enhanced-adapter.test.js" line="51" assertions="0" />
+        <testcase name="should determine lawful basis correctly for US users" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="60" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should determine lawful basis correctly for EU users" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="66" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should classify OnePay data categories correctly" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="72" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should apply progressive disclosure for EU users" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="87" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should allow processing for US users without consent" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="97" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate processing records with GDPR metadata" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="104" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should schedule auto-deletion for successful verifications" classname="GDPR Compliance &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="117" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Enhanced Verification Flow" file="__tests__/enhanced-adapter.test.js" line="129" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle US user verification without consent" classname="Enhanced Verification Flow &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="130" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should require consent for EU users" classname="Enhanced Verification Flow &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="172" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle enhanced pre-screening with fraud detection" classname="Enhanced Verification Flow &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="187" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle velocity limits for EU users" classname="Enhanced Verification Flow &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="203" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should enhance verification results with GDPR metadata" classname="Enhanced Verification Flow &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="218" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Data Portability (Article 20)" file="__tests__/enhanced-adapter.test.js" line="243" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should export user data in GDPR-compliant format" classname="Data Portability (Article 20) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="244" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should include all required data categories in export" classname="Data Portability (Article 20) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="260" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Right to Object (Article 21)" file="__tests__/enhanced-adapter.test.js" line="272" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle marketing objections" classname="Right to Object (Article 21) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="273" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle automated decision objections" classname="Right to Object (Article 21) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="282" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle Cash App linking objections" classname="Right to Object (Article 21) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="291" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle rewards objections" classname="Right to Object (Article 21) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="300" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject unknown objection types" classname="Right to Object (Article 21) &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="309" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Enhanced Metrics" file="__tests__/enhanced-adapter.test.js" line="319" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should include GDPR metrics in enhanced metrics" classname="Enhanced Metrics &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="320" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Enhanced Health Check" file="__tests__/enhanced-adapter.test.js" line="336" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should include GDPR compliance status in health check" classname="Enhanced Health Check &amp;gt; EnhancedCashAppAdapter - GDPR Compliance" time="0" file="__tests__/enhanced-adapter.test.js" line="337" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="ConsentManager" file="__tests__/enhanced-adapter.test.js" line="361" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should request consent for GDPR purposes" classname="ConsentManager" time="0" file="__tests__/enhanced-adapter.test.js" line="368" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should record consent with proper metadata" classname="ConsentManager" time="0" file="__tests__/enhanced-adapter.test.js" line="377" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="FraudRingDetector" file="__tests__/enhanced-adapter.test.js" line="390" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should detect fraud rings with high tension" classname="FraudRingDetector" time="0" file="__tests__/enhanced-adapter.test.js" line="397" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should not detect fraud rings with low tension" classname="FraudRingDetector" time="0" file="__tests__/enhanced-adapter.test.js" line="416" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="OnePay Configuration Validation" file="__tests__/enhanced-adapter.test.js" line="432" tests="4" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should have complete GDPR configuration structure" classname="OnePay Configuration Validation" time="0" file="__tests__/enhanced-adapter.test.js" line="433" assertions="0" />
+      <testcase name="should have proper geographic configurations" classname="OnePay Configuration Validation" time="0.00003" file="__tests__/enhanced-adapter.test.js" line="446" assertions="0" />
+      <testcase name="should have complete DPIA documentation" classname="OnePay Configuration Validation" time="0" file="__tests__/enhanced-adapter.test.js" line="456" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should have proper security measures" classname="OnePay Configuration Validation" time="0" file="__tests__/enhanced-adapter.test.js" line="470" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/simple-enhanced-adapter.test.js" file="__tests__/simple-enhanced-adapter.test.js" tests="25" assertions="0" failures="0" skipped="22" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="EnhancedCashAppAdapter - Basic GDPR Tests" file="__tests__/simple-enhanced-adapter.test.js" line="11" tests="14" assertions="0" failures="0" skipped="13" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="GDPR Configuration" file="__tests__/simple-enhanced-adapter.test.js" line="97" tests="7" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize with GDPR configuration" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="98" assertions="0" />
+        <testcase name="should determine lawful basis correctly for US users" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="106" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should determine lawful basis correctly for EU users" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="115" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should classify OnePay data categories correctly" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="124" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should apply progressive disclosure for EU users" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="139" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should allow processing for US users without consent" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="151" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should schedule auto-deletion for successful verifications" classname="GDPR Configuration &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="160" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Enhanced Results" file="__tests__/simple-enhanced-adapter.test.js" line="174" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should enhance verification results with GDPR metadata" classname="Enhanced Results &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="175" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate approval rate correctly" classname="Enhanced Results &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="198" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Data Portability" file="__tests__/simple-enhanced-adapter.test.js" line="206" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should export user data in GDPR-compliant format" classname="Data Portability &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="207" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Right to Object" file="__tests__/simple-enhanced-adapter.test.js" line="223" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle marketing objections" classname="Right to Object &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="224" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject unknown objection types" classname="Right to Object &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="233" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Response Creation" file="__tests__/simple-enhanced-adapter.test.js" line="243" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should create consent required response" classname="Response Creation &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="244" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should create disclosure rejection response" classname="Response Creation &amp;gt; EnhancedCashAppAdapter - Basic GDPR Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="254" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="ConsentManager - Basic Tests" file="__tests__/simple-enhanced-adapter.test.js" line="272" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should initialize correctly" classname="ConsentManager - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="279" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should request consent for GDPR purposes" classname="ConsentManager - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="285" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should record consent with proper metadata" classname="ConsentManager - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="296" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="FraudRingDetector - Basic Tests" file="__tests__/simple-enhanced-adapter.test.js" line="311" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should initialize correctly" classname="FraudRingDetector - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="318" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should detect fraud rings with high tension" classname="FraudRingDetector - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="323" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should not detect fraud rings with low tension" classname="FraudRingDetector - Basic Tests" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="345" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="OnePay Configuration Validation" file="__tests__/simple-enhanced-adapter.test.js" line="364" tests="5" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should have complete GDPR configuration structure" classname="OnePay Configuration Validation" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="365" assertions="0" />
+      <testcase name="should have proper geographic configurations" classname="OnePay Configuration Validation" time="0.000044" file="__tests__/simple-enhanced-adapter.test.js" line="378" assertions="0" />
+      <testcase name="should have complete DPIA documentation" classname="OnePay Configuration Validation" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="388" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should have proper security measures" classname="OnePay Configuration Validation" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="402" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should have proper data minimization rules" classname="OnePay Configuration Validation" time="0" file="__tests__/simple-enhanced-adapter.test.js" line="413" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/cash-app-adapter.test.js" file="__tests__/cash-app-adapter.test.js" tests="27" assertions="0" failures="0" skipped="26" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="CashAppVerificationAdapter v3.0" file="__tests__/cash-app-adapter.test.js" line="12" tests="25" assertions="0" failures="0" skipped="24" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Adapter Initialization" file="__tests__/cash-app-adapter.test.js" line="35" tests="6" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize adapter with all modules" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="36" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should load configuration successfully" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0.000069" file="__tests__/cash-app-adapter.test.js" line="45" assertions="0" />
+        <testcase name="should initialize modules within acceptable time" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="52" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should emit initialization event" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="56" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle initialization errors gracefully" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="63" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should not initialize twice" classname="Adapter Initialization &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="73" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="verifyWalletFunding" file="__tests__/cash-app-adapter.test.js" line="82" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle complete verification flow successfully" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="83" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject on pre-screen failure" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="126" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle high risk rejection" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="143" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle verification errors gracefully" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="166" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should update metrics on successful verification" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="185" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle concurrent verification requests" classname="verifyWalletFunding &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="225" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="handleCashAppCallback" file="__tests__/cash-app-adapter.test.js" line="268" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle OAuth callback successfully" classname="handleCashAppCallback &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="269" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle callback errors" classname="handleCashAppCallback &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="286" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="getVerificationStatus" file="__tests__/cash-app-adapter.test.js" line="301" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return verification status for valid ID" classname="getVerificationStatus &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="302" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should return not found for invalid ID" classname="getVerificationStatus &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="323" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Metrics and Monitoring" file="__tests__/cash-app-adapter.test.js" line="338" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track metrics correctly" classname="Metrics and Monitoring &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="339" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate success rate correctly" classname="Metrics and Monitoring &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="387" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle zero requests gracefully" classname="Metrics and Monitoring &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="395" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Health Check" file="__tests__/cash-app-adapter.test.js" line="404" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return healthy status for all modules" classname="Health Check &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="405" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle unhealthy modules" classname="Health Check &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="435" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should include uptime and memory information" classname="Health Check &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="447" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Shutdown" file="__tests__/cash-app-adapter.test.js" line="461" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should shutdown all modules gracefully" classname="Shutdown &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="462" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Utility Functions" file="__tests__/cash-app-adapter.test.js" line="481" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should mask PII correctly" classname="Utility Functions &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="482" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should ensure initialization before operations" classname="Utility Functions &amp;gt; CashAppVerificationAdapter v3.0" time="0" file="__tests__/cash-app-adapter.test.js" line="490" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="createCashAppAdapter Factory" file="__tests__/cash-app-adapter.test.js" line="509" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should create and initialize adapter" classname="createCashAppAdapter Factory" time="0" file="__tests__/cash-app-adapter.test.js" line="510" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should handle initialization errors" classname="createCashAppAdapter Factory" time="0" file="__tests__/cash-app-adapter.test.js" line="520" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/ai.test.ts" file="__tests__/ai.test.ts" tests="22" assertions="0" failures="0" skipped="22" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="AnomalyEngine - Core Detection Logic" file="__tests__/ai.test.ts" line="13" tests="10" assertions="0" failures="0" skipped="10" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Basic Scoring" file="__tests__/ai.test.ts" line="20" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should score low risk leg correctly" classname="Basic Scoring &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="21" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should score high risk leg correctly" classname="Basic Scoring &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="44" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should score medium risk leg correctly" classname="Basic Scoring &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="67" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Feature Normalization" file="__tests__/ai.test.ts" line="92" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should normalize features correctly" classname="Feature Normalization &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="93" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle edge cases in normalization" classname="Feature Normalization &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="119" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Business Rules" file="__tests__/ai.test.ts" line="140" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should apply business rules correctly" classname="Business Rules &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="141" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Batch Processing" file="__tests__/ai.test.ts" line="164" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should process batch of signals correctly" classname="Batch Processing &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="165" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Error Handling" file="__tests__/ai.test.ts" line="203" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle malformed signals gracefully" classname="Error Handling &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="204" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle inference failures gracefully" classname="Error Handling &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="226" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Statistics" file="__tests__/ai.test.ts" line="253" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return correct statistics" classname="Statistics &amp;gt; AnomalyEngine - Core Detection Logic" time="0" file="__tests__/ai.test.ts" line="254" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Training System" file="__tests__/ai.test.ts" line="269" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Model Training" file="__tests__/ai.test.ts" line="270" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should train model successfully" classname="Model Training &amp;gt; Training System" time="0" file="__tests__/ai.test.ts" line="271" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle insufficient data gracefully" classname="Model Training &amp;gt; Training System" time="0" file="__tests__/ai.test.ts" line="282" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Training History" file="__tests__/ai.test.ts" line="290" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should retrieve training history" classname="Training History &amp;gt; Training System" time="0" file="__tests__/ai.test.ts" line="291" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should limit history results" classname="Training History &amp;gt; Training System" time="0" file="__tests__/ai.test.ts" line="304" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="AI API" file="__tests__/ai.test.ts" line="311" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Health Check" file="__tests__/ai.test.ts" line="318" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return healthy status" classname="Health Check &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="319" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Leg Scoring" file="__tests__/ai.test.ts" line="330" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should score leg successfully" classname="Leg Scoring &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="331" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle batch scoring" classname="Leg Scoring &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="356" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Model Training" file="__tests__/ai.test.ts" line="395" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should trigger model training" classname="Model Training &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="396" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Statistics" file="__tests__/ai.test.ts" line="407" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return system statistics" classname="Statistics &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="408" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Data Export" file="__tests__/ai.test.ts" line="422" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should export data in CSV format" classname="Data Export &amp;gt; AI API" time="0" file="__tests__/ai.test.ts" line="423" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+    <testsuite name="Integration Tests" file="__tests__/ai.test.ts" line="438" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="End-to-End Workflow" file="__tests__/ai.test.ts" line="439" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle complete anomaly detection workflow" classname="End-to-End Workflow &amp;gt; Integration Tests" time="0" file="__tests__/ai.test.ts" line="440" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Performance Tests" file="__tests__/ai.test.ts" line="479" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle high volume scoring" classname="Performance Tests &amp;gt; Integration Tests" time="0" file="__tests__/ai.test.ts" line="480" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+  <testsuite name="__tests__/simple-adapter.test.js" file="__tests__/simple-adapter.test.js" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="CashAppVerificationAdapter - Basic Tests" file="__tests__/simple-adapter.test.js" line="11" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+      <testcase name="should create adapter instance" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="100" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should mask PII correctly" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="106" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should initialize without errors" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="113" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should handle shutdown gracefully" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="122" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should track metrics correctly" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="130" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should emit initialization event" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="141" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="should handle health check" classname="CashAppVerificationAdapter - Basic Tests" time="0" file="__tests__/simple-adapter.test.js" line="150" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="shopping/api.test.ts" file="shopping/api.test.ts" tests="25" assertions="0" failures="0" skipped="25" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="Shopping API with RBAC" file="shopping/api.test.ts" line="9" tests="25" assertions="0" failures="0" skipped="25" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Authentication" file="shopping/api.test.ts" line="58" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should login with valid credentials" classname="Authentication &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="59" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should fail login with invalid credentials" classname="Authentication &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="67" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="User Management (RBAC)" file="shopping/api.test.ts" line="74" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="admin should create users" classname="User Management (RBAC) &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="75" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="manager should not create users" classname="User Management (RBAC) &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="87" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="admin should list users" classname="User Management (RBAC) &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="98" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="manager should list users" classname="User Management (RBAC) &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="105" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="customer should not list users" classname="User Management (RBAC) &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="111" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Product Management" file="shopping/api.test.ts" line="118" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="Mac.attlocal.net">
+        <testcase name="admin should create products" classname="Product Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="119" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="manager should create products" classname="Product Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="133" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="cashier should not create products" classname="Product Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="145" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="customer should list products" classname="Product Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="157" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Order Management" file="shopping/api.test.ts" line="165" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="Mac.attlocal.net">
+        <testcase name="customer should create orders" classname="Order Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="166" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="admin should list orders" classname="Order Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="183" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="manager should list orders" classname="Order Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="190" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="customer should list own orders" classname="Order Management &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="196" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Dashboard Analytics" file="shopping/api.test.ts" line="203" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="admin should access dashboard" classname="Dashboard Analytics &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="204" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="manager should access dashboard" classname="Dashboard Analytics &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="215" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="viewer should access dashboard" classname="Dashboard Analytics &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="221" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Health Check" file="shopping/api.test.ts" line="239" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should return health status" classname="Health Check &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="240" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Permission Validation" file="shopping/api.test.ts" line="252" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should reject requests without token" classname="Permission Validation &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="253" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle expired tokens gracefully" classname="Permission Validation &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="259" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Data Validation" file="shopping/api.test.ts" line="266" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should validate product data" classname="Data Validation &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="267" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should validate order data" classname="Data Validation &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="280" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Performance" file="shopping/api.test.ts" line="295" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle concurrent requests" classname="Performance &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="296" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should respond quickly" classname="Performance &amp;gt; Shopping API with RBAC" time="0" file="shopping/api.test.ts" line="307" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+  <testsuite name="tests/modular-adapter.test.js" file="tests/modular-adapter.test.js" tests="38" assertions="0" failures="0" skipped="35" time="0" hostname="Mac.attlocal.net">
+    <testsuite name="Modular Cash App Adapter v3.0" file="tests/modular-adapter.test.js" line="16" tests="38" assertions="0" failures="0" skipped="35" time="0" hostname="Mac.attlocal.net">
+      <testsuite name="Adapter Initialization" file="tests/modular-adapter.test.js" line="124" tests="4" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize adapter with all modules" classname="Adapter Initialization &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="125" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should load configuration successfully" classname="Adapter Initialization &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="133" assertions="0" />
+        <testcase name="should initialize modules within acceptable time" classname="Adapter Initialization &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="140" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should have all modules healthy" classname="Adapter Initialization &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="144" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="OAuth Handler Module" file="tests/modular-adapter.test.js" line="154" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize OAuth handler" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="161" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate verification token" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="167" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate secure state token" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="180" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should build authorization URL" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="190" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should mask PII correctly" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="201" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle OAuth flow initiation" classname="OAuth Handler Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="207" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Plaid Verifier Module" file="tests/modular-adapter.test.js" line="230" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize Plaid verifier" classname="Plaid Verifier Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="237" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should generate link token" classname="Plaid Verifier Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="243" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate risk score correctly" classname="Plaid Verifier Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="267" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should analyze transactions for risk patterns" classname="Plaid Verifier Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="278" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should mask PII correctly" classname="Plaid Verifier Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="293" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Validation Engine Module" file="tests/modular-adapter.test.js" line="299" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize validation engine" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="306" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should pre-screen user data" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="312" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should reject invalid email in pre-screen" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="327" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should perform fuzzy string matching" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="340" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should calculate Levenshtein distance correctly" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="346" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should compare phone numbers correctly" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="351" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should cross-validate verification sources" classname="Validation Engine Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="356" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Tension Router Module" file="tests/modular-adapter.test.js" line="387" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should initialize tension router" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="394" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should apply adaptive strategy" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="400" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should route to appropriate tier" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="420" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should detect conflicts in verification sources" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="448" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should create rejection response" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="468" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should queue manual review when required" classname="Tension Router Module &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="485" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Integration Tests" file="tests/modular-adapter.test.js" line="502" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle complete verification flow" classname="Integration Tests &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="503" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle verification failure gracefully" classname="Integration Tests &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="549" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should maintain performance under load" classname="Integration Tests &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="562" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Configuration Tests" file="tests/modular-adapter.test.js" line="592" tests="2" assertions="0" failures="0" skipped="0" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should load configuration with all sections" classname="Configuration Tests &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="593" assertions="0" />
+        <testcase name="should validate configuration thresholds" classname="Configuration Tests &amp;gt; Modular Cash App Adapter v3.0" time="0.00003" file="tests/modular-adapter.test.js" line="602" assertions="0" />
+      </testsuite>
+      <testsuite name="Error Handling" file="tests/modular-adapter.test.js" line="616" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should handle module initialization failures" classname="Error Handling &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="617" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle API failures gracefully" classname="Error Handling &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="630" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should handle timeout scenarios" classname="Error Handling &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="648" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+      <testsuite name="Metrics and Monitoring" file="tests/modular-adapter.test.js" line="670" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="Mac.attlocal.net">
+        <testcase name="should track metrics correctly" classname="Metrics and Monitoring &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="671" assertions="0">
+          <skipped />
+        </testcase>
+        <testcase name="should provide health status" classname="Metrics and Monitoring &amp;gt; Modular Cash App Adapter v3.0" time="0" file="tests/modular-adapter.test.js" line="696" assertions="0">
+          <skipped />
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

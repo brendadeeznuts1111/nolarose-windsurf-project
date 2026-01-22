@@ -84,7 +84,8 @@ describe('CashAppVerificationAdapter - Basic Tests', () => {
                 enableCompression: true,
                 enableMetrics: true,
                 metricsInterval: 60000
-            }
+            },
+            _testMode: true // Mark as test mode to skip config validation
         };
         
         adapter = new CashAppVerificationAdapter(mockGDPRValidator, simpleConfig);

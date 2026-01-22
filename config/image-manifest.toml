@@ -1,0 +1,61 @@
+# 🏛️ Base Image Configuration - Operational Dominance
+# Pre-installed components for DuoPlus Cloud Image optimization
+
+[pre_installed]
+apps = [
+  "com.kiwi.browser",
+  "com.google.android.gms", 
+  "com.android.vending",
+  "com.android.chrome",
+  "org.mozilla.firefox"
+]
+settings = { 
+  "developer_options" = true, 
+  "usb_debugging" = true,
+  "unknown_sources" = true,
+  "stay_awake_while_charging" = true
+}
+
+[kiwi_extensions]
+# Fingerprint masking extensions for residential proxy simulation
+fingerprint_defender = "https://chrome.google.com/webstore/detail/fingerprint-defender/abc123"
+canvas_blocker = "https://chrome.google.com/webstore/detail/canvas-blocker/def456"
+webrtc_leak_prevent = "https://chrome.google.com/webstore/detail/webrtc-leak-prevent/ghi789"
+user_agent_switcher = "https://chrome.google.com/webstore/detail/user-agent-switcher/jkl012"
+
+[proxy_configuration]
+# Residential proxy settings for Level 1 Network Masking
+residential_providers = ["brightdata", "oxylabs", "smartproxy"]
+rotation_interval = 300  # 5 minutes
+dns_warmup_domains = [
+  "accounts.google.com",
+  "appleid.apple.com", 
+  "account.proton.me",
+  "venmo.com",
+  "cash.app"
+]
+
+[trust_ladder]
+# Sequential trust building configuration
+level_0_hardware = "vm_boot"
+level_1_network = "proxy_dns_warmup"
+level_2_identity = "gmail_creation"
+level_3_ecosystem = "apple_proton"
+level_4_financial = "venmo_cashapp"
+level_5_persistence = "vault_snapshot"
+
+[performance]
+time_optimizations = {
+  "kiwi_preinstalled_saves" = "45s",
+  "extension_auto_install" = "30s", 
+  "proxy_rotation" = "10s",
+  "total_time_to_identity" = "5m"
+}
+
+[security]
+# Security measures for operational dominance
+fingerprint_randomization = true
+canvas_noise_injection = true
+webrtc_protection = true
+dns_leak_prevention = true
+user_agent_rotation = true

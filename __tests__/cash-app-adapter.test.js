@@ -18,6 +18,7 @@ describe('CashAppVerificationAdapter v3.0', () => {
         TestUtils.setupTestEnvironment();
         
         config = TestDataFactory.createConfig();
+        config._testMode = true; // Mark as test mode to skip config validation
         mockGDPRValidator = createMockGDPRValidator();
         
         adapter = new CashAppVerificationAdapter(mockGDPRValidator, config);

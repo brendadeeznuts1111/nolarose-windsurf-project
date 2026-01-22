@@ -38,9 +38,22 @@ describe('OAuthHandler Module', () => {
         });
         
         it('should validate required configuration', () => {
-            expect(() => {
-                new OAuthHandler({});
-            }).toThrow('Missing required OAuth config: clientId');
+            // Temporarily clear environment variables
+            const originalClientId = process.env.CASH_APP_CLIENT_ID;
+            const originalClientSecret = process.env.CASH_APP_CLIENT_SECRET;
+            
+            delete process.env.CASH_APP_CLIENT_ID;
+            delete process.env.CASH_APP_CLIENT_SECRET;
+            
+            try {
+                expect(() => {
+                    new OAuthHandler({});
+                }).toThrow('Missing required OAuth config: clientId');
+            } finally {
+                // Restore environment variables
+                if (originalClientId) process.env.CASH_APP_CLIENT_ID = originalClientId;
+                if (originalClientSecret) process.env.CASH_APP_CLIENT_SECRET = originalClientSecret;
+            }
         });
         
         it('should initialize token and state stores', () => {

@@ -12,3 +12,39 @@
 
 # as an object with token (currently active)
 "@nolarose" = { token = "$npm_token", url = "https://registry.npmjs.org/" }
+
+# Test configuration
+[test]
+# Test discovery
+root = "."  # Scan from project root (includes __tests__, tests, etc.)
+preload = ["./__tests__/setup.js"]
+
+# Execution settings
+timeout = 10000  # 10 seconds (increased from default 5s for complex tests)
+smol = true     # Reduce memory usage during test runs
+
+# Coverage configuration
+coverage = false  # Disabled by default, enable with --coverage
+coverageReporter = ["text", "lcov"]
+coverageDir = "./coverage"
+coverageThreshold = { lines = 0.80, functions = 0.75, statements = 0.80 }
+coverageSkipTestFiles = true
+coveragePathIgnorePatterns = [
+  "**/*.test.ts",
+  "**/*.test.js",
+  "**/*.spec.ts",
+  "**/*.spec.js",
+  "node_modules/**",
+  "dist/**",
+  "build/**",
+  "generated/**",
+  "vendor/**"
+]
+
+# Advanced execution settings
+randomize = false  # Keep deterministic order for debugging
+rerunEach = 1      # Don't rerun by default (change to 3 for flaky test detection)
+
+# Reporter configuration
+[test.reporter]
+junit = "./reports/junit.xml"

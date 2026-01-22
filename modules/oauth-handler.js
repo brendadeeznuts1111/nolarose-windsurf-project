@@ -18,6 +18,14 @@ console.log("🔐 OAuth Handler Module - Loaded");
  */
 export class OAuthHandler {
     constructor(config = {}) {
+        // Validate required configuration
+        if (!config.clientId && !process.env.CASH_APP_CLIENT_ID) {
+            throw new Error('Missing required OAuth config: clientId');
+        }
+        if (!config.clientSecret && !process.env.CASH_APP_CLIENT_SECRET) {
+            throw new Error('Missing required OAuth config: clientSecret');
+        }
+        
         this.config = {
             clientId: config.clientId || process.env.CASH_APP_CLIENT_ID,
             clientSecret: config.clientSecret || process.env.CASH_APP_CLIENT_SECRET,

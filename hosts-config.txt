@@ -1,0 +1,28 @@
+# Local Development Hosts Configuration
+# Add these entries to your /etc/hosts file (macOS/Linux) or C:\Windows\System32\drivers\etc\hosts (Windows)
+
+# Factory-Wager Enterprise Development
+127.0.0.1 api.factory-wager.com
+127.0.0.1 dashboard.factory-wager.com
+127.0.0.1 admin.factory-wager.com
+127.0.0.1 fraud.factory-wager.com
+
+# Shopping API Services
+127.0.0.1 shop.factory-wager.com
+127.0.0.1 commerce.factory-wager.com
+127.0.0.1 retail.factory-wager.com
+
+# AI and Analytics Services
+127.0.0.1 ai.factory-wager.com
+127.0.0.1 analytics.factory-wager.com
+127.0.0.1 monitoring.factory-wager.com
+
+# Security Services
+127.0.0.1 security.factory-wager.com
+127.0.0.1 auth.factory-wager.com
+127.0.0.1 rbac.factory-wager.com
+
+# Development Environment
+127.0.0.1 dev.factory-wager.com
+127.0.0.1 staging.factory-wager.com
+127.0.0.1 local.factory-wager.com
