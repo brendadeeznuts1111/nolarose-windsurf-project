@@ -82,7 +82,7 @@ export class CitadelFeedbackDemo {
       
       try {
         // Execute feedback command
-        const command = `bun run src/nexus/orchestrator.ts --feedback "${scenario.details}"`;
+        const command = `bun run src/orchestrators/orchestrator.ts --feedback "${scenario.details}"`;
         execSync(command, { 
           cwd: process.cwd(),
           env: { ...process.env, DEVICE_ID: scenario.deviceId || 'unknown_device' },
@@ -182,7 +182,7 @@ export class CitadelFeedbackDemo {
     console.log(`   bun run src/nexus/dashboard.ts --search "critical"`);
     
     console.log(`\n🚨 Report new incidents:`);
-    console.log(`   DEVICE_ID=cloud_vm_15 bun run src/nexus/orchestrator.ts --feedback "sim_card_blocked"`);
+    console.log(`   DEVICE_ID=cloud_vm_15 bun run src/orchestrators/orchestrator.ts --feedback "sim_card_blocked"`);
   }
 
   /**

@@ -36,7 +36,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const details = "apple_id_lockout test.user@icloud.com";
       
       // Execute feedback command with test device
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       expect(() => {
         execSync(command, { 
@@ -70,7 +70,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const deviceId = "../../../etc/passwd"; // Malicious input
       const details = "test_malicious_input";
       
-      const command = `DEVICE_ID="${deviceId}" bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID="${deviceId}" bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       // Should not throw due to sanitization
       expect(() => {
@@ -98,7 +98,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const deviceId = "search_test_01";
       const details = "search_test_incident_unique";
       
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       execSync(command, { 
         cwd: process.cwd(),
@@ -146,7 +146,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
         const details = `concurrent_incident_${i}`;
         
         const promise = new Promise((resolve, reject) => {
-          const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+          const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
           
           try {
             execSync(command, { 
@@ -185,7 +185,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const details = "integrity_validation_test";
       
       // Log an incident
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       execSync(command, { 
         cwd: process.cwd(),
@@ -239,7 +239,7 @@ describe("⚡ Performance Benchmark", () => {
     const startTime = Date.now();
     
     const promises = Array.from({ length: benchmarkCount }, (_, i) => {
-      const command = `DEVICE_ID=perf_${i} bun run src/nexus/orchestrator.ts --feedback "perf_test_${i}"`;
+      const command = `DEVICE_ID=perf_${i} bun run src/orchestrators/orchestrator.ts --feedback "perf_test_${i}"`;
       
       return execSync(command, { 
         cwd: process.cwd(),

@@ -380,7 +380,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       for (const incident of incidents) {
         const { execSync } = require("child_process");
-        const command = `DEVICE_ID=${incident.deviceId} bun run src/nexus/orchestrator.ts --feedback "${incident.details}"`;
+        const command = `DEVICE_ID=${incident.deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${incident.details}"`;
         
         execSync(command, { 
           cwd: process.cwd(),
