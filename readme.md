@@ -646,6 +646,7 @@ The **Sovereign Unit \[01\]** Financial Warming Multiverse stands on the shoulde
 #### **🦀 Bun Runtime & Types**
 - **Project**: [Bun - JavaScript Runtime](https://bun.sh/)
 - **Type Definitions**: [Bun Types Package](https://github.com/oven-sh/bun/tree/main/packages/bun-types)
+- **Globals Reference**: [Bun Globals Documentation](https://bun.com/reference/globals)
 - **Usage**: Core runtime environment and TypeScript definitions
 - **Impact**: Delivers sub-50ms performance with zero-latency analytics
 
