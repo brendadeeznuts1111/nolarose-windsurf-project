@@ -252,7 +252,7 @@ export class AdvancedMetricsCollector {
         }
       } catch (error) {
         console.error(`Failed to parse ${file}:`, (error as Error).message);
-        return null;
+        continue; // Skip this file and continue with others
       }
       
       for (const pattern of extracted) {

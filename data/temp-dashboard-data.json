@@ -1,0 +1,55 @@
+{
+  "dashboard": {
+    "active_silos": 4,
+    "total_silos": 5,
+    "high_risk_devices": 1,
+    "total_incidents": 2048,
+    "performance_efficiency": 87,
+    "uptime_hours": 24,
+    "devices": [
+      {
+        "id": "cloud_vm_01",
+        "status": "ACTIVE",
+        "cycles": 3,
+        "risk": "LOW",
+        "last_activity": "2m ago"
+      },
+      {
+        "id": "cloud_vm_02", 
+        "status": "WARN",
+        "cycles": 7,
+        "risk": "MED",
+        "last_activity": "5m ago"
+      },
+      {
+        "id": "cloud_vm_03",
+        "status": "ACTIVE", 
+        "cycles": 2,
+        "risk": "LOW",
+        "last_activity": "1m ago"
+      },
+      {
+        "id": "cloud_vm_04",
+        "status": "CRITICAL",
+        "cycles": 12,
+        "risk": "HIGH", 
+        "last_activity": "0m ago"
+      },
+      {
+        "id": "cloud_vm_05",
+        "status": "ACTIVE",
+        "cycles": 1,
+        "risk": "LOW",
+        "last_activity": "3m ago"
+      }
+    ],
+    "recent_incidents": [
+      {
+        "device": "test_vm_03",
+        "type": "SECURITY_INCIDENT",
+        "details": "performance_anomaly sim_api_delay_5.2s threshold_exceeded",
+        "timestamp": "2026-01-22T12:37:06-06:00"
+      }
+    ]
+  }
+}
