@@ -6,7 +6,7 @@
 - [Unix Domain Sockets (Cross-Platform)](#-unix-domain-sockets-cross-platform)
 - [Export Default Syntax](#-export-default-syntax)
 - [Hot Route Reloading](#-hot-route-reloading)
-- [Idle Timeout Configuration](#-idle-timeout-configuration)
+- [Idle Timeout Configuration](#idle-timeout-configuration)
 - [Complete Examples](#-complete-examples)
 
 ## 🔌 Abstract Namespace Sockets (Linux Only)
@@ -161,7 +161,7 @@ export default {
 - WebSocket handlers cannot be reloaded
 - Server configuration (port, unix socket) cannot be changed
 
-## ⏱️ Idle Timeout Configuration
+## Idle Timeout Configuration
 
 ### What is Idle Timeout?
 
