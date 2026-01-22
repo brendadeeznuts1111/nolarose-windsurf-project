@@ -3,30 +3,27 @@
 // Testing the Android 13 Nexus Citadel Feedback System core functionality
 
 import { test, expect, describe, beforeEach, afterEach } from "bun:test";
-import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { join } from "path";
 
 // Test configuration
 const TEST_AUDIT_DIR = "./test-audit";
 
 describe("🏛️ Citadel Feedback System - Core Tests", () => {
-  // Import execSync at the top level
-  const { execSync } = require("child_process");
 
   beforeEach(async () => {
     // Clean up test environment
-    if (existsSync(TEST_AUDIT_DIR)) {
-      const { rmSync } = require("fs");
-      rmSync(TEST_AUDIT_DIR, { recursive: true, force: true });
+    const testDir = Bun.file(TEST_AUDIT_DIR);
+    if (await testDir.exists()) {
+      await Bun.$`rm -rf ${TEST_AUDIT_DIR}`;
     }
-    mkdirSync(TEST_AUDIT_DIR, { recursive: true });
+    await Bun.$`mkdir -p ${TEST_AUDIT_DIR}`;
   });
 
   afterEach(async () => {
     // Clean up after tests
-    if (existsSync(TEST_AUDIT_DIR)) {
-      const { rmSync } = require("fs");
-      rmSync(TEST_AUDIT_DIR, { recursive: true, force: true });
+    const testDir = Bun.file(TEST_AUDIT_DIR);
+    if (await testDir.exists()) {
+      await Bun.$`rm -rf ${TEST_AUDIT_DIR}`;
     }
   });
 
@@ -39,25 +36,30 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
 
       expect(() => {
-        execSync(command, {
-          cwd: process.cwd(),
-          stdio: 'pipe',
-          timeout: 5000
-        });
+        Bun.$`DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`.quiet();
       }).not.toThrow();
 
       // Verify audit file was created in main audit directory
-      const { readdirSync } = require("fs");
-      const auditFiles = readdirSync("./audit")
-        .filter((f: string) => f.endsWith('.feedback.json'))
+      const auditPath = "./audit";
+      const auditDir = Bun.file(auditPath);
+      const auditFiles: string[] = [];
+
+      // List files in audit directory
+      const glob = new Bun.Glob(`${auditPath}/*.feedback.json`);
+      for await (const entry of glob.scan()) {
+        const fileName = entry.split('/').pop() || entry;
+        auditFiles.push(fileName);
+      }
+
+      const filteredFiles = auditFiles
         .filter((f: string) => f.includes(deviceId));
 
-      expect(auditFiles.length).toBeGreaterThan(0);
+      expect(filteredFiles.length).toBeGreaterThan(0);
 
       // Verify audit file content
-      const { readFileSync } = require("fs");
-      const latestFile = auditFiles[auditFiles.length - 1];
-      const content = JSON.parse(readFileSync(join("./audit", latestFile), 'utf-8'));
+      const latestFile = filteredFiles[filteredFiles.length - 1];
+      const fileContent = await Bun.file(join("./audit", latestFile)).text();
+      const content = JSON.parse(fileContent);
 
       expect(content.deviceId).toBe(deviceId);
       expect(content.details).toBe(details);
@@ -74,17 +76,19 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
 
       // Should not throw due to sanitization
       expect(() => {
-        execSync(command, {
-          cwd: process.cwd(),
-          stdio: 'pipe',
-          timeout: 5000
-        });
+        Bun.$`${command}`.quiet();
       }).not.toThrow();
 
       // Verify file was created with sanitized device ID
-      const { readdirSync } = require("fs");
-      const auditFiles = readdirSync("./audit")
-        .filter((f: string) => f.endsWith('.feedback.json'));
+      const auditPath = "./audit";
+      const auditFiles: string[] = [];
+
+      // List files in audit directory
+      const glob = new Bun.Glob(`${auditPath}/*.feedback.json`);
+      for await (const entry of glob.scan()) {
+        const fileName = entry.split('/').pop() || entry;
+        auditFiles.push(fileName);
+      }
 
       // Should have sanitized device ID (no path traversal)
       const sanitizedFiles = auditFiles.filter((f: string) => f.includes("___etc_passwd"));
@@ -98,22 +102,15 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       const deviceId = "search_test_01";
       const details = "search_test_incident_unique";
 
+      // Execute feedback command with test device
       const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
 
-      execSync(command, {
-        cwd: process.cwd(),
-        stdio: 'pipe',
-        timeout: 5000
-      });
+      Bun.$`${command}`.quiet();
 
       // Test dashboard search using CLI wrapper
       const searchCommand = `./cli-dashboard search "search_test_incident_unique"`;
 
-      const result = execSync(searchCommand, {
-        cwd: process.cwd(),
-        encoding: 'utf8',
-        timeout: 5000
-      });
+      const result = await Bun.$`${searchCommand}`.text();
 
       expect(result).toContain("search_test_incident_unique");
       expect(result).toContain("Found");
@@ -123,11 +120,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
     test.concurrent("dashboard metrics display correctly", async () => {
       const metricsCommand = `./cli-dashboard metrics`;
 
-      const result = execSync(metricsCommand, {
-        cwd: process.cwd(),
-        encoding: 'utf8',
-        timeout: 5000
-      });
+      const result = await Bun.$`${metricsCommand}`.text();
 
       expect(result).toContain("DETAILED METRICS");
       expect(result).toContain("DEVICE PERFORMANCE");
@@ -149,11 +142,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
           const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
 
           try {
-            execSync(command, {
-              cwd: process.cwd(),
-              stdio: 'pipe',
-              timeout: 5000
-            });
+            Bun.$`${command}`.quiet();
             resolve({ deviceId, details });
           } catch (error) {
             reject(error);
@@ -170,12 +159,20 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       expect(results.length).toBe(concurrentCount);
 
       // Verify audit files exist
-      const { readdirSync } = require("fs");
-      const auditFiles = readdirSync("./audit")
-        .filter((f: string) => f.endsWith('.feedback.json'))
+      const auditPath = "./audit";
+      const auditFiles: string[] = [];
+
+      // List files in audit directory
+      const glob = new Bun.Glob(`${auditPath}/*.feedback.json`);
+      for await (const entry of glob.scan()) {
+        const fileName = entry.split('/').pop() || entry;
+        auditFiles.push(fileName);
+      }
+
+      const concurrentFiles = auditFiles
         .filter((f: string) => f.includes("concurrent_"));
 
-      expect(auditFiles.length).toBeGreaterThanOrEqual(concurrentCount);
+      expect(concurrentFiles.length).toBeGreaterThanOrEqual(concurrentCount);
     }, 15000);
   });
 
@@ -187,21 +184,26 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       // Log an incident
       const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
 
-      execSync(command, {
-        cwd: process.cwd(),
-        stdio: 'pipe',
-        timeout: 5000
-      });
+      Bun.$`${command}`.quiet();
 
       // Verify audit file structure
-      const { readdirSync, readFileSync } = require("fs");
-      const auditFiles = readdirSync("./audit")
-        .filter((f: string) => f.endsWith('.feedback.json'))
+      const auditPath = "./audit";
+      const auditFiles: string[] = [];
+
+      // List files in audit directory
+      const glob = new Bun.Glob(`${auditPath}/*.feedback.json`);
+      for await (const entry of glob.scan()) {
+        const fileName = entry.split('/').pop() || entry;
+        auditFiles.push(fileName);
+      }
+
+      const deviceFiles = auditFiles
         .filter((f: string) => f.includes(deviceId));
 
-      expect(auditFiles.length).toBeGreaterThanOrEqual(1);
+      expect(deviceFiles.length).toBeGreaterThanOrEqual(1);
 
-      const content = JSON.parse(readFileSync(join("./audit", auditFiles[0]), 'utf-8'));
+      const fileContent = await Bun.file(join("./audit", deviceFiles[0])).text();
+      const content = JSON.parse(fileContent);
 
       // Required fields validation
       expect(content).toHaveProperty("timestamp");
@@ -231,9 +233,6 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
 
 // Performance benchmark
 describe("⚡ Performance Benchmark", () => {
-  // Import execSync at the top level for this describe block
-  const { execSync } = require("child_process");
-
   test.concurrent("incident logging performance", async () => {
     const benchmarkCount = 10;
     const startTime = Date.now();
@@ -241,11 +240,7 @@ describe("⚡ Performance Benchmark", () => {
     const promises = Array.from({ length: benchmarkCount }, (_, i) => {
       const command = `DEVICE_ID=perf_${i} bun run src/orchestrators/orchestrator.ts --feedback "perf_test_${i}"`;
 
-      return execSync(command, {
-        cwd: process.cwd(),
-        stdio: 'pipe',
-        timeout: 3000
-      });
+      return Bun.$`${command}`.quiet();
     });
 
     await Promise.all(promises);
