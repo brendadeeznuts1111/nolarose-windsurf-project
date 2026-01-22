@@ -77,7 +77,7 @@ async function runBenchmark(concurrency: number): Promise<BenchmarkResult> {
     requestsPerSecond,
     successRate,
     avgLatency,
-    errors: [...new Set(errors)] // Unique errors
+    errors: Array.from(new Set(errors)) // Unique errors
   };
   
   console.log(`   ✅ Completed in ${totalTime.toFixed(2)}ms`);
@@ -112,7 +112,7 @@ async function testConnectionPooling() {
       
       if (i === 0) {
         console.log(`   First request: ${time.toFixed(2)}ms (cold connection)`);
-      } else if (i === requestCount - 1) {
+      } else if (i === requestCount - 1 && times[0]) {
         const improvement = ((times[0] - time) / times[0]) * 100;
         console.log(`   Last request: ${time.toFixed(2)}ms (${improvement.toFixed(1)}% improvement)`);
       }
@@ -121,13 +121,17 @@ async function testConnectionPooling() {
     }
   }
   
-  const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-  const poolEfficiency = ((times[0] - avgTime) / times[0]) * 100;
+  if (times.length > 0) {
+    const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
+    const poolEfficiency = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
   
   console.log(`   📊 Average time: ${avgTime.toFixed(2)}ms`);
   console.log(`   🚀 Pool efficiency: ${poolEfficiency.toFixed(1)}%`);
   
   return { times, avgTime, poolEfficiency };
+  } else {
+    return { times: [], avgTime: 0, poolEfficiency: 0 };
+  }
 }
 
 // Test preconnect benefits

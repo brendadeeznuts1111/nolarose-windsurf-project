@@ -69,7 +69,7 @@ async function demonstratePooling() {
   }
   
   const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-  const improvement = ((times[0] - times[times.length - 1]) / times[0]) * 100;
+  const improvement = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
   
   console.log(`   📊 Average time: ${avgTime.toFixed(2)}ms`);
   console.log(`   🚀 Pooling improvement: ${improvement.toFixed(1)}%`);

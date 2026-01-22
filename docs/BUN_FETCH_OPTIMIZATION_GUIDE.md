@@ -2,14 +2,14 @@
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Preconnect Features](#preconnect-features)
-- [Connection Pooling](#connection-pooling)
-- [Concurrency Scaling](#concurrency-scaling)
-- [CLI Usage](#cli-usage)
-- [Performance Benchmarks](#performance-benchmarks)
-- [Production Patterns](#production-patterns)
-- [Troubleshooting](#troubleshooting)
+- [Overview](#-overview)
+- [Preconnect Features](#-preconnect-features)
+- [Connection Pooling](#-connection-pooling)
+- [Concurrency Scaling](#-concurrency-scaling)
+- [CLI Usage](#-cli-usage)
+- [Performance Benchmarks](#-performance-benchmarks)
+- [Production Patterns](#-production-patterns)
+- [Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 

@@ -42,7 +42,7 @@ async function demonstrateConnectionPooling() {
       if (i === 0) {
         console.log(`   First request: ${time.toFixed(2)}ms (establishing connection)`);
       } else if (i === requestCount - 1) {
-        const improvement = ((times[0] - time) / times[0]) * 100;
+        const improvement = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
         console.log(`   Last request: ${time.toFixed(2)}ms (${improvement.toFixed(1)}% improvement)`);
       }
     } catch (error) {
@@ -52,7 +52,7 @@ async function demonstrateConnectionPooling() {
   
   if (times.length > 0) {
     const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-    const poolEfficiency = ((times[0] - avgTime) / times[0]) * 100;
+    const poolEfficiency = times[0] ? ((times[0] - avgTime) / times[0]) * 100 : 0;
     
     console.log(`   📊 Average time: ${avgTime.toFixed(2)}ms`);
     console.log(`   🚀 Pool efficiency: ${poolEfficiency.toFixed(1)}%`);

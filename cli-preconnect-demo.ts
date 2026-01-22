@@ -66,6 +66,11 @@ async function demonstrateRuntimePreconnect() {
   
   const targetService = SERVICES[0]; // Use API Gateway
   
+  if (!targetService) {
+    console.log("❌ No services available for preconnect demo");
+    return { preconnectTime: 0, requestTime: 0 };
+  }
+  
   console.log(`Preconnecting to ${targetService.name}...`);
   const preconnectStart = performance.now();
   
@@ -117,7 +122,7 @@ async function testConnectionReuse() {
   
   if (times.length > 0) {
     const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-    const improvement = ((times[0] - times[times.length - 1]) / times[0]) * 100;
+    const improvement = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
     
     console.log(`   📊 Average: ${avgTime.toFixed(2)}ms`);
     console.log(`   🚀 Reuse improvement: ${improvement.toFixed(1)}%`);
@@ -134,7 +139,7 @@ async function demonstrateHighConcurrency() {
   console.log("-".repeat(30));
   
   const concurrency = 50;
-  const targetUrl = `${SERVICES[0].url}/uuid`;
+  const targetUrl = SERVICES[0] ? `${SERVICES[0].url}/uuid` : "https://httpbin.org/uuid";
   
   console.log(`Launching ${concurrency} concurrent requests...`);
   

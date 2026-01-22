@@ -106,15 +106,15 @@ class OptimizedFraudDetection {
       
       const batchPromises = batch.map(transaction => 
         this.analyzeTransaction(transaction)
-          .catch(error => ({ error: error.message, transactionId: transaction.id }))
+          .catch(error => ({ error: error instanceof Error ? error.message : 'Unknown error', transactionId: transaction.id }))
       );
       
       const batchResults = await Promise.all(batchPromises);
       results.push(...batchResults);
     }
     
-    const fraudulentCount = results.filter(r => r.isFraudulent).length;
-    const avgTime = results.reduce((sum, r) => sum + parseFloat(r.analysisTime || '0'), 0) / results.length;
+    const fraudulentCount = results.filter(r => r && 'isFraudulent' in r && r.isFraudulent).length;
+    const avgTime = results.reduce((sum, r) => sum + (r && 'analysisTime' in r ? parseFloat(r.analysisTime || '0') : 0), 0) / results.length;
     
     console.log(`✅ Batch complete: ${fraudulentCount}/${results.length} fraudulent, avg time: ${avgTime.toFixed(2)}ms`);
     
@@ -133,7 +133,7 @@ class OptimizedFraudDetection {
       
       return { status: response.ok ? 'clear' : 'suspicious', response: response.status };
     } catch (error) {
-      return { status: 'error', error: error.message };
+      return { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -148,7 +148,7 @@ class OptimizedFraudDetection {
       
       return { status: response.ok ? 'verified' : 'unverified', response: response.status };
     } catch (error) {
-      return { status: 'error', error: error.message };
+      return { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -162,7 +162,7 @@ class OptimizedFraudDetection {
       
       return { status: response.ok ? 'recognized' : 'unknown', response: response.status };
     } catch (error) {
-      return { status: 'error', error: error.message };
+      return { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -175,7 +175,7 @@ class OptimizedFraudDetection {
       
       return { status: response.ok ? 'found' : 'not_found', response: response.status };
     } catch (error) {
-      return { status: 'error', error: error.message };
+      return { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
@@ -188,7 +188,7 @@ class OptimizedFraudDetection {
       
       return { status: response.ok ? 'valid' : 'invalid', response: response.status };
     } catch (error) {
-      return { status: 'error', error: error.message };
+      return { status: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
     }
   }
 
