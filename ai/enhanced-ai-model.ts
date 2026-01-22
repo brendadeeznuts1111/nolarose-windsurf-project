@@ -641,3 +641,99 @@ export {
 	type ModelPerformance,
 	type LearningMetrics,
 };
+
+// Demo and testing section
+async function demonstrateEnhancedAI() {
+	console.log("🧠 Enhanced AI Model - Advanced Ensemble Methods Demo");
+	console.log("=" .repeat(60));
+
+	// Initialize the enhanced AI model
+	const enhancedAI = new EnhancedAIModel({
+		ensembleSize: 4,
+		learningRate: 0.01,
+		adaptationThreshold: 0.001,
+		featureDecayRate: 0.95,
+		realTimeLearning: true,
+	});
+
+	console.log("✅ Enhanced AI Model initialized");
+	const modelStatus = enhancedAI.getModelStatus();
+	console.log(`📊 Total models: ${modelStatus.models.length}`);
+	console.log(`🎯 Model initialized with 4 ensemble models`);
+
+	// Simulate some training data
+	const trainingData = Array.from({ length: 100 }, (_, i) => ({
+		features: {
+			root_detected: Math.random() > 0.9 ? 1 : 0,
+			vpn_active: Math.random() > 0.7 ? 1 : 0,
+			thermal_spike: Math.random() > 0.8 ? 1 : 0,
+			biometric_fail: Math.random() > 0.85 ? 1 : 0,
+			proxy_hop_count: Math.floor(Math.random() * 5),
+		},
+		label: Math.random() > 0.7 ? "fraud" : "legitimate",
+		timestamp: Date.now() - Math.random() * 86400000,
+	}));
+
+	console.log(`📚 Generated ${trainingData.length} training samples`);
+
+	// Test predictions directly
+	console.log("\n🔮 Testing predictions...");
+	const testCases = [
+		{
+			name: "High Risk Case",
+			features: {
+				root_detected: 1,
+				vpn_active: 1,
+				thermal_spike: 1,
+				biometric_fail: 1,
+				proxy_hop_count: 4,
+			},
+		},
+		{
+			name: "Low Risk Case",
+			features: {
+				root_detected: 0,
+				vpn_active: 0,
+				thermal_spike: 0,
+				biometric_fail: 0,
+				proxy_hop_count: 0,
+			},
+		},
+		{
+			name: "Medium Risk Case",
+			features: {
+				root_detected: 0,
+				vpn_active: 1,
+				thermal_spike: 0,
+				biometric_fail: 1,
+				proxy_hop_count: 2,
+			},
+		},
+	];
+
+	for (const testCase of testCases) {
+		const prediction = await enhancedAI.predict(testCase.features);
+		console.log(`\n📊 ${testCase.name}:`);
+		console.log(`   Risk Score: ${(prediction.score * 100).toFixed(2)}%`);
+		console.log(`   Risk Level: ${prediction.riskLevel}`);
+		console.log(`   Confidence: ${(prediction.confidence * 100).toFixed(2)}%`);
+		console.log(`   Model Contributions: ${Object.keys(prediction.modelContributions).join(", ")}`);
+		console.log(`   Recommendations: ${prediction.recommendations.join(", ")}`);
+	}
+
+	// Get ensemble performance
+	console.log("\n📊 Ensemble Performance:");
+	const status = enhancedAI.getModelStatus();
+	const performance = status.ensemblePerformance;
+	console.log(`   Overall Accuracy: ${(performance.accuracy * 100).toFixed(2)}%`);
+	console.log(`   Overall Confidence: ${(performance.confidence * 100).toFixed(2)}%`);
+	console.log(`   Average Latency: ${performance.latency.toFixed(2)}ms`);
+
+	console.log("\n🎉 Enhanced AI Model Demo Complete!");
+	console.log("💚 Advanced ensemble methods with real-time prediction operational!");
+}
+
+// Run the demo if this file is executed directly
+if (import.meta.main) {
+	demonstrateEnhancedAI().catch(console.error);
+}
