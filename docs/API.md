@@ -1,8 +1,8 @@
-# 🚀 Sovereign Unit [01] - API Documentation
+# 🚀 Sovereign Unit \[01\] - API Documentation
 
 ## 📋 Overview
 
-The **Sovereign Unit [01]** Financial Warming Multiverse provides a comprehensive, enterprise-grade API ecosystem featuring **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**. This document describes the complete API surface, authentication mechanisms, data structures, and implementation patterns.
+The **Sovereign Unit \[01\]** Financial Warming Multiverse provides a comprehensive, enterprise-grade API ecosystem featuring **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**. This document describes the complete API surface, authentication mechanisms, data structures, and implementation patterns.
 
 ### **🎯 Key Capabilities:**
 - **🧠 AI Risk Prediction**: 94% accuracy with XGBoost and behavioral analysis
@@ -79,7 +79,7 @@ Enterprise-grade configuration with comprehensive property matrix columns:
 - **Training**: `dataset_size`, `training_time_hours`, `last_retrained`, `validation_accuracy`
 - **Deployment**: `scaling_factor`, `cost_per_1000_predictions`, `sla_requirement`, `regions`
 
-### 🚀 Sovereign Unit [01] Architecture
+### 🚀 Sovereign Unit \[01\] Architecture
 
 #### **Core Components:**
 - **CRC32 Integrity Shield**: Zero-latency analytics with tamper protection
@@ -1186,7 +1186,7 @@ const api = new SovereignUnitAPI({
 
 ### API License
 
-This API is provided under the **Sovereign Unit [01] Enterprise License**. See the [LICENSE](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/LICENSE) file for details.
+This API is provided under the **Sovereign Unit \[01\] Enterprise License**. See the [LICENSE](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/LICENSE) file for details.
 
 ### Terms of Service
 
@@ -1203,7 +1203,7 @@ By using this API, you agree to our [Terms of Service](https://www.sovereign-uni
 
 ## 🎯 Conclusion
 
-The **Sovereign Unit [01]** API provides enterprise-grade financial technology infrastructure with:
+The **Sovereign Unit \[01\]** API provides enterprise-grade financial technology infrastructure with:
 
 ✅ **94% AI Accuracy** - Industry-leading risk prediction  
 ✅ **99.97% Uptime** - Enterprise-grade reliability  
@@ -1222,7 +1222,7 @@ The **Sovereign Unit [01]** API provides enterprise-grade financial technology i
 
 **Built with ❤️ for the future of financial technology**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*
 ```
 
 ## Rate Limiting
