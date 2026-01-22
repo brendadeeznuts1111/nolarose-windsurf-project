@@ -265,15 +265,31 @@ export class CashAppVerificationAdapter {
     async shutdown() {
         console.log('🔄 Shutting down Cash App Adapter v3.0...');
         
-        await Promise.all([
-            this.oauth.shutdown(),
-            this.plaid.shutdown(),
-            this.validation.shutdown(),
-            this.router.shutdown()
-        ]);
+        const shutdownPromises = [];
+        
+        if (this.oauth && typeof this.oauth.shutdown === 'function') {
+            shutdownPromises.push(this.oauth.shutdown());
+        }
+        
+        if (this.plaid && typeof this.plaid.shutdown === 'function') {
+            shutdownPromises.push(this.plaid.shutdown());
+        }
+        
+        if (this.validation && typeof this.validation.shutdown === 'function') {
+            shutdownPromises.push(this.validation.shutdown());
+        }
+        
+        if (this.router && typeof this.router.shutdown === 'function') {
+            shutdownPromises.push(this.router.shutdown());
+        }
+        
+        if (shutdownPromises.length > 0) {
+            await Promise.all(shutdownPromises);
+        }
         
         this.tokenCache.clear();
         this.sessionStore.clear();
+        this.initialized = false;
         
         console.log('✅ Adapter v3.0 shutdown complete');
     }
