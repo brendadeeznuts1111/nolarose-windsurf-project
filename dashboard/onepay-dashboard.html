@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnePay GDPR Compliance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes pulse-red {
+            0%, 100% { background-color: rgb(239 68 68); }
+            50% { background-color: rgb(220 38 38); }
+        }
+        @keyframes pulse-yellow {
+            0%, 100% { background-color: rgb(250 204 21); }
+            50% { background-color: rgb(234 179 8); }
+        }
+        .alert-critical { animation: pulse-red 2s infinite; }
+        .alert-warning { animation: pulse-yellow 2s infinite; }
+        .metric-card { transition: all 0.3s ease; }
+        .metric-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .gdpr-compliant { border-left: 4px solid rgb(34 197 94); }
+        .gdpr-at-risk { border-left: 4px solid rgb(250 204 21); }
+        .gdpr-non-compliant { border-left: 4px solid rgb(239 68 68); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-shield-alt text-3xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">OnePay GDPR Dashboard</h1>
+                        <p class="text-sm opacity-90">Real-time Compliance & Performance Monitoring</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm opacity-90">System Status</p>
+                        <p class="font-semibold" id="overall-status">HEALTHY</p>
+                    </div>
+                    <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse" id="status-indicator"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Status Overview -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">System Health Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Overall Status -->
+                <div class="metric-card bg-white rounded-lg shadow p-6" id="overall-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-heartbeat text-2xl text-blue-500"></i>
+                        <span class="text-sm font-medium text-gray-500">Overall</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800" id="overall-health">HEALTHY</h3>
+                    <p class="text-sm text-gray-600 mt-1">System Status</p>
+                </div>
+
+                <!-- GDPR Status -->
+                <div class="metric-card bg-white rounded-lg shadow p-6 gdpr-compliant" id="gdpr-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-green-500"></i>
+                        <span class="text-sm font-medium text-gray-500">GDPR</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800" id="gdpr-health">COMPLIANT</h3>
+                    <p class="text-sm text-gray-600 mt-1">Privacy Status</p>
+                </div>
+
+                <!-- Performance Status -->
+                <div class="metric-card bg-white rounded-lg shadow p-6" id="performance-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-tachometer-alt text-2xl text-purple-500"></i>
+                        <span class="text-sm font-medium text-gray-500">Performance</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800" id="performance-health">OPTIMAL</h3>
+                    <p class="text-sm text-gray-600 mt-1">System Speed</p>
+                </div>
+
+                <!-- Security Status -->
+                <div class="metric-card bg-white rounded-lg shadow p-6" id="security-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-lock text-2xl text-red-500"></i>
+                        <span class="text-sm font-medium text-gray-500">Security</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800" id="security-health">SECURE</h3>
+                    <p class="text-sm text-gray-600 mt-1">Threat Level</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Metrics -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Key Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- GDPR Metrics -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fas fa-user-shield mr-2 text-green-500"></i>
+                        GDPR Compliance
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Consent Rate</span>
+                            <span class="font-semibold" id="consent-rate">85%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" id="consent-bar" style="width: 85%"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Data Exports</span>
+                            <span class="font-semibold" id="data-exports">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Auto-Deletions</span>
+                            <span class="font-semibold" id="auto-deletions">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">User Objections</span>
+                            <span class="font-semibold" id="objections">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fas fa-rocket mr-2 text-purple-500"></i>
+                        Performance
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Approval Rate</span>
+                            <span class="font-semibold" id="approval-rate">95%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-purple-500 h-2 rounded-full" id="approval-bar" style="width: 95%"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Avg Response Time</span>
+                            <span class="font-semibold" id="response-time">2.3s</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Throughput</span>
+                            <span class="font-semibold" id="throughput">1,250 req/h</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Error Rate</span>
+                            <span class="font-semibold text-green-500" id="error-rate">0.1%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Metrics -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                        <i class="fas fa-shield-virus mr-2 text-red-500"></i>
+                        Security
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Fraud Detections</span>
+                            <span class="font-semibold text-yellow-500" id="fraud-detections">3</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Security Events</span>
+                            <span class="font-semibold" id="security-events">12</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Auth Failures</span>
+                            <span class="font-semibold text-green-500" id="auth-failures">2</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Encryption Status</span>
+                            <span class="font-semibold text-green-500" id="encryption-status">ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Real-time Analytics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Verification Timeline -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">Verification Timeline</h3>
+                    <canvas id="verification-chart" width="400" height="200"></canvas>
+                </div>
+
+                <!-- GDPR Compliance Chart -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-800">GDPR Compliance Metrics</h3>
+                    <canvas id="gdpr-chart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Active Alerts</h2>
+            <div class="bg-white rounded-lg shadow">
+                <div id="alerts-container" class="p-6">
+                    <p class="text-gray-500 text-center">No active alerts</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Events -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Recent Events</h2>
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <div id="events-container" class="space-y-2">
+                        <!-- Events will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Dashboard Controller
+        class OnePayDashboard {
+            constructor() {
+                this.metrics = {
+                    gdpr: {
+                        consentRate: 85,
+                        dataExports: 0,
+                        autoDeletions: 0,
+                        objections: 0
+                    },
+                    performance: {
+                        approvalRate: 95,
+                        responseTime: 2.3,
+                        throughput: 1250,
+                        errorRate: 0.1
+                    },
+                    security: {
+                        fraudDetections: 3,
+                        securityEvents: 12,
+                        authFailures: 2,
+                        encryptionStatus: 'ACTIVE'
+                    }
+                };
+                
+                this.alerts = [];
+                this.events = [];
+                this.charts = {};
+                
+                this.init();
+            }
+
+            init() {
+                this.initCharts();
+                this.startRealTimeUpdates();
+                this.updateUI();
+            }
+
+            initCharts() {
+                // Verification Timeline Chart
+                const verificationCtx = document.getElementById('verification-chart').getContext('2d');
+                this.charts.verification = new Chart(verificationCtx, {
+                    type: 'line',
+                    data: {
+                        labels: this.generateTimeLabels(12),
+                        datasets: [{
+                            label: 'Successful Verifications',
+                            data: this.generateRandomData(12, 80, 100),
+                            borderColor: 'rgb(34, 197, 94)',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: 'Failed Verifications',
+                            data: this.generateRandomData(12, 0, 20),
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+
+                // GDPR Compliance Chart
+                const gdprCtx = document.getElementById('gdpr-chart').getContext('2d');
+                this.charts.gdpr = new Chart(gdprCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Consent Granted', 'Consent Denied', 'Data Exported', 'Auto-Deleted'],
+                        datasets: [{
+                            data: [85, 15, 45, 23],
+                            backgroundColor: [
+                                'rgb(34, 197, 94)',
+                                'rgb(239, 68, 68)',
+                                'rgb(59, 130, 246)',
+                                'rgb(250, 204, 21)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            }
+                        }
+                    }
+                });
+            }
+
+            generateTimeLabels(count) {
+                const labels = [];
+                const now = new Date();
+                for (let i = count - 1; i >= 0; i--) {
+                    const time = new Date(now - i * 5 * 60 * 1000);
+                    labels.push(time.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+                }
+                return labels;
+            }
+
+            generateRandomData(count, min, max) {
+                return Array.from({ length: count }, () => 
+                    Math.floor(Math.random() * (max - min + 1)) + min
+                );
+            }
+
+            startRealTimeUpdates() {
+                // Update metrics every 5 seconds
+                setInterval(() => this.updateMetrics(), 5000);
+                
+                // Update charts every 10 seconds
+                setInterval(() => this.updateCharts(), 10000);
+                
+                // Add random events
+                setInterval(() => this.addRandomEvent(), 8000);
+            }
+
+            updateMetrics() {
+                // Simulate metric changes
+                this.metrics.gdpr.consentRate = Math.max(70, Math.min(95, 
+                    this.metrics.gdpr.consentRate + (Math.random() - 0.5) * 2));
+                
+                this.metrics.performance.approvalRate = Math.max(85, Math.min(98, 
+                    this.metrics.performance.approvalRate + (Math.random() - 0.5) * 1));
+                
+                this.metrics.performance.responseTime = Math.max(1.5, Math.min(5, 
+                    this.metrics.performance.responseTime + (Math.random() - 0.5) * 0.5));
+                
+                this.metrics.security.fraudDetections = Math.max(0, 
+                    this.metrics.security.fraudDetections + Math.floor(Math.random() * 3) - 1);
+                
+                // Random events
+                if (Math.random() < 0.1) {
+                    this.metrics.gdpr.dataExports++;
+                    this.addEvent('DATA_EXPORT', 'User data exported', 'info');
+                }
+                
+                if (Math.random() < 0.05) {
+                    this.metrics.gdpr.autoDeletions++;
+                    this.addEvent('AUTO_DELETION', 'Auto-deletion executed', 'success');
+                }
+                
+                if (Math.random() < 0.08) {
+                    this.metrics.gdpr.objections++;
+                    this.addEvent('USER_OBJECTION', 'User objected to processing', 'warning');
+                }
+                
+                this.updateUI();
+            }
+
+            updateCharts() {
+                // Update verification chart
+                const verificationData = this.charts.verification.data.datasets[0].data;
+                verificationData.shift();
+                verificationData.push(Math.floor(Math.random() * 20) + 80);
+                
+                const failedData = this.charts.verification.data.datasets[1].data;
+                failedData.shift();
+                failedData.push(Math.floor(Math.random() * 20));
+                
+                this.charts.verification.update('none');
+                
+                // Update GDPR chart
+                this.charts.gdpr.data.datasets[0].data = [
+                    this.metrics.gdpr.consentRate,
+                    100 - this.metrics.gdpr.consentRate,
+                    Math.min(this.metrics.gdpr.dataExports * 2, 50),
+                    Math.min(this.metrics.gdpr.autoDeletions * 3, 30)
+                ];
+                this.charts.gdpr.update('none');
+            }
+
+            updateUI() {
+                // Update status cards
+                this.updateStatusCard('overall', 'HEALTHY');
+                this.updateStatusCard('gdpr', 'COMPLIANT');
+                this.updateStatusCard('performance', 'OPTIMAL');
+                this.updateStatusCard('security', 'SECURE');
+                
+                // Update metrics
+                document.getElementById('consent-rate').textContent = `${this.metrics.gdpr.consentRate.toFixed(1)}%`;
+                document.getElementById('consent-bar').style.width = `${this.metrics.gdpr.consentRate}%`;
+                document.getElementById('data-exports').textContent = this.metrics.gdpr.dataExports;
+                document.getElementById('auto-deletions').textContent = this.metrics.gdpr.autoDeletions;
+                document.getElementById('objections').textContent = this.metrics.gdpr.objections;
+                
+                document.getElementById('approval-rate').textContent = `${this.metrics.performance.approvalRate.toFixed(1)}%`;
+                document.getElementById('approval-bar').style.width = `${this.metrics.performance.approvalRate}%`;
+                document.getElementById('response-time').textContent = `${this.metrics.performance.responseTime.toFixed(1)}s`;
+                document.getElementById('throughput').textContent = `${this.metrics.performance.throughput.toLocaleString()} req/h`;
+                document.getElementById('error-rate').textContent = `${this.metrics.performance.errorRate.toFixed(1)}%`;
+                
+                document.getElementById('fraud-detections').textContent = this.metrics.security.fraudDetections;
+                document.getElementById('security-events').textContent = this.metrics.security.securityEvents;
+                document.getElementById('auth-failures').textContent = this.metrics.security.authFailures;
+                document.getElementById('encryption-status').textContent = this.metrics.security.encryptionStatus;
+                
+                // Update alerts
+                this.updateAlerts();
+                
+                // Update events
+                this.updateEvents();
+            }
+
+            updateStatusCard(type, status) {
+                const card = document.getElementById(`${type}-card`);
+                const health = document.getElementById(`${type}-health`);
+                
+                // Remove existing status classes
+                card.classList.remove('gdpr-compliant', 'gdpr-at-risk', 'gdpr-non-compliant');
+                
+                // Add appropriate class and color
+                if (type === 'gdpr') {
+                    if (this.metrics.gdpr.consentRate < 70) {
+                        card.classList.add('gdpr-non-compliant');
+                        health.textContent = 'NON_COMPLIANT';
+                    } else if (this.metrics.gdpr.consentRate < 80) {
+                        card.classList.add('gdpr-at-risk');
+                        health.textContent = 'AT_RISK';
+                    } else {
+                        card.classList.add('gdpr-compliant');
+                        health.textContent = 'COMPLIANT';
+                    }
+                } else {
+                    health.textContent = status;
+                }
+            }
+
+            addEvent(type, message, level = 'info') {
+                const event = {
+                    id: Date.now(),
+                    type,
+                    message,
+                    level,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+                
+                this.events.unshift(event);
+                if (this.events.length > 10) {
+                    this.events.pop();
+                }
+            }
+
+            addRandomEvent() {
+                const events = [
+                    { type: 'VERIFICATION', message: 'User verification completed', level: 'success' },
+                    { type: 'CONSENT', message: 'User granted consent', level: 'info' },
+                    { type: 'SECURITY', message: 'Security scan completed', level: 'success' },
+                    { type: 'PERFORMANCE', message: 'Performance metrics updated', level: 'info' }
+                ];
+                
+                const randomEvent = events[Math.floor(Math.random() * events.length)];
+                this.addEvent(randomEvent.type, randomEvent.message, randomEvent.level);
+            }
+
+            updateAlerts() {
+                const container = document.getElementById('alerts-container');
+                
+                // Check for conditions that should trigger alerts
+                const alerts = [];
+                
+                if (this.metrics.gdpr.consentRate < 70) {
+                    alerts.push({
+                        type: 'CRITICAL',
+                        message: 'GDPR consent rate below 70%',
+                        icon: 'fas fa-exclamation-triangle',
+                        color: 'text-red-500'
+                    });
+                }
+                
+                if (this.metrics.performance.responseTime > 4) {
+                    alerts.push({
+                        type: 'WARNING',
+                        message: 'Response time above 4 seconds',
+                        icon: 'fas fa-clock',
+                        color: 'text-yellow-500'
+                    });
+                }
+                
+                if (this.metrics.security.fraudDetections > 10) {
+                    alerts.push({
+                        type: 'ALERT',
+                        message: 'High fraud detection rate',
+                        icon: 'fas fa-shield-virus',
+                        color: 'text-orange-500'
+                    });
+                }
+                
+                if (alerts.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-center">No active alerts</p>';
+                } else {
+                    container.innerHTML = alerts.map(alert => `
+                        <div class="flex items-center justify-between p-3 border-l-4 border-red-500 bg-red-50 rounded">
+                            <div class="flex items-center">
+                                <i class="${alert.icon} ${alert.color} mr-3"></i>
+                                <div>
+                                    <p class="font-medium text-gray-800">${alert.type}</p>
+                                    <p class="text-sm text-gray-600">${alert.message}</p>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            updateEvents() {
+                const container = document.getElementById('events-container');
+                
+                if (this.events.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500 text-center">No recent events</p>';
+                } else {
+                    container.innerHTML = this.events.map(event => {
+                        const colors = {
+                            success: 'text-green-500',
+                            warning: 'text-yellow-500',
+                            error: 'text-red-500',
+                            info: 'text-blue-500'
+                        };
+                        
+                        const icons = {
+                            success: 'fas fa-check-circle',
+                            warning: 'fas fa-exclamation-triangle',
+                            error: 'fas fa-times-circle',
+                            info: 'fas fa-info-circle'
+                        };
+                        
+                        return `
+                            <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <i class="${icons[event.level]} ${colors[event.level]} mr-3"></i>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-800">${event.type}</p>
+                                        <p class="text-xs text-gray-600">${event.message}</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-gray-500">${event.timestamp}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const dashboard = new OnePayDashboard();
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    location.reload();
+                }
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    dashboard.addEvent('MANUAL', 'Manual refresh triggered', 'info');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
