@@ -1,0 +1,12 @@
+# Production Overrides
+[logging]
+level = "warn"
+logToFile = true
+
+[performance]
+enableCaching = true
+cacheSize = 5000
+
+[verifier]
+fuzzyThreshold = 0.9
+manualReviewThreshold = 80

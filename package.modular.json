@@ -1,0 +1,84 @@
+{
+  "name": "cash-app-adapter-modular-v3",
+  "version": "3.0.0",
+  "description": "Modular Cash App Verification Adapter v3.0 - Composable, testable, and scalable",
+  "main": "cash-app-adapter.js",
+  "type": "module",
+  "scripts": {
+    "adapter:config": "bun scripts/adapter-cli.js config",
+    "adapter:validate": "bun scripts/adapter-cli.js validate",
+    "adapter:test": "bun scripts/adapter-cli.js test",
+    "adapter:bench": "bun scripts/adapter-cli.js bench",
+    "adapter:health": "bun scripts/adapter-cli.js health",
+    "adapter:modules": "bun scripts/adapter-cli.js modules",
+    "adapter:pr": "bun scripts/adapter-cli.js pr",
+    "adapter:init": "bun scripts/adapter-cli.js init",
+    "test": "bun test tests/modular-adapter.test.js",
+    "test:watch": "bun test --watch tests/modular-adapter.test.js",
+    "test:coverage": "bun test --coverage tests/modular-adapter.test.js",
+    "lint": "bun scripts/adapter-cli.js validate",
+    "build": "bun build cash-app-adapter.js --outdir dist --target bun",
+    "dev": "bun --watch cash-app-adapter.js",
+    "start": "bun cash-app-adapter.js",
+    "benchmark": "bun scripts/adapter-cli.js bench 1000",
+    "health": "bun scripts/adapter-cli.js health"
+  },
+  "keywords": [
+    "cash-app",
+    "verification",
+    "adapter",
+    "modular",
+    "oauth",
+    "plaid",
+    "validation",
+    "routing",
+    "bun",
+    "typescript",
+    "enterprise"
+  ],
+  "author": "Cash App Adapter Team",
+  "license": "MIT",
+  "dependencies": {
+    "bun": ">=1.3.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "engines": {
+    "bun": ">=1.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cash-app/adapter-modular-v3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cash-app/adapter-modular-v3/issues"
+  },
+  "homepage": "https://github.com/cash-app/adapter-modular-v3#readme",
+  "config": {
+    "adapter": {
+      "version": "3.0.0",
+      "modular": true,
+      "backwardCompatible": "2.1.x",
+      "nextVersion": "3.1.0"
+    }
+  },
+  "files": [
+    "cash-app-adapter.js",
+    "modules/",
+    "config/",
+    "scripts/",
+    "tests/",
+    "docs/",
+    "README.md"
+  ],
+  "directories": {
+    "lib": "modules",
+    "config": "config",
+    "test": "tests",
+    "doc": "docs"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

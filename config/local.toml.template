@@ -1,0 +1,10 @@
+# Local Configuration Override
+# Copy this file to local.toml and modify for your environment
+[cashApp]
+clientId = "your_cash_app_client_id"
+clientSecret = "your_cash_app_client_secret"
+
+[plaid]
+clientId = "your_plaid_client_id"
+secret = "your_plaid_secret"
+webhook = "https://your-domain.com/webhook"

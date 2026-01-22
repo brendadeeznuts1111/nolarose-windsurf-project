@@ -1,0 +1,60 @@
+# Cash App Configuration
+[cashApp]
+clientId = "${CASH_APP_CLIENT_ID}"
+clientSecret = "${CASH_APP_CLIENT_SECRET}"
+redirectUri = "http://localhost:3000/callback"
+scope = "wallet:read wallet:write"
+tokenExpiry = 3600
+stateExpiry = 600
+
+# Plaid Configuration
+[plaid]
+clientId = "${PLAID_CLIENT_ID}"
+secret = "${PLAID_SECRET}"
+env = "sandbox"
+products = ["auth", "transactions"]
+countryCodes = ["US"]
+language = "en"
+webhook = "${PLAID_WEBHOOK}"
+cacheExpiry = 1800
+
+# Verification Configuration
+[verifier]
+fuzzyThreshold = 0.8
+phoneMatchThreshold = 0.9
+emailMatchThreshold = 0.85
+nameMatchThreshold = 0.75
+verificationExpiry = 86400000
+maxRetries = 3
+
+# Routing Configuration
+[verifier.routing]
+enableAdaptiveRouting = true
+conflictDetection = true
+manualReviewThreshold = 70
+queueHighRisk = true
+escalationThreshold = 85
+
+# Performance Configuration
+[verifier.performance]
+maxResponseTime = 5000
+maxQueueSize = 1000
+retryAttempts = 3
+
+# Logging Configuration
+[logging]
+level = "info"
+enableMetrics = true
+enableTracing = true
+maskPII = true
+logToFile = false
+logDirectory = "./logs"
+
+# Performance Configuration
+[performance]
+enableCaching = true
+cacheSize = 1000
+cacheTTL = 3600000
+enableCompression = true
+enableMetrics = true
+metricsInterval = 60000

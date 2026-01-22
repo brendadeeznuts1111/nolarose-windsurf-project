@@ -1,0 +1,11 @@
+# Development Overrides
+[logging]
+level = "debug"
+logToFile = true
+
+[performance]
+enableCaching = false
+
+[verifier]
+fuzzyThreshold = 0.7
+manualReviewThreshold = 60

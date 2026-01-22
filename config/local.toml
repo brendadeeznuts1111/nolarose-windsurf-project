@@ -1,0 +1,11 @@
+# Local Configuration Override
+# Used for development and testing
+
+[cashApp]
+clientId = "test_client_id"
+clientSecret = "test_client_secret"
+
+[plaid]
+clientId = "test_client_id"
+secret = "test_secret"
+webhook = "https://test.example.com/webhook"
