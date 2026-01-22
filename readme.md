@@ -12,7 +12,7 @@
 
 ## 🌐 [Documentation Portal](https://github.com/brendadeeznuts1111/nolarose-windsurf-project)
 
-## 📋 [Live Demo](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/demo-app/) | [API Reference](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/) | [CLI Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/cli.md)
+## 📋 [Live Demo](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/demo-app/) | [API Reference](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/API.md) | [Configuration Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/CONFIGURATION.md)
 
 ---
 
@@ -52,7 +52,7 @@ bun run cli/admin.ts status
 bun run cli/sovereign-admin.ts
 ```
 
-**📚 [Complete Quick Start Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/QUICK_START.md)**
+**📚 [Complete Quick Start Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/QUICK_START.md)**
 
 ---
 
@@ -251,16 +251,14 @@ kubectl apply -f k8s/sovereign/
 ## 📚 **Documentation**
 
 ### **📖 User Guides:**
-- [Quick Start Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/QUICK_START.md) - 3-minute Sovereign deployment
-- [Sovereign Architecture](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/SOVEREIGN_ARCHITECTURE.md) - Complete system design
-- [API Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/api.md) - RESTful API reference
-- [CLI Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/cli.md) - Command-line tools
-
-### **🔧 Developer Resources:**
-- [Contributing Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/CONTRIBUTING.md) - Development workflow
-- [Security Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/SECURITY.md) - Security implementation
-- [Performance Tuning](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/performance.md) - Optimization guide
-- [Architecture Patterns](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/architecture.md) - Design patterns
+- [Quick Start Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/QUICK_START.md) - 3-minute Sovereign deployment
+- [Sovereign Architecture](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/CONFIGURATION.md) - Complete system design
+- [API Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/API.md) - RESTful API reference
+- [Configuration Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/CONFIGURATION.md) - Configuration management
+- [Performance Analysis](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/PERFORMANCE_TABLE_EXAMPLE.md) - Performance metrics
+- [Server Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/ENHANCED_SERVER.md) - Server implementation
+- [Contributing Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/CONTRIBUTING.md) - Development workflow
+- [Security Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/SECURITY.md) - Security implementation
 
 ---
 
@@ -380,7 +378,7 @@ bun run lint
 
 ## 🤝 **Contributing**
 
-We welcome contributions to the **Sovereign Unit \[01\]** ecosystem! Please see our [Contributing Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/CONTRIBUTING.md) for details.
+We welcome contributions to the **Sovereign Unit \[01\]** ecosystem! Please see our [Contributing Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/CONTRIBUTING.md) for details.
 
 ### **🚀 Quick Contribution:**
 1. Fork the repository
@@ -400,7 +398,7 @@ We welcome contributions to the **Sovereign Unit \[01\]** ecosystem! Please see 
 
 ## 📄 **License**
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/LICENSE) file for details.
 
 ---
 
@@ -408,7 +406,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 - **📋 Issues**: [GitHub Issues](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/discussions)
-- **🔒 Security**: [Security Policy](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/SECURITY.md)
+- **🔒 Security**: [Security Policy](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/SECURITY.md)
 - **📧 Contact**: sovereign-unit@nolarose.com
 
 ---
@@ -477,7 +475,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 **🏛️ Sovereign Unit \[01\] - Financial Warming Multiverse**
 
-[⭐ Star](https://github.com/brendadeeznuts1111/nolarose-windsurf-project) | [🍴 Fork](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/fork) | [📖 Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/docs/) | [🚀 Quick Start](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/QUICK_START.md)
+[⭐ Star](https://github.com/brendadeeznuts1111/nolarose-windsurf-project) | [🍴 Fork](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/fork) | [📖 Documentation](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/) | [🚀 Quick Start](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/QUICK_START.md)
 
 Built with ❤️ for the future of financial technology
 
