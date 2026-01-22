@@ -68,7 +68,8 @@ export class NebulaAISystem {
                 
                 const encoder = new TextEncoder();
                 const metadataBytes = encoder.encode(JSON.stringify(metadata));
-                modelBuffer.set(metadataBytes, 0, Math.min(metadataBytes.length, 1000));
+                const bytesToWrite = Math.min(metadataBytes.length, 1000);
+                modelBuffer.set(metadataBytes.slice(0, bytesToWrite), 0);
                 
                 require('fs').writeFileSync(modelPath, modelBuffer);
                 console.log('✅ Dummy model created');

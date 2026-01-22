@@ -169,7 +169,8 @@ async function saveModel(metrics: TrainingMetrics): Promise<void> {
   
   const encoder = new TextEncoder();
   const metadataBytes = encoder.encode(metadata);
-  modelBuffer.set(metadataBytes, 0, Math.min(metadataBytes.length, 1000));
+  const bytesToWrite = Math.min(metadataBytes.length, 1000);
+  modelBuffer.set(metadataBytes.slice(0, bytesToWrite), 0);
   
   writeFileSync('./ai/model.onnx', modelBuffer);
   console.log(`✅ Model saved: ${modelBuffer.length} bytes`);

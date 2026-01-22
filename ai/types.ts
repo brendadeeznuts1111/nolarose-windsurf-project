@@ -176,12 +176,15 @@ export interface TrainingResponse extends APIResponse<TrainingMetrics> {
   samplesUsed: number;
 }
 
-export interface HealthResponse extends APIResponse<{
-  status: 'healthy' | 'degraded' | 'unhealthy';
-  modelLoaded: boolean;
-  uptime: number;
-  memoryUsage: number;
-}>> {
+export interface HealthResponse {
+  success: boolean;
+  data: {
+    status: 'healthy' | 'degraded' | 'unhealthy';
+    modelLoaded: boolean;
+    uptime: number;
+    memoryUsage: number;
+  };
+  timestamp: string;
   lastTraining?: string;
   nextTraining?: string;
 }
@@ -228,35 +231,5 @@ export interface DashboardConfig {
   refreshInterval: number;
   maxAnomalies: number;
   showRealTime: boolean;
-  alertEnabled: boolean;
+  enableAlerts: boolean;
 }
-
-export default {
-  LegSignal,
-  AnomalyResult,
-  TrainingLeg,
-  TrainingMetrics,
-  ModelStats,
-  BatchResult,
-  AIDashboardStats,
-  AnomalyEvent,
-  AIConfig,
-  InferenceSession,
-  Tensor,
-  TrainingConfig,
-  ModelVersion,
-  ExportOptions,
-  AlertRule,
-  PerformanceMetrics,
-  WebhookEvent,
-  APIResponse,
-  ScoreResponse,
-  BatchScoreResponse,
-  TrainingResponse,
-  HealthResponse,
-  LegRecord,
-  DeviceRecord,
-  LogEntry,
-  Metric,
-  DashboardConfig
-} as const;
