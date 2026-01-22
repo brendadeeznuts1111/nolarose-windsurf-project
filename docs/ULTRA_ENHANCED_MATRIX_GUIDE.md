@@ -53,7 +53,7 @@ Build-time optimization and bundle analysis:
 
 | Column | Description | Values |
 |--------|-------------|--------|
-| Features | Feature flags array | ["DEBUG","PREMIUM"] |
+| Features | Feature flags array | `["DEBUG","PREMIUM"]` |
 | DCE% | DCE percentage | 0-100% |
 | SizeRed | Size reduction bytes | 0-1000000 |
 | Static | Static checks | ✓/✗ |
@@ -321,9 +321,9 @@ Pattern                     | Width | Emoji | ANSI | Graphemes | ZeroW | Combini
 ```
 Pattern                     | Features | DCE% | TreeShake | Prepacked | Bytecode | Minified
 ----------------------------|----------|------|-----------|-----------|----------|----------
-bun://build/:mode/:target    | [BUILD]  | 85%  | 75%       | ✓         | ✓        | ✓
-bun://feature/flag/:name     | [FLAG]   | 45%  | 30%       | ✗         | ✗        | ✗
-bun://bundle/tree-shake/:pat | [TREE]   | 85%  | 75%       | ✓         | ✓        | ✓
+bun://build/:mode/:target    | `[BUILD]`  | 85%  | 75%       | ✓         | ✓        | ✓
+bun://feature/flag/:name     | `[FLAG]`   | 45%  | 30%       | ✗         | ✗        | ✗
+bun://bundle/tree-shake/:pat | `[TREE]`   | 85%  | 75%       | ✓         | ✓        | ✓
 ```
 
 ## 🎯 **Advanced Usage**
