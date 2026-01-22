@@ -1,0 +1,48 @@
+{
+  "dashboard": {
+    "port": 3001,
+    "host": "localhost",
+    "title": "🏛️ Citadel Identity Matrix - Web Dashboard"
+  },
+  "api": {
+    "port": 8081,
+    "host": "localhost",
+    "endpoints": {
+      "metrics": "/api/metrics",
+      "incidents": "/api/incidents",
+      "devices": "/api/devices",
+      "feedback": "/api/feedback"
+    }
+  },
+  "websocket": {
+    "port": 9091,
+    "host": "localhost",
+    "path": "/ws"
+  },
+  "timing": {
+    "refreshInterval": 30000,
+    "metricsUpdateInterval": 5000,
+    "websocketReconnectDelay": 5000
+  },
+  "features": {
+    "autoRefresh": true,
+    "realtimeUpdates": true,
+    "simulatedData": true,
+    "debugMode": false
+  },
+  "security": {
+    "cors": {
+      "enabled": true,
+      "origins": ["http://localhost:3001", "http://127.0.0.1:3001"]
+    },
+    "rateLimit": {
+      "enabled": true,
+      "requestsPerMinute": 100
+    }
+  },
+  "citadel": {
+    "auditDirectory": "./audit",
+    "maxIncidents": 1000,
+    "retentionDays": 30
+  }
+}

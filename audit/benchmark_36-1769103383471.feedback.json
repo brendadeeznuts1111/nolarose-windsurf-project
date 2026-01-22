@@ -1,0 +1,16 @@
+{
+  "timestamp": 1769103383471,
+  "deviceId": "benchmark_36",
+  "event": "security_incident",
+  "details": "benchmark_test_36",
+  "severity": "medium",
+  "metadata": {
+    "source": "cli_feedback",
+    "argv": [
+      "/opt/homebrew/Cellar/bun/1.3.5/bin/bun",
+      "/Users/nolarose/wind/eeeeee/CascadeProjects/windsurf-project/src/nexus/orchestrator.ts",
+      "--feedback",
+      "benchmark_test_36"
+    ]
+  }
+}

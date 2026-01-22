@@ -1,0 +1,13 @@
+{
+  "seeds": {
+    "demo-unit": {
+      "unitId": "demo-unit",
+      "seed": "47A25092E9131102EC2E893F8E086BC8381B9336",
+      "createdAt": "2026-01-22T16:12:11.705Z",
+      "algorithm": "sha1",
+      "digits": 6,
+      "period": 30,
+      "expiresAt": "2026-02-21T16:12:11.705Z"
+    }
+  }
+}

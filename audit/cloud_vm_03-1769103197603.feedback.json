@@ -1,0 +1,16 @@
+{
+  "timestamp": 1769103197603,
+  "deviceId": "cloud_vm_03",
+  "event": "security_incident",
+  "details": "CAPTCHA verification failed during app installation - suspected bot detection",
+  "severity": "medium",
+  "metadata": {
+    "source": "cli_feedback",
+    "argv": [
+      "/opt/homebrew/Cellar/bun/1.3.5/bin/bun",
+      "/Users/nolarose/wind/eeeeee/CascadeProjects/windsurf-project/src/nexus/orchestrator.ts",
+      "--feedback",
+      "CAPTCHA verification failed during app installation - suspected bot detection"
+    ]
+  }
+}

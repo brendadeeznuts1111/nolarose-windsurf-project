@@ -1,0 +1,16 @@
+{
+  "timestamp": 1769103388362,
+  "deviceId": "unknown_device",
+  "event": "security_incident",
+  "details": "performance_anomaly sim_api_delay_3.2s",
+  "severity": "medium",
+  "metadata": {
+    "source": "cli_feedback",
+    "argv": [
+      "/opt/homebrew/Cellar/bun/1.3.5/bin/bun",
+      "/Users/nolarose/wind/eeeeee/CascadeProjects/windsurf-project/src/nexus/orchestrator.ts",
+      "--feedback",
+      "performance_anomaly sim_api_delay_3.2s"
+    ]
+  }
+}

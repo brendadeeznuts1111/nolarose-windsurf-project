@@ -1,0 +1,60 @@
+# Testing Environment Configuration
+[environment]
+name = "testing"
+debug = true
+logLevel = "error"
+
+[database]
+type = "sqlite"
+path = ":memory:"
+poolSize = 1
+
+[redis]
+host = "localhost"
+port = 6379
+db = 2
+
+[api]
+timeout = 5000
+retries = 1
+rateLimit = 50
+
+[features]
+premium = true
+debugMode = true
+mockApi = true
+betaFeatures = true
+
+[cashApp]
+clientId = "test_client_id"
+clientSecret = "test_client_secret"
+redirectUri = "http://localhost:3000/callback"
+scope = "wallet:read wallet:write"
+tokenExpiry = 3600
+stateExpiry = 600
+
+[plaid]
+clientId = "test_plaid_client_id"
+secret = "test_plaid_secret"
+env = "sandbox"
+products = ["auth", "transactions"]
+countryCodes = ["US"]
+language = "en"
+webhook = "http://localhost:3000/webhook/plaid"
+cacheExpiry = 1800
+
+[security]
+enableCors = true
+corsOrigins = ["http://localhost:3000", "http://localhost:3005"]
+enableHelmet = false
+enableRateLimit = false
+rateLimitWindow = 60000
+rateLimitMax = 50
+
+[monitoring]
+enableMetrics = false
+metricsInterval = 0
+enableTracing = false
+traceSampleRate = 0
+logToFile = false
+logDirectory = "./test-logs"

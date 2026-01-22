@@ -1,0 +1,64 @@
+# Production Environment Configuration
+[environment]
+name = "production"
+debug = false
+logLevel = "info"
+
+[database]
+type = "postgresql"
+host = "${DB_HOST}"
+port = "${DB_PORT}"
+database = "${DB_NAME}"
+username = "${DB_USER}"
+password = "${DB_PASSWORD}"
+poolSize = 20
+
+[redis]
+host = "${REDIS_HOST}"
+port = "${REDIS_PORT}"
+db = 1
+
+[api]
+timeout = 10000
+retries = 5
+rateLimit = 1000
+
+[features]
+premium = true
+debugMode = false
+mockApi = false
+betaFeatures = false
+
+[cashApp]
+clientId = "${CASH_APP_CLIENT_ID}"
+clientSecret = "${CASH_APP_CLIENT_SECRET}"
+redirectUri = "https://api.factory-wager.com/callback"
+scope = "wallet:read wallet:write"
+tokenExpiry = 3600
+stateExpiry = 600
+
+[plaid]
+clientId = "${PLAID_CLIENT_ID}"
+secret = "${PLAID_SECRET}"
+env = "production"
+products = ["auth", "transactions"]
+countryCodes = ["US"]
+language = "en"
+webhook = "${PLAID_WEBHOOK}"
+cacheExpiry = 1800
+
+[security]
+enableCors = true
+corsOrigins = ["https://app.factory-wager.com", "https://admin.factory-wager.com"]
+enableHelmet = true
+enableRateLimit = true
+rateLimitWindow = 60000
+rateLimitMax = 1000
+
+[monitoring]
+enableMetrics = true
+metricsInterval = 60000
+enableTracing = true
+traceSampleRate = 0.01
+logToFile = true
+logDirectory = "/var/log/windsurf"

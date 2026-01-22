@@ -1,0 +1,60 @@
+# Development Environment Configuration
+[environment]
+name = "development"
+debug = true
+logLevel = "debug"
+
+[database]
+type = "sqlite"
+path = "./data/dev.db"
+poolSize = 5
+
+[redis]
+host = "localhost"
+port = 6379
+db = 0
+
+[api]
+timeout = 30000
+retries = 3
+rateLimit = 100
+
+[features]
+premium = true
+debugMode = true
+mockApi = true
+betaFeatures = true
+
+[cashApp]
+clientId = "${CASH_APP_CLIENT_ID}"
+clientSecret = "${CASH_APP_CLIENT_SECRET}"
+redirectUri = "http://localhost:3000/callback"
+scope = "wallet:read wallet:write"
+tokenExpiry = 3600
+stateExpiry = 600
+
+[plaid]
+clientId = "${PLAID_CLIENT_ID}"
+secret = "${PLAID_SECRET}"
+env = "sandbox"
+products = ["auth", "transactions"]
+countryCodes = ["US"]
+language = "en"
+webhook = "${PLAID_WEBHOOK}"
+cacheExpiry = 1800
+
+[security]
+enableCors = true
+corsOrigins = ["http://localhost:3000", "http://localhost:3005", "http://localhost:3227"]
+enableHelmet = true
+enableRateLimit = true
+rateLimitWindow = 60000
+rateLimitMax = 100
+
+[monitoring]
+enableMetrics = true
+metricsInterval = 10000
+enableTracing = true
+traceSampleRate = 0.1
+logToFile = false
+logDirectory = "./logs"

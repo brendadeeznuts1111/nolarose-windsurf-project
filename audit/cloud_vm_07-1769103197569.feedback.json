@@ -1,0 +1,16 @@
+{
+  "timestamp": 1769103197569,
+  "deviceId": "cloud_vm_07",
+  "event": "security_incident",
+  "details": "Apple ID sarah.a1b2c3d4@icloud.com locked due to failed login attempts",
+  "severity": "medium",
+  "metadata": {
+    "source": "cli_feedback",
+    "argv": [
+      "/opt/homebrew/Cellar/bun/1.3.5/bin/bun",
+      "/Users/nolarose/wind/eeeeee/CascadeProjects/windsurf-project/src/nexus/orchestrator.ts",
+      "--feedback",
+      "Apple ID sarah.a1b2c3d4@icloud.com locked due to failed login attempts"
+    ]
+  }
+}

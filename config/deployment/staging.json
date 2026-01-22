@@ -1,0 +1,117 @@
+{
+  "environment": "staging",
+  "region": "us-east-1",
+  "cluster": "windsurf-cluster",
+  "namespace": "windsurf",
+  "services": [
+    {
+      "name": "main-api",
+      "image": "nolarose/windsurf-main-api:latest",
+      "port": 3000,
+      "replicas": 3,
+      "resources": {
+        "cpu": "500m",
+        "memory": "512Mi",
+        "storage": "1Gi"
+      },
+      "environment": {
+        "NODE_ENV": "staging",
+        "PORT": "3000"
+      },
+      "healthCheck": {
+        "path": "/health",
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3
+      }
+    },
+    {
+      "name": "risk-analysis",
+      "image": "nolarose/windsurf-risk-analysis:latest",
+      "port": 3001,
+      "replicas": 2,
+      "resources": {
+        "cpu": "1000m",
+        "memory": "1Gi",
+        "storage": "2Gi"
+      },
+      "environment": {
+        "NODE_ENV": "staging",
+        "PORT": "3001"
+      },
+      "healthCheck": {
+        "path": "/api/risk/health",
+        "interval": 30,
+        "timeout": 10,
+        "retries": 3
+      }
+    },
+    {
+      "name": "ai-prediction",
+      "image": "nolarose/windsurf-ai-prediction:latest",
+      "port": 3002,
+      "replicas": 2,
+      "resources": {
+        "cpu": "2000m",
+        "memory": "2Gi",
+        "storage": "4Gi"
+      },
+      "environment": {
+        "NODE_ENV": "staging",
+        "PORT": "3002"
+      },
+      "healthCheck": {
+        "path": "/api/ai/health",
+        "interval": 30,
+        "timeout": 15,
+        "retries": 3
+      }
+    }
+  ],
+  "databases": [
+    {
+      "type": "postgresql",
+      "host": "postgres-primary",
+      "port": 5432,
+      "database": "windsurf",
+      "username": "windsurf_user",
+      "password": "${DB_PASSWORD}",
+      "ssl": true,
+      "backup": {
+        "enabled": true,
+        "schedule": "0 2 * * *",
+        "retention": 30,
+        "storage": "s3://windsurf-backups"
+      }
+    },
+    {
+      "type": "redis",
+      "host": "redis-cluster",
+      "port": 6379,
+      "database": "redis_cache_0",
+      "username": "",
+      "password": "${REDIS_PASSWORD}",
+      "ssl": true,
+      "backup": {
+        "enabled": true,
+        "schedule": "0 3 * * *",
+        "retention": 7,
+        "storage": "s3://windsurf-backups"
+      }
+    }
+  ],
+  "monitoring": {
+    "enabled": true,
+    "prometheus": true,
+    "grafana": true,
+    "loki": true,
+    "jaeger": true
+  },
+  "security": {
+    "tls": true,
+    "authentication": true,
+    "authorization": true,
+    "encryption": true,
+    "audit": true
+  }
+}

@@ -9,15 +9,34 @@ The AI module provides advanced fraud detection capabilities using machine learn
 ```
 ai/
 ├── README.md                    # This documentation
-├── anomaly-predict.ts           # Core prediction engine with network optimization
-├── network-optimizer.ts         # Network performance optimization module
-├── anomaly-bench.ts             # Performance benchmarking suite
-├── model-config-enhanced.json   # Enhanced model configuration with matrix columns
-├── model-config.json            # Legacy model configuration
-├── types/                       # TypeScript type definitions
-│   ├── models.ts               # Model interfaces and configurations
-│   ├── features.ts             # Feature vector types and metadata
-│   └── predictions.ts          # Prediction result types
+├── core/                        # Core AI engines and models
+│   ├── anomalyEngine.ts        # Core anomaly detection engine
+│   ├── enhanced-ai-model.ts     # Enhanced AI model with ensemble methods
+│   └── realtime-fraud-detector.ts # Real-time fraud detection
+├── prediction/                  # Prediction and analysis systems
+│   ├── anomaly-predict.ts       # Core prediction engine with network optimization
+│   └── anomaly-bench.ts         # Performance benchmarking suite
+├── network/                     # Network optimization and integration
+│   ├── network-optimizer.ts     # Network performance optimization module
+│   ├── enhanced-network-optimizer.ts # Enhanced network optimization
+│   └── enhanced-integration.ts  # Enhanced integration systems
+├── training/                    # Training and inference systems
+│   ├── train.ts                 # Nightly training script for Nebula-Flow™
+│   └── inference.ts             # WebAssembly ONNX runtime for inference
+├── config/                      # Model configuration and artifacts
+│   ├── model-config.json        # Legacy model configuration
+│   ├── model-config-enhanced.json # Enhanced model configuration with matrix columns
+│   └── model.onnx               # ONNX model file
+├── web/                         # Web interface and API
+│   ├── api.ts                   # REST API endpoints
+│   ├── index.ts                 # Main entry point
+│   └── dashboard.html           # Web dashboard
+├── models/                      # Model definitions and types
+│   └── types.ts                 # TypeScript type definitions
+└── types/                       # Detailed type definitions
+    ├── models.ts               # Model interfaces and configurations
+    ├── features.ts             # Feature vector types and metadata
+    └── predictions.ts          # Prediction result types
 ├── models/                      # ML model implementations
 │   ├── ensemble.ts             # Ensemble model coordinator
 │   ├── neural-network.ts       # Neural network implementation
