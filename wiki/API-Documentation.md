@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-The **Sovereign Unit [01]** API provides a comprehensive, enterprise-grade interface for financial technology operations, including **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**.
+The **Sovereign Unit \[01\]** API provides a comprehensive, enterprise-grade interface for financial technology operations, including **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**.
 
 ### **Key Features**
 - **🧠 AI Risk Prediction**: 94% accuracy with sub-50ms response times
@@ -643,16 +643,11 @@ POST /api/risk/custom
 ### **Documentation**
 - [📋 Configuration Guide](Configuration-Guide) - Environment setup
 - [🔒 Security Guide](Security-Guide) - Security best practices
-- [🧪 Testing Guide](Testing-Guide) - Testing frameworks
-- [🆘 Troubleshooting](Troubleshooting) - Common issues
-
-### **Tools & Utilities**
-- [🔧 API Explorer](https://api.sovereign-unit-01.com/explorer) - Interactive API testing
-- [📊 Dashboard](https://dashboard.sovereign-unit-01.com) - Analytics dashboard
-- [📈 Metrics](https://metrics.sovereign-unit-01.com) - Performance metrics
+- [🆘 Troubleshooting](Troubleshooting) - Common issues and solutions
 
 ### **Support**
-- **📚 Documentation**: [docs.sovereign-unit-01.com](https://docs.sovereign-unit-01.com)
+- **📚 Documentation**: [docs.sovereign-unit.com](https://docs.sovereign-unit.com)
+- **💬 Community**: [slack.sovereign-unit.com](https://slack.sovereign-unit.com)
 - **💬 Community**: [slack.sovereign-unit-01.com](https://slack.sovereign-unit-01.com)
 - **🐛 Issues**: [GitHub Issues](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/issues)
 - **📧 Support**: [api-support@sovereign-unit-01.com](mailto:api-support@sovereign-unit-01.com)
@@ -661,7 +656,7 @@ POST /api/risk/custom
 
 ## 🎯 Ready to Build?
 
-**Start integrating the Sovereign Unit [01] API today:**
+**Start integrating the Sovereign Unit \[01\] API today:**
 
 🚀 **[Get Your API Key](https://dashboard.sovereign-unit-01.com/register)**  
 📚 **[View Full API Reference](https://docs.sovereign-unit-01.com/api)**  
@@ -672,4 +667,4 @@ POST /api/risk/custom
 
 **Built with ❤️ for developers building the future of financial technology**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*

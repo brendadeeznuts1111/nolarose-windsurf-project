@@ -1,8 +1,8 @@
-# 🚀 Getting Started with Sovereign Unit [01]
+# 🚀 Getting Started with Sovereign Unit \[01\]
 
 ## 📋 Overview
 
-This guide will help you get the **Sovereign Unit [01]** Financial Warming Multiverse up and running on your local machine. You'll learn how to set up the development environment, configure the system, and start building with our powerful APIs.
+This guide will help you get the **Sovereign Unit \[01\]** Financial Warming Multiverse up and running on your local machine. You'll learn how to set up the development environment, configure the system, and start building with our powerful APIs.
 
 ## 🎯 Prerequisites
 
@@ -386,7 +386,7 @@ cp .env.example .env
 - [📖 API Documentation](API-Documentation) - Complete API reference
 - [⚙️ Configuration Guide](Configuration-Guide) - Advanced configuration
 - [🔒 Security Guide](Security-Guide) - Security best practices
-- [🧪 Testing Guide](Testing-Guide) - Testing frameworks and practices
+- [🆘 Troubleshooting](Troubleshooting) - Common issues and solutions
 
 ### **Development Paths**
 
@@ -401,14 +401,14 @@ cp .env.example .env
 Ready to contribute to the project?
 
 - 🎯 [Contributing Guide](Contributing-Guide) - How to contribute
-- 🏗️ [Development Workflow](Development-Workflow) - Development processes
-- 📋 [Code Standards](Code-Standards) - Coding conventions
+- 🏗️ [Development Workflow](Contributing-Guide#development-workflow) - Development processes
+- 📋 [Code Standards](Contributing-Guide#code-standards) - Coding conventions
 
 ---
 
 ## 🎉 You're Ready!
 
-Congratulations! You now have the **Sovereign Unit [01]** Financial Warming Multiverse running locally. Here's what you can do next:
+Congratulations! You now have the **Sovereign Unit \[01\]** Financial Warming Multiverse running locally. Here's what you can do next:
 
 1. **Explore the API**: Visit http://localhost:3227/api/health
 2. **Run the tests**: `bun run test`

@@ -1,4 +1,4 @@
-# 📚 Sovereign Unit [01] Wiki - Table of Contents
+# 📚 Sovereign Unit \[01\] Wiki - Table of Contents
 
 ## 🌟 Home
 - **[Home](Home.md)** - Welcome and overview
@@ -184,4 +184,4 @@
 
 **Built with 📚 for our amazing community**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*

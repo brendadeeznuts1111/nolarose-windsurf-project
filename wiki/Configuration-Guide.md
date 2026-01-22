@@ -2,7 +2,7 @@
 
 ## 📋 Overview
 
-The **Sovereign Unit [01]** configuration system provides comprehensive, enterprise-grade configuration management with **type-safe environment variables**, **environment-specific configurations**, **real-time validation**, and **hot reload capabilities**.
+The **Sovereign Unit \[01\]** configuration system provides comprehensive, enterprise-grade configuration management with **type-safe environment variables**, **environment-specific configurations**, **real-time validation**, and **hot reload capabilities**.
 
 This guide covers everything from basic setup to advanced configuration patterns for production deployments.
 
@@ -745,7 +745,6 @@ curl http://localhost:3227/api/config/health
 ### **Documentation**
 - **[API Documentation](API-Documentation)**: Complete API reference
 - **[Security Guide](Security-Guide)**: Security best practices
-- **[Deployment Guide](Deployment-Guide)**: Production deployment
 - **[Troubleshooting](Troubleshooting)**: Common issues and solutions
 
 ### **External Resources**
@@ -783,4 +782,4 @@ The **Sovereign Unit [01]** configuration system provides:
 
 **Built with ❤️ for enterprise-grade configuration management**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*

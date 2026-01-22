@@ -1,8 +1,8 @@
-# 🤝 Contributing to Sovereign Unit [01]
+# 🤝 Contributing to Sovereign Unit \[01\]
 
 ## 📋 Overview
 
-Thank you for your interest in contributing to the **Sovereign Unit [01]** Financial Warming Multiverse! This guide will help you understand how to contribute effectively, whether you're fixing bugs, adding features, improving documentation, or helping with community support.
+Thank you for your interest in contributing to the **Sovereign Unit \[01\]** Financial Warming Multiverse! This guide will help you understand how to contribute effectively, whether you're fixing bugs, adding features, improving documentation, or helping with community support.
 
 ## 🎯 Types of Contributions
 
@@ -508,7 +508,7 @@ Links to related documentation.
 
 ### **Code of Conduct**
 
-We are committed to providing a welcoming and inclusive environment for all contributors. Please read our full [Code of Conduct](CODE_OF_CONDUCT.md).
+We are committed to providing a welcoming and inclusive environment for all contributors. Please read our full [Code of Conduct](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/CODE_OF_CONDUCT.md).
 
 ### **Communication Channels**
 
@@ -662,4 +662,4 @@ Your contributions help make the **Sovereign Unit [01]** Financial Warming Multi
 
 **Built together with ❤️ by our amazing community**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*

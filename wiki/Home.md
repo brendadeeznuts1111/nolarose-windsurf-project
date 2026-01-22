@@ -1,10 +1,10 @@
-# 🌟 Welcome to the Sovereign Unit [01] Wiki
+# 🌟 Welcome to the Sovereign Unit \[01\] Wiki
 
 ## 📋 Overview
 
-The **Sovereign Unit [01]** Financial Warming Multiverse is a comprehensive, enterprise-grade financial technology platform featuring **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**.
+The **Sovereign Unit \[01\]** Financial Warming Multiverse is a comprehensive, enterprise-grade financial technology platform featuring **AI-powered risk prediction**, **cross-family guardian networks**, **Cash App Priority integration**, and **real-time fraud detection**.
 
-This wiki serves as the central knowledge base for developers, operators, and contributors working with the Sovereign Unit [01] ecosystem.
+This wiki serves as the central knowledge base for developers, operators, and contributors working with the Sovereign Unit \[01\] ecosystem.
 
 ## 🚀 Quick Navigation
 
@@ -12,19 +12,18 @@ This wiki serves as the central knowledge base for developers, operators, and co
 - [📚 Getting Started](Getting-Started) - Setup and first steps
 - [⚙️ Configuration Guide](Configuration-Guide) - Environment setup and configuration
 - [🔌 API Documentation](API-Documentation) - Complete API reference
-- [🧪 Testing Guide](Testing-Guide) - Testing practices and frameworks
 
 ### **For Operators**
-- [🚀 Deployment Guide](Deployment-Guide) - Production deployment
-- [📊 Monitoring & Observability](Monitoring) - System monitoring and metrics
+- [🚀 Deployment Guide](Configuration-Guide#deployment) - Production deployment
+- [📊 Monitoring & Observability](Configuration-Guide#monitoring) - System monitoring and metrics
 - [🔒 Security Guide](Security-Guide) - Security best practices
 - [🆘 Troubleshooting](Troubleshooting) - Common issues and solutions
 
 ### **For Contributors**
 - [🤝 Contributing Guide](Contributing-Guide) - How to contribute
-- [🏗️ Architecture Overview](Architecture) - System architecture and design
-- [📋 Development Workflow](Development-Workflow) - Development processes
-- [🎯 Code Standards](Code-Standards) - Coding conventions and standards
+- [🏗️ Architecture Overview](Security-Guide#security-architecture) - System architecture and design
+- [📋 Development Workflow](Contributing-Guide#development-workflow) - Development processes
+- [🎯 Code Standards](Contributing-Guide#code-standards) - Coding conventions and standards
 
 ## 🎯 Key Features
 
@@ -66,7 +65,7 @@ This wiki serves as the central knowledge base for developers, operators, and co
 
 ```mermaid
 graph TB
-    A[Sovereign Unit [01] Core] --> B[AI Risk Engine]
+    A[Sovereign Unit \[01\] Core] --> B[AI Risk Engine]
     A --> C[Guardian Networks]
     A --> D[Cash App Priority]
     A --> E[Security Layer]
@@ -231,4 +230,4 @@ bun run test:coverage
 
 **Built with ❤️ for the future of financial technology**
 
-*© 2026 Sovereign Unit [01] - All Rights Reserved*
+*© 2026 Sovereign Unit \[01\] - All Rights Reserved*
