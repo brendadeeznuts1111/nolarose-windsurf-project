@@ -12,7 +12,7 @@
 
 ## 🌐 [Documentation Portal](https://github.com/brendadeeznuts1111/nolarose-windsurf-project)
 
-## 📋 [Live Demo](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/demo-app/) | [API Reference](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/API.md) | [Configuration Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/CONFIGURATION.md)
+## 📋 [Live Dashboard](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/landing.html) | [Fraud Detection UI](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/blob/main/dashboard/dashboard.html) | [API Reference](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/API.md) | [Configuration Guide](https://github.com/brendadeeznuts1111/nolarose-windsurf-project/tree/main/docs/CONFIGURATION.md)
 
 ---
 
