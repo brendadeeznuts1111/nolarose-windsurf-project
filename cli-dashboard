@@ -47,7 +47,9 @@ async function runDashboardCommand(args: string[]) {
       }
     });
 
-    child.on('error', reject);
+    child.on('error', (error: Error) => {
+      reject(error);
+    });
   });
 }
 
@@ -76,7 +78,7 @@ async function interactiveSearch() {
       try {
         await runDashboardCommand(['--search', query]);
       } catch (error) {
-        console.log(`❌ Search failed: ${error.message}`);
+        console.log(`❌ Search failed: ${(error as Error).message}`);
       }
       console.log(`\n─────────────────────────────────────────`);
     }
@@ -100,7 +102,7 @@ async function startWatchMode(interval: number = 5000) {
     try {
       await runDashboardCommand([]);
     } catch (error) {
-      console.log(`❌ Refresh failed: ${error.message}`);
+      console.log(`❌ Refresh failed: ${(error as Error).message}`);
     }
   }, interval);
 
@@ -171,7 +173,12 @@ async function fullInteractiveMode() {
           break;
         case 'git':
           console.log('\n📋 Git Status:');
-          await runDashboardCommand([], { cwd: process.cwd() });
+          const { spawn } = await import('child_process');
+          await new Promise((resolve, reject) => {
+            const git = spawn('git', ['status'], { stdio: 'inherit' });
+            git.on('close', (code) => code === 0 ? resolve(code) : reject(new Error(`Git failed with code ${code}`)));
+            git.on('error', reject);
+          });
           break;
         case 'exit':
         case 'quit':
@@ -185,7 +192,7 @@ async function fullInteractiveMode() {
           }
       }
     } catch (error) {
-      console.log(`❌ Command failed: ${error.message}`);
+      console.log(`❌ Command failed: ${(error as Error).message}`);
     }
 
     if (command !== 'search' && command !== 'watch') {
