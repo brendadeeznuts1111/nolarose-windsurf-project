@@ -42,7 +42,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       // Execute feedback command with test device
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       expect(() => {
         execSync(command, { 
@@ -73,7 +73,7 @@ describe("🏛️ Citadel Feedback System", () => {
       const details = "captcha_failure suspected_bot_detection automated_behavior";
       
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       expect(() => {
         execSync(command, { 
@@ -98,7 +98,7 @@ describe("🏛️ Citadel Feedback System", () => {
       const details = "performance_anomaly sim_api_delay_5.2s threshold_exceeded";
       
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       expect(() => {
         execSync(command, { 
@@ -208,7 +208,7 @@ describe("🏛️ Citadel Feedback System", () => {
         
         const promise = new Promise((resolve, reject) => {
           const { execSync } = require("child_process");
-          const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+          const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
           
           try {
             execSync(command, { 
@@ -251,7 +251,7 @@ describe("🏛️ Citadel Feedback System", () => {
         const details = `load_test_incident_${i}`;
         
         const { execSync } = require("child_process");
-        const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+        const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
         
         return execSync(command, { 
           cwd: process.cwd(),
@@ -281,7 +281,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       // Log an incident
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=${deviceId} bun run src/nexus/orchestrator.ts --feedback "${details}"`;
+      const command = `DEVICE_ID=${deviceId} bun run src/orchestrators/orchestrator.ts --feedback "${details}"`;
       
       execSync(command, { 
         cwd: process.cwd(),
@@ -322,7 +322,7 @@ describe("🏛️ Citadel Feedback System", () => {
     test.concurrent("handles malformed input gracefully", async () => {
       // Test with empty details
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=malform_test bun run src/nexus/orchestrator.ts --feedback ""`;
+      const command = `DEVICE_ID=malform_test bun run src/orchestrators/orchestrator.ts --feedback ""`;
       
       expect(() => {
         execSync(command, { 
@@ -333,7 +333,7 @@ describe("🏛️ Citadel Feedback System", () => {
       }).not.toThrow();
       
       // Test with special characters
-      const specialCharsCommand = `DEVICE_ID=special_test bun run src/nexus/orchestrator.ts --feedback "special_chars_!@#$%^&*()_+-=[]{}|;:,.<>?"`;
+      const specialCharsCommand = `DEVICE_ID=special_test bun run src/orchestrators/orchestrator.ts --feedback "special_chars_!@#$%^&*()_+-=[]{}|;:,.<>?"`;
       
       expect(() => {
         execSync(specialCharsCommand, { 
@@ -347,9 +347,9 @@ describe("🏛️ Citadel Feedback System", () => {
     test.concurrent("prevents directory traversal attacks", async () => {
       // Test malicious input
       const maliciousCommands = [
-        `DEVICE_ID=../../../etc/passwd bun run src/nexus/orchestrator.ts --feedback "malicious_test"`,
-        `DEVICE_ID=..\\..\\windows\\system32 bun run src/nexus/orchestrator.ts --feedback "malicious_test"`,
-        `DEVICE_ID=/etc/shadow bun run src/nexus/orchestrator.ts --feedback "malicious_test"`
+        `DEVICE_ID=../../../etc/passwd bun run src/orchestrators/orchestrator.ts --feedback "malicious_test"`,
+        `DEVICE_ID=..\\..\\windows\\system32 bun run src/orchestrators/orchestrator.ts --feedback "malicious_test"`,
+        `DEVICE_ID=/etc/shadow bun run src/orchestrators/orchestrator.ts --feedback "malicious_test"`
       ];
       
       for (const command of maliciousCommands) {
@@ -435,7 +435,7 @@ describe("⚡ Performance Benchmarks", () => {
     
     const promises = Array.from({ length: benchmarkCount }, (_, i) => {
       const { execSync } = require("child_process");
-      const command = `DEVICE_ID=benchmark_${i} bun run src/nexus/orchestrator.ts --feedback "benchmark_test_${i}"`;
+      const command = `DEVICE_ID=benchmark_${i} bun run src/orchestrators/orchestrator.ts --feedback "benchmark_test_${i}"`;
       
       return execSync(command, { 
         cwd: process.cwd(),

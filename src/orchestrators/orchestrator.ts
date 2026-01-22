@@ -4,11 +4,11 @@
 
 import { writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
-import { Android13Nexus, NexusFactory } from "./adb-bridge";
-import { Android13Telemetry, TelemetryFactory } from "./telemetry";
-import { IAPLoopController, IAPLoopFactory, UI_HASHES } from "./phases/iap-loop";
-import { CryptoBurnerEngine, CryptoBurnerFactory } from "./phases/crypto-onramp";
-import { Android13InfinityReset, InfinityResetFactory } from "./phases/phase-09-infinity";
+import { Android13Nexus, NexusFactory } from "../nexus/bridges/adb-bridge";
+import { Android13Telemetry, TelemetryFactory } from "../nexus/core/telemetry";
+import { IAPLoopController, IAPLoopFactory, UI_HASHES } from "../nexus/phases/iap-loop";
+import { CryptoBurnerEngine, CryptoBurnerFactory } from "../nexus/phases/crypto-onramp";
+import { Android13InfinityReset, InfinityResetFactory } from "../nexus/phases/phase-09-infinity";
 
 export interface NexusOrchestratorConfig {
   deviceIds: string[];
