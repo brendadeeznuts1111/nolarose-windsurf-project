@@ -42,7 +42,7 @@ async function demonstrateConnectionPooling() {
       if (i === 0) {
         console.log(`   First request: ${time.toFixed(2)}ms (establishing connection)`);
       } else if (i === requestCount - 1) {
-        const improvement = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
+        const improvement = times[0] && times[times.length - 1] !== undefined ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
         console.log(`   Last request: ${time.toFixed(2)}ms (${improvement.toFixed(1)}% improvement)`);
       }
     } catch (error) {

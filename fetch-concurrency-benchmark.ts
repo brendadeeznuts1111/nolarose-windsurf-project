@@ -123,7 +123,7 @@ async function testConnectionPooling() {
   
   if (times.length > 0) {
     const avgTime = times.reduce((a, b) => a + b, 0) / times.length;
-    const poolEfficiency = times[0] && times[times.length - 1] ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
+    const poolEfficiency = times[0] && times[times.length - 1] !== undefined ? ((times[0] - times[times.length - 1]) / times[0]) * 100 : 0;
   
   console.log(`   📊 Average time: ${avgTime.toFixed(2)}ms`);
   console.log(`   🚀 Pool efficiency: ${poolEfficiency.toFixed(1)}%`);
