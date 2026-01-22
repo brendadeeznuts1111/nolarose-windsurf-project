@@ -2,7 +2,6 @@
 // Web interface for viewing all environment variables and their status
 
 import { config } from "../config/config";
-import { existsSync } from "fs";
 import { configFreeze } from "./config-freeze";
 
 interface ConfigStatus {
@@ -20,8 +19,8 @@ export class ConfigPage {
   /**
    * Generate HTML configuration page
    */
-  public generateConfigPage(): string {
-    const statuses = this.getAllConfigStatuses();
+  public async generateConfigPage(): Promise<string> {
+    const statuses = await this.getAllConfigStatuses();
     const summary = this.getSummary(statuses);
 
     return `
@@ -40,7 +39,7 @@ export class ConfigPage {
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #1f2937;
             min-height: 100vh;
             padding: 20px;
         }
@@ -55,7 +54,7 @@ export class ConfigPage {
         }
         
         .header {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            background: #3b82f6;
             color: white;
             padding: 30px;
             text-align: center;
@@ -444,7 +443,7 @@ export class ConfigPage {
   /**
    * Get all configuration statuses
    */
-  private getAllConfigStatuses(): ConfigStatus[] {
+  private async getAllConfigStatuses(): Promise<ConfigStatus[]> {
     const statuses: ConfigStatus[] = [];
     const env = process.env;
     const duoplus = this.config.duoplus;
@@ -470,7 +469,7 @@ export class ConfigPage {
       {
         name: 'DUOPLUS_DB_PATH',
         value: duoplus.dbPath,
-        status: this.validateFileExists(duoplus.dbPath, true),
+        status: await this.validateFileExists(duoplus.dbPath, true),
         description: 'SQLite database file path',
         category: 'Server Configuration',
         required: true
@@ -546,7 +545,7 @@ export class ConfigPage {
       {
         name: 'DUOPLUS_LIGHTNING_CERT_PATH',
         value: duoplus.lightning.certPath,
-        status: this.validateFileExists(duoplus.lightning.certPath, false),
+        status: await this.validateFileExists(duoplus.lightning.certPath, false),
         description: 'Lightning Network certificate path',
         category: 'Lightning Network',
         required: false
@@ -650,7 +649,7 @@ export class ConfigPage {
       {
         name: 'BUN_RUNTIME_TRANSPILER_CACHE_PATH',
         value: this.config.bun.cachePath,
-        status: this.validateFileExists(this.config.bun.cachePath, true),
+        status: await this.validateFileExists(this.config.bun.cachePath, true),
         description: 'Bun transpiler cache path',
         category: 'Bun Configuration',
         required: false
@@ -673,10 +672,10 @@ export class ConfigPage {
    */
   private generateCategoryHTML(statuses: ConfigStatus[]): string {
     const categories = Array.from(new Set(statuses.map(s => s.category)));
-    
+
     return categories.map(category => {
       const categoryStatuses = statuses.filter(s => s.category === category);
-      
+
       return `
         <div class="category">
             <h2>${category}</h2>
@@ -723,9 +722,10 @@ export class ConfigPage {
     return 'valid';
   }
 
-  private validateFileExists(path: string, required: boolean): 'valid' | 'warning' | 'error' {
+  private async validateFileExists(path: string, required: boolean): Promise<'valid' | 'warning' | 'error'> {
     if (!path) return required ? 'error' : 'warning';
-    if (existsSync(path)) return 'valid';
+    const exists = await Bun.file(path).exists();
+    if (exists) return 'valid';
     return required ? 'error' : 'warning';
   }
 
