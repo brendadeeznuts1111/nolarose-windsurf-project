@@ -1,0 +1,109 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Admin Dashboard",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/admin/config-server.ts",
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development",
+        "DUOPLUS_ADMIN_PORT": "3227"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug CLI Dashboard",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/nexus/core/dashboard.ts",
+      "args": ["--metrics"],
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Shopping API",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/shopping/server.ts",
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Dashboard Workflow",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/citadel-dashboard-workflow.ts",
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Cash App Demo",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/cash-app-priority-demo.ts",
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Family Controls Demo",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/examples/family-controls-demo.ts",
+      "runtimeArgs": ["--inspect"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Launch All Dashboards",
+      "configurations": ["Debug Admin Dashboard", "Debug Shopping API"],
+      "stopAll": true
+    },
+    {
+      "name": "Launch Citadel Workflow",
+      "configurations": ["Debug Dashboard Workflow"],
+      "stopAll": true
+    }
+  ]
+}

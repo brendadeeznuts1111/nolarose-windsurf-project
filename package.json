@@ -164,7 +164,14 @@
     "features:list": "bun run cli/feature-status-cli.ts features --detailed",
     "features:health": "bun run cli/feature-status-cli.ts health",
     "features:services": "bun run cli/feature-status-cli.ts services",
-    "features:toggle": "bun run cli/feature-status-cli.ts toggle"
+    "features:toggle": "bun run cli/feature-status-cli.ts toggle",
+    "dashboard:workflow": "./citadel-workflow.sh",
+    "dashboard:auto": "bun run citadel-dashboard-workflow.ts",
+    "dashboard:web": "bun run src/admin/config-server.ts && open http://localhost:3227",
+    "dashboard:cli": "bun run src/nexus/core/dashboard.ts",
+    "dashboard:open": "open http://localhost:3227",
+    "citadel:start": "./citadel-workflow.sh",
+    "citadel:auto": "bun run citadel-dashboard-workflow.ts"
   },
   "keywords": [
     "fraud-detection",

@@ -5,12 +5,10 @@
 import { ConfigPage } from "./config-page";
 import { config } from "../config/config";
 import { configFreeze } from "./config-freeze";
-import { UnifiedLandingPage } from "./unified-landing";
 import packageJson from "../../package.json";
 
 class ConfigServer {
   private configPage = new ConfigPage();
-  private unifiedLanding = new UnifiedLandingPage();
   private server: any;
   private port: number;
   private isStopping: boolean = false;

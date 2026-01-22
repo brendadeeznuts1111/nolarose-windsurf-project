@@ -1,0 +1,240 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Dashboard Workflow",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "dashboard:workflow"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Start the complete Citadel dashboard workflow with auto-browser opening"
+    },
+    {
+      "label": "Start Admin Dashboard",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "src/admin/config-server.ts"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Start the admin dashboard on port 3227"
+    },
+    {
+      "label": "Start CLI Dashboard",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "src/nexus/core/dashboard.ts"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Start the CLI dashboard with metrics"
+    },
+    {
+      "label": "Start Shopping API",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "shopping/server.ts"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Start the shopping API server on port 3005"
+    },
+    {
+      "label": "Open Admin Dashboard",
+      "type": "shell",
+      "command": "open",
+      "args": ["http://localhost:3227"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Open admin dashboard in browser (port 3227)"
+    },
+    {
+      "label": "Open Shopping Dashboard",
+      "type": "shell",
+      "command": "open",
+      "args": ["http://localhost:3005"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Open shopping dashboard in browser (port 3005)"
+    },
+    {
+      "label": "Search Audit Logs",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "src/nexus/core/dashboard.ts", "--search", "${input:searchQuery}"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Search audit logs for specific incidents"
+    },
+    {
+      "label": "Show Dashboard Metrics",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "src/nexus/core/dashboard.ts", "--metrics"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Show detailed dashboard metrics"
+    },
+    {
+      "label": "Run TypeScript Lint",
+      "type": "shell",
+      "command": "bunx",
+      "args": ["tsc", "--noEmit", "--skipLibCheck"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": ["$tsc"],
+      "detail": "Run TypeScript lint validation"
+    },
+    {
+      "label": "Run Biome Check",
+      "type": "shell",
+      "command": "bunx",
+      "args": ["@biomejs/biome", "check", "."],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Run Biome code quality checks"
+    },
+    {
+      "label": "Git Push & Dashboard Workflow",
+      "type": "shell",
+      "command": "git",
+      "args": ["add", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Stage all changes for commit"
+    },
+    {
+      "label": "Commit Changes",
+      "type": "shell",
+      "command": "git",
+      "args": ["commit", "-m", "${input:commitMessage}"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Commit staged changes with message"
+    },
+    {
+      "label": "Push to Remote",
+      "type": "shell",
+      "command": "git",
+      "args": ["push"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [],
+      "detail": "Push commits to remote repository"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "searchQuery",
+      "description": "Search query for audit logs",
+      "default": "performance",
+      "type": "promptString"
+    },
+    {
+      "id": "commitMessage",
+      "description": "Git commit message",
+      "default": "Update dashboard configuration",
+      "type": "promptString"
+    }
+  ]
+}
