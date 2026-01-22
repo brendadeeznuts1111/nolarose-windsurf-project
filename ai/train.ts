@@ -67,7 +67,7 @@ export async function trainModel(): Promise<TrainingMetrics> {
     return metrics;
     
   } catch (error) {
-    console.error('❌ Training failed:', error.message);
+    console.error('❌ Training failed:', error instanceof Error ? error.message : String(error));
     throw error;
   }
 }
@@ -156,7 +156,7 @@ async function saveModel(metrics: TrainingMetrics): Promise<void> {
   console.log('💾 Saving model...');
   
   // Create mock ONNX model file (28KB)
-  const modelBuffer = Buffer.alloc(28000);
+  const modelBuffer = new Uint8Array(28000);
   
   // Write some mock metadata
   const metadata = JSON.stringify({
@@ -167,7 +167,9 @@ async function saveModel(metrics: TrainingMetrics): Promise<void> {
     size: 28000
   });
   
-  modelBuffer.write(metadata, 0, Math.min(metadata.length, 1000));
+  const encoder = new TextEncoder();
+  const metadataBytes = encoder.encode(metadata);
+  modelBuffer.set(metadataBytes, 0, Math.min(metadataBytes.length, 1000));
   
   writeFileSync('./ai/model.onnx', modelBuffer);
   console.log(`✅ Model saved: ${modelBuffer.length} bytes`);
@@ -205,7 +207,7 @@ async function logTrainingMetrics(db: Database, metrics: TrainingMetrics, sample
     
     console.log('📊 Training metrics logged to database');
   } catch (error) {
-    console.warn('⚠️ Failed to log training metrics:', error.message);
+    console.warn('⚠️ Failed to log training metrics:', error instanceof Error ? error.message : String(error));
   }
 }
 
@@ -223,7 +225,7 @@ export async function getTrainingHistory(limit: number = 10): Promise<TrainingMe
     
     return rows;
   } catch (error) {
-    console.warn('⚠️ Failed to get training history:', error.message);
+    console.warn('⚠️ Failed to get training history:', error instanceof Error ? error.message : String(error));
     return [];
   } finally {
     db.close();

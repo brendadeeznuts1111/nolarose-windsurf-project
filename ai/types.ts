@@ -259,4 +259,4 @@ export default {
   LogEntry,
   Metric,
   DashboardConfig
-};
+} as const;

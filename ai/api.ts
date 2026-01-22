@@ -3,9 +3,11 @@
 // ai/api.ts - REST API for Nebula-Flow™ AI System
 // Endpoints for scoring, training, and monitoring
 
-import { AnomalyEngine, LegSignal, AnomalyResult } from './anomalyEngine.js';
+import { AnomalyEngine } from './anomalyEngine.js';
 import { trainModel, getTrainingHistory } from './train.js';
-import { 
+import type { 
+  LegSignal, 
+  AnomalyResult,
   ScoreResponse, 
   BatchScoreResponse, 
   TrainingResponse, 
@@ -37,9 +39,7 @@ export class AIAPI {
         uptime,
         memoryUsage: memoryUsage.heapUsed
       },
-      timestamp: new Date().toISOString(),
-      lastTraining: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      nextTraining: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+      timestamp: new Date().toISOString()
     };
   }
   
@@ -63,7 +63,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         processingTime: performance.now() - startTime,
         modelVersion: this.engine.getStats().version,
         timestamp: new Date().toISOString()
@@ -91,7 +91,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         totalProcessed: 0,
         processingTime: performance.now() - startTime,
         timestamp: new Date().toISOString()
@@ -117,7 +117,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         trainingTime: performance.now() - startTime,
         samplesUsed: 0,
         timestamp: new Date().toISOString()
@@ -138,7 +138,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString()
       };
     }
@@ -165,7 +165,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString()
       };
     }
@@ -186,7 +186,7 @@ export class AIAPI {
     } catch (error) {
       return {
         success: false,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
         timestamp: new Date().toISOString()
       };
     }

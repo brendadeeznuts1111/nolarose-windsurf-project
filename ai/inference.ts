@@ -84,7 +84,16 @@ export async function infer(features: Float32Array): Promise<number> {
     const inferenceTime = performance.now() - start;
     
     // Get prediction (assuming single output)
-    const output = results[Object.keys(results)[0]];
+    const outputKey = Object.keys(results)[0];
+    if (!outputKey) {
+      throw new Error('No output returned from inference');
+    }
+    
+    const output = results[outputKey];
+    if (!output || !output.data || output.data.length === 0) {
+      throw new Error('Invalid output from inference');
+    }
+    
     const score = output.data[0] as number;
     
     // Log performance metrics
@@ -106,6 +115,7 @@ function fallbackScoring(features: Float32Array): number {
   // Simple weighted average fallback
   const weights = [0.15, 0.20, 0.25, 0.10, 0.10, 0.10, 0.05, 0.02, 0.02, 0.01];
   let score = 0;
+  
   for (let i = 0; i < Math.min(features.length, weights.length); i++) {
     score += features[i] * weights[i];
   }

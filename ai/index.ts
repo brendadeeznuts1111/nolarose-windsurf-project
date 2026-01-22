@@ -57,7 +57,7 @@ export class NebulaAISystem {
                 console.log('📄 Creating dummy model file...');
                 
                 // Create a 28KB dummy model file
-                const modelBuffer = Buffer.alloc(28000);
+                const modelBuffer = new Uint8Array(28000);
                 const metadata = {
                     version: 'v1.0.0',
                     type: 'anomaly-detection',
@@ -66,13 +66,15 @@ export class NebulaAISystem {
                     size: 28000
                 };
                 
-                modelBuffer.write(JSON.stringify(metadata), 0, Math.min(JSON.stringify(metadata).length, 1000));
+                const encoder = new TextEncoder();
+                const metadataBytes = encoder.encode(JSON.stringify(metadata));
+                modelBuffer.set(metadataBytes, 0, Math.min(metadataBytes.length, 1000));
                 
                 require('fs').writeFileSync(modelPath, modelBuffer);
                 console.log('✅ Dummy model created');
             }
         } catch (error) {
-            console.warn('⚠️ Could not ensure model exists:', error.message);
+            console.warn('⚠️ Could not ensure model exists:', error instanceof Error ? error.message : String(error));
         }
     }
     
