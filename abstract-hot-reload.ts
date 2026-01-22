@@ -5,7 +5,6 @@ let routeVersion = '1.0.0';
 // 1. export default → Bun.serve under the hood
 export default {
   unix: '\0my-abstract-socket', // abstract namespace socket
-  idleTimeout: 10,               // 10 s idle timeout
   fetch(req, server) {
     const u = new URL(req.url);
     if (u.pathname === '/reload') {

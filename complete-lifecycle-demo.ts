@@ -3,10 +3,10 @@
 // Complete Bun Server Lifecycle Demo
 // Shows all lifecycle methods with proper demonstrations
 
-const completeServer = Bun.serve({
+const completeServer: any = Bun.serve({
   port: 0,
   development: true,
-  async fetch(req: Request, server: any) {
+  async fetch(req: Request, server: any): Promise<Response> {
     const url = new URL(req.url);
     
     // Log all requests for demonstration

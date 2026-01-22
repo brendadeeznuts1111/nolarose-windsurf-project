@@ -23,7 +23,7 @@ const lifecycleServer = Bun.serve({
 
       case '/reload': {
         server.reload({
-          fetch(req, server) {
+          fetch(req: Request, server: any) {
             return new Response('handler swapped via reload()\n');
           }
         });

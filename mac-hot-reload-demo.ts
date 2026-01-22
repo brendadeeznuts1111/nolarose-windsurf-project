@@ -6,7 +6,6 @@ let routeVersion = '1.0.0';
 // macOS-compatible version using regular Unix socket
 export default {
   unix: '/tmp/hot-reload-demo.sock', // regular Unix socket for macOS
-  idleTimeout: 10,                   // 10 s idle timeout
   fetch(req, server) {
     const u = new URL(req.url);
     if (u.pathname === '/reload') {
