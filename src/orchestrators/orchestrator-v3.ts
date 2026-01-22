@@ -53,9 +53,6 @@ export class NexusCitadelOrchestrator {
     this.config = config;
     this.startTime = Date.now();
 
-    console.log(`🛰️ Initializing Nexus Citadel v3.0 with ${config.deviceIds.length} devices...`);
-    console.log(`🛡️ Identity Management: ${config.enableIdentityManagement ? 'Enabled' : 'Disabled'}`);
-    console.log(`🔐 Security: Enterprise-grade with keychain persistence`);
   }
 
   /**
@@ -63,25 +60,22 @@ export class NexusCitadelOrchestrator {
    * Complete system initialization with security and identity management
    */
   async initialize(): Promise<void> {
-    console.log(`\n🔥 Phase 00: Credential Citadel Initialization...`);
 
     try {
       // 1. 🛡️ INITIALIZE SECURITY AND UNLOCK FORTRESS
-      console.log(`   🔐 Unlocking Identity Fortress...`);
+
       this.masterKey = await unlockFortress();
       if (!this.masterKey) {
-        console.log(`   🔒 Creating new fortress master key...`);
+
         this.masterKey = await lockFortress();
       }
-      console.log(`   ✅ Fortress unlocked successfully`);
 
       // 2. 💾 INITIALIZE IDENTITY VAULT
-      console.log(`   💾 Initializing Identity Vault...`);
+
       initializeVault();
-      console.log(`   ✅ Vault initialized with SIM inventory and proxy pool`);
 
       // 3. 📱 CONNECT ANDROID 13 DEVICES
-      console.log(`   📱 Connecting Android 13 cloud instances...`);
+
       for (const deviceId of this.config.deviceIds) {
         const nexus = new Android13Nexus(deviceId);
         await nexus.connect();
@@ -97,23 +91,22 @@ export class NexusCitadelOrchestrator {
           integrityVerified: false
         });
 
-        console.log(`   ✅ Device ${deviceId} connected`);
       }
 
       // 4. 🌐 INITIALIZE TELEMETRY STREAMS
       if (this.config.enableTelemetry) {
-        console.log(`   🌀 Starting ZSTD telemetry streams...`);
+
         for (const deviceId of this.config.deviceIds) {
           const telemetry = new Android13Telemetry(deviceId);
           await telemetry.startLogStream(`${this.config.logDirectory}/${deviceId}-logs.zst`);
           this.telemetry.set(deviceId, telemetry);
         }
-        console.log(`   ✅ Telemetry streams active`);
+
       }
 
       // 5. 🔥 INITIALIZE CRYPTO BURNERS
       if (this.config.enableCryptoBurners) {
-        console.log(`   🔥 Initializing crypto burner engines...`);
+
         for (const deviceId of this.config.deviceIds) {
           const cryptoEngine = new CryptoBurnerEngine({
             network: 'mainnet',
@@ -122,19 +115,17 @@ export class NexusCitadelOrchestrator {
           });
           this.crypto.set(deviceId, cryptoEngine);
         }
-        console.log(`   ✅ Crypto engines ready`);
+
       }
 
       // 6. 📱 AUTO-PROVISION DEVICES WITH IDENTITIES
       if (this.config.autoProvision && this.config.enableIdentityManagement) {
-        console.log(`   📱 Auto-provisioning device identities...`);
+
         await this.provisionAllDevices();
       }
 
-      console.log(`\n🎆 Credential Citadel v3.0 fully initialized and secured!`);
-
     } catch (error) {
-      console.error(`❌ Citadel initialization failed: ${error}`);
+
       throw error;
     }
   }
@@ -144,14 +135,12 @@ export class NexusCitadelOrchestrator {
    * Complete device provisioning with SIM assignment and profile creation
    */
   async provisionAllDevices(): Promise<void> {
-    console.log(`\n📱 Provisioning ${this.config.deviceIds.length} devices with unique identities...`);
 
     for (const deviceId of this.config.deviceIds) {
       await this.provisionDevice(deviceId);
       await Bun.sleep(500); // Brief delay between provisions
     }
 
-    console.log(`✅ All devices provisioned with unique identities`);
   }
 
   /**
@@ -159,20 +148,19 @@ export class NexusCitadelOrchestrator {
    * Create and assign unique identity to device
    */
   async provisionDevice(deviceId: string): Promise<DeviceProfile | null> {
-    console.log(`   📱 Provisioning ${deviceId}...`);
 
     try {
       // Check if device already has profile
       const existingProfile = Vault.getProfile(deviceId);
       if (existingProfile) {
-        console.log(`   ⚠️ Device ${deviceId} already has profile: ${existingProfile.apple_id}`);
+
         return existingProfile;
       }
 
       // Generate new profile
       const profile = await ProfileFactory.provisionDevice(deviceId);
       if (!profile) {
-        console.log(`   ❌ Failed to provision ${deviceId}`);
+
         return null;
       }
 
@@ -185,11 +173,10 @@ export class NexusCitadelOrchestrator {
         status.lastActivity = new Date().toISOString();
       }
 
-      console.log(`   ✅ ${deviceId} provisioned: ${profile.apple_id}`);
       return profile;
 
     } catch (error) {
-      console.error(`   ❌ Failed to provision ${deviceId}: ${error}`);
+
       return null;
     }
   }
@@ -203,17 +190,15 @@ export class NexusCitadelOrchestrator {
     const status = this.deviceStatus.get(deviceId);
 
     if (!nexus || !status) {
-      console.error(`❌ Device ${deviceId} not found`);
+
       return;
     }
-
-    console.log(`\n\x1b[35m[${deviceId}] 🌀 Starting Citadel Mischief Pipeline...\x1b[0m`);
 
     try {
       // 1. 📋 LOAD OR CREATE IDENTITY PROFILE
       let profile = Vault.getProfile(deviceId);
       if (!profile && this.config.enableIdentityManagement) {
-        console.log(`   [${deviceId}] 📋 No profile found, provisioning...`);
+
         profile = await this.provisionDevice(deviceId);
       }
 
@@ -221,11 +206,9 @@ export class NexusCitadelOrchestrator {
         throw new Error(`No identity profile available for ${deviceId}`);
       }
 
-      console.log(`   [${deviceId}] 👤 Using identity: ${profile.apple_id}`);
-
       // 2. 🔍 VERIFY PROFILE INTEGRITY
       if (!Vault.verifyIntegrity(profile)) {
-        console.log(`   [${deviceId}] ⚠️ Profile integrity check failed, regenerating...`);
+
         profile = await ProfileFactory.rotateIdentity(deviceId);
         if (!profile) {
           throw new Error(`Failed to regenerate identity for ${deviceId}`);
@@ -233,7 +216,7 @@ export class NexusCitadelOrchestrator {
       }
 
       // 3. 🍎 APPLE ID VERIFICATION WITH PROFILE
-      console.log(`   [${deviceId}] 🍎 Apple ID verification with ${profile.apple_id}...`);
+
       await nexus.type(profile.apple_id);
       await Bun.sleep(1000);
       await nexus.type(profile.apple_pwd);
@@ -243,37 +226,37 @@ export class NexusCitadelOrchestrator {
 
       // 4. 💎 GENERATE BURNER WALLET
       if (this.config.enableCryptoBurners) {
-        console.log(`   [${deviceId}] 💎 Generating crypto wallet...`);
+
         const cryptoEngine = this.crypto.get(deviceId);
         if (cryptoEngine) {
           const wallet = cryptoEngine.generateBurnerWallet(deviceId);
           await Bun.write(`${this.config.walletDirectory}/${deviceId}-wallet.json`, JSON.stringify(wallet, null, 2));
-          console.log(`   [${deviceId}] 💎 Wallet generated: ${wallet.address}`);
+
         }
       }
 
       // 5. 🎯 SEARCH ADS ARBITRAGE
       if (this.config.enableSearchAds) {
-        console.log(`   [${deviceId}] 🎯 Running Search Ads Arbitrage...`);
+
         await this.runSearchAdsArbitrage(nexus, deviceId);
       }
 
       // 6. 💰 IAP REVENUE LOOP
       if (this.config.enableIAPLoop) {
-        console.log(`   [${deviceId}] 💰 Executing IAP Revenue Loop...`);
+
         await this.runIAPRevenueLoop(nexus, deviceId);
         status.revenueGenerated += 100; // Mock revenue
       }
 
       // 7. 📰 PRESS RELEASE SPAM
       if (this.config.enablePressRelease) {
-        console.log(`   [${deviceId}] 📰 Executing Press Release Spam...`);
+
         await this.runPressReleaseSpam(nexus, deviceId);
       }
 
       // 8. 🔄 INFINITY RESET
       if (this.config.enableInfinityReset) {
-        console.log(`   [${deviceId}] 🔄 Executing Infinity Reset...`);
+
         await this.resetIdentity(nexus, deviceId);
       }
 
@@ -281,11 +264,9 @@ export class NexusCitadelOrchestrator {
       status.cyclesCompleted++;
       status.lastActivity = new Date().toISOString();
 
-      console.log(`\x1b[32m[${deviceId}] ✔ Citadel Mischief Cycle Complete\x1b[0m`);
-
     } catch (error) {
       status.status = 'error';
-      console.error(`\x1b[31m[${deviceId}] ❌ Mischief Pipeline Failed: ${error}\x1b[0m`);
+
     }
   }
 
@@ -294,7 +275,6 @@ export class NexusCitadelOrchestrator {
    * Generate new identity and archive old one
    */
   async rotateDeviceIdentity(deviceId: string): Promise<boolean> {
-    console.log(`🔄 Rotating identity for device: ${deviceId}`);
 
     try {
       const newProfile = await ProfileFactory.rotateIdentity(deviceId);
@@ -310,11 +290,10 @@ export class NexusCitadelOrchestrator {
         status.lastActivity = new Date().toISOString();
       }
 
-      console.log(`✅ Identity rotated for ${deviceId}: ${newProfile.apple_id}`);
       return true;
 
     } catch (error) {
-      console.error(`❌ Failed to rotate identity for ${deviceId}: ${error}`);
+
       return false;
     }
   }
@@ -355,10 +334,6 @@ export class NexusCitadelOrchestrator {
    * 50-col matrix showing device status and identities
    */
   displayIdentityMatrix(): void {
-    console.log(`\n📊 IDENTITY MATRIX - Credential Citadel Status`);
-    console.log(`┌─────────────────────────────────────────────────────────────────────────────────┐`);
-    console.log(`│ DEVICE     │ STATUS   │ IDENTITY                    │ SIM          │ INTEGRITY │ CYCLES │ REVENUE │`);
-    console.log(`├─────────────────────────────────────────────────────────────────────────────────┤`);
 
     for (const status of this.deviceStatus.values()) {
       const deviceId = status.deviceId.padEnd(10);
@@ -369,38 +344,35 @@ export class NexusCitadelOrchestrator {
       const cycles = status.cyclesCompleted.toString().padEnd(6);
       const revenue = `$${status.revenueGenerated}`.padEnd(6);
 
-      console.log(`│ ${deviceId} │ ${statusStr} │ ${identity} │ ${sim} │ ${integrity} │ ${cycles} │ ${revenue} │`);
     }
 
-    console.log(`└─────────────────────────────────────────────────────────────────────────────────┘`);
   }
 
   // Private methods (reuse from v2.0)
   private async runSearchAdsArbitrage(nexus: Android13Nexus, deviceId: string): Promise<void> {
     // Implementation from v2.0
-    console.log(`   [${deviceId}] 🎯 Search Ads Arbitrage executed`);
+
   }
 
   private async runIAPRevenueLoop(nexus: Android13Nexus, deviceId: string): Promise<void> {
     // Implementation from v2.0
-    console.log(`   [${deviceId}] 💰 IAP Revenue Loop executed`);
+
   }
 
   private async runPressReleaseSpam(nexus: Android13Nexus, deviceId: string): Promise<void> {
     // Implementation from v2.0
-    console.log(`   [${deviceId}] 📰 Press Release Spam executed`);
+
   }
 
   private async resetIdentity(nexus: Android13Nexus, deviceId: string): Promise<void> {
     // Implementation from v2.0
-    console.log(`   [${deviceId}] 🔄 Identity reset executed`);
+
   }
 
   /**
    * 🛑 SHUTDOWN CITADEL
    */
   async shutdown(): Promise<void> {
-    console.log(`\n🛑 Shutting down Credential Citadel...`);
 
     // Stop telemetry streams
     for (const telemetry of this.telemetry.values()) {
@@ -415,7 +387,6 @@ export class NexusCitadelOrchestrator {
     // Backup vault
     await Vault.backup(`./backups/vault-backup-${Date.now()}.json`);
 
-    console.log(`✅ Credential Citadel shutdown complete`);
   }
 }
 
@@ -448,7 +419,6 @@ async function main() {
 
     // Execute mischief cycles
     for (let cycle = 0; cycle < 2; cycle++) {
-      console.log(`\n🔄 Executing Citadel Mischief Cycle ${cycle + 1}/2...`);
 
       for (const deviceId of config.deviceIds) {
         await citadel.runMischief(deviceId);
@@ -461,17 +431,9 @@ async function main() {
 
     // Display final status
     const finalStatus = citadel.getCitadelStatus();
-    console.log(`\n📊 Final Citadel Statistics:`);
-    console.log(`   📱 Total Devices: ${finalStatus.overview.totalDevices}`);
-    console.log(`   ✅ Active Devices: ${finalStatus.overview.activeDevices}`);
-    console.log(`   🔄 Total Cycles: ${finalStatus.performance.avgCyclesPerDevice * finalStatus.overview.totalDevices}`);
-    console.log(`   💰 Total Revenue: $${finalStatus.performance.totalRevenue}`);
-    console.log(`   🛡️ Integrity Verified: ${finalStatus.performance.integrityVerifiedCount}/${finalStatus.overview.totalDevices}`);
-
-    console.log(`\n🎆 CREDENTIAL CITADEL - ENTERPRISE DOMINATION COMPLETE!`);
 
   } catch (error) {
-    console.error(`❌ Citadel execution failed: ${error}`);
+
   } finally {
     await citadel.shutdown();
   }

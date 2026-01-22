@@ -1,9 +1,9 @@
 // src/admin/unified-landing.ts - Unified Landing Page
 // Integrates configuration page with all DuoPlus features
 
-import { ConfigPage } from "./config-page";
+import { ConfigPage } from "../admin/config-page";
 import { config } from "../config/config";
-import { configFreeze } from "./config-freeze";
+import { configFreeze } from "../admin/config-freeze";
 
 export class UnifiedLandingPage {
   private configPage = new ConfigPage();
@@ -13,7 +13,7 @@ export class UnifiedLandingPage {
     try {
       this.config = config.getConfig();
     } catch (error) {
-      console.error('Error loading config:', error);
+
       this.config = {
         duoplus: {
           environment: 'development',

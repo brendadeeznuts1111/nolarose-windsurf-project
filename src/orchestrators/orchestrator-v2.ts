@@ -30,7 +30,6 @@ export class NexusOrchestrator {
   };
 
   constructor(public deviceIds: string[]) {
-    console.log(`🚀 Initializing Nexus Factory v2.0 with ${deviceIds.length} workers...`);
 
     // Initialize stats tracking
     for (const id of deviceIds) {
@@ -48,10 +47,8 @@ export class NexusOrchestrator {
    * 🔋 PHASE: BOOT & CONNECT
    */
   async ignite() {
-    console.log(`\x1b[33m🔋 Phase 00: Igniting Nexus Factory...\x1b[0m`);
 
     for (const id of this.deviceIds) {
-      console.log(`   📱 Connecting worker: ${id}`);
 
       const nexus = new Android13Nexus(id);
       await nexus.connect();
@@ -72,10 +69,8 @@ export class NexusOrchestrator {
       // Start ZSTD Log Streaming in background
       await telemetry.startLogStream(`./logs/android/${id}-logs.zst`);
 
-      console.log(`   ✅ Worker ${id}: Telemetry Stream Stabilized (ZSTD)`);
     }
 
-    console.log(`\x1b[32m✅ All ${this.deviceIds.length} workers online and ready\x1b[0m`);
   }
 
   /**
@@ -88,44 +83,39 @@ export class NexusOrchestrator {
 
     if (!nexus || !cryptoEngine || !stats) return;
 
-    console.log(`\n\x1b[35m[${deviceId}] 🌀 Starting Mischief Pipeline v2.0...\x1b[0m`);
-
     try {
       // 1. APPLE ID VERIFICATION (Phase 01)
-      console.log(`   [${deviceId}] 🍎 Phase 01: Apple ID Verification...`);
+
       await this.waitForUI(nexus, this.hashes.APPLE_VERIFY_BTN, "Apple Verify Button");
       await nexus.tap(450, 1100); // Click 'Verify'
       await Bun.sleep(1000);
 
       // 2. GENERATE BURNER WALLET (Phase 10)
-      console.log(`   [${deviceId}] 💎 Phase 10: Generating Non-KYC Wallet...`);
+
       const wallet = cryptoEngine.generateBurnerWallet(deviceId);
       await Bun.write(`./builds/wallets/${deviceId}.json`, JSON.stringify(wallet, null, 2));
-      console.log(`   [${deviceId}] 💎 Non-KYC Wallet Burned: ${wallet.address}`);
 
       // 3. SEARCH ADS ARBITRAGE (Phase 07)
-      console.log(`   [${deviceId}] 🎯 Phase 07: Search Ads Arbitrage...`);
+
       await this.runSearchAdsArbitrage(nexus, deviceId);
 
       // 4. IAP REVENUE LOOP (Phase 06)
-      console.log(`   [${deviceId}] 💰 Phase 06: IAP Revenue Loop...`);
+
       await this.runIAPRevenueLoop(nexus, deviceId);
 
       // 5. PRESS RELEASE SPAM (Phase 12)
-      console.log(`   [${deviceId}] 📰 Phase 12: Press Release Spam...`);
+
       await this.runPressReleaseSpam(nexus, deviceId);
 
       // 6. INFINITY RESET (Phase 09)
-      console.log(`   [${deviceId}] 🔄 Phase 09: Infinity Reset...`);
+
       await this.resetIdentity(nexus, deviceId);
 
       // Update stats
       stats.mischiefCycles++;
 
-      console.log(`\x1b[32m[${deviceId}] ✔ Mischief Cycle Complete. Identity Purged.\x1b[0m`);
-
     } catch (error) {
-      console.error(`\x1b[31m[${deviceId}] ❌ Mischief Pipeline Failed: ${error}\x1b[0m`);
+
     }
   }
 
@@ -133,7 +123,6 @@ export class NexusOrchestrator {
    * 🎯 PHASE 07: Search Ads Arbitrage Auto-Pilot
    */
   private async runSearchAdsArbitrage(nexus: Android13Nexus, deviceId: string) {
-    console.log(`   [${deviceId}] 🎯 Executing Search Ads Arbitrage...`);
 
     try {
       // Navigate to Search Ads interface
@@ -145,7 +134,6 @@ export class NexusOrchestrator {
 
       // Auto-bid strategy with competitive analysis
       const bidAmount = this.calculateOptimalBid(deviceId);
-      console.log(`   [${deviceId}] 💸 Optimal bid calculated: $${bidAmount}`);
 
       // Execute bid
       await nexus.tap(600, 800); // Bid amount field
@@ -157,7 +145,6 @@ export class NexusOrchestrator {
 
       // Monitor bid performance
       const performance = await this.monitorBidPerformance(nexus);
-      console.log(`   [${deviceId}] 📊 Bid performance: ${performance.impressions} impressions, ${performance.clicks} clicks`);
 
       // Update stats
       const stats = this.stats.get(deviceId);
@@ -167,7 +154,7 @@ export class NexusOrchestrator {
       }
 
     } catch (error) {
-      console.error(`   [${deviceId}] ❌ Search Ads Arbitrage failed: ${error}`);
+
     }
   }
 
@@ -175,7 +162,6 @@ export class NexusOrchestrator {
    * 📰 PHASE 12: Press Release Spam Trigger
    */
   private async runPressReleaseSpam(nexus: Android13Nexus, deviceId: string) {
-    console.log(`   [${deviceId}] 📰 Executing Press Release Spam...`);
 
     try {
       // Generate press release content
@@ -203,7 +189,6 @@ export class NexusOrchestrator {
       await Bun.sleep(3000);
 
       // Verify submission
-      console.log(`   [${deviceId}] 📰 Press release submitted: ${releaseContent.title}`);
 
       // Update stats
       const stats = this.stats.get(deviceId);
@@ -212,7 +197,7 @@ export class NexusOrchestrator {
       }
 
     } catch (error) {
-      console.error(`   [${deviceId}] ❌ Press Release Spam failed: ${error}`);
+
     }
   }
 
@@ -220,7 +205,6 @@ export class NexusOrchestrator {
    * 💰 IAP Revenue Loop with Enhanced Detection
    */
   private async runIAPRevenueLoop(nexus: Android13Nexus, deviceId: string) {
-    console.log(`   [${deviceId}] 💰 Executing IAP Revenue Loop...`);
 
     try {
       // Wait for buy confirmation with 7.84ms CRC32 SIMD logic
@@ -232,16 +216,14 @@ export class NexusOrchestrator {
 
       // Handle review popup if present
       if (await nexus.checkScreenIntegrity(this.hashes.REVIEW_POPUP)) {
-        console.log(`   [${deviceId}] ⭐ Auto-review detected and handled`);
+
         await nexus.tap(400, 1000); // 5-star rating
         await nexus.tap(500, 1200); // Submit review
         await Bun.sleep(1000);
       }
 
-      console.log(`   [${deviceId}] 💰 IAP Purchase completed - 70% revenue routed`);
-
     } catch (error) {
-      console.error(`   [${deviceId}] ❌ IAP Revenue Loop failed: ${error}`);
+
     }
   }
 
@@ -249,7 +231,6 @@ export class NexusOrchestrator {
    * ⏱️ Wait for UI element with SIMD verification
    */
   private async waitForUI(nexus: Android13Nexus, targetHash: string, elementName: string, timeout: number = 30000): Promise<void> {
-    console.log(`   [${nexus.deviceId}] ⏳ Waiting for ${elementName} (hash: ${targetHash})`);
 
     const startTime = Date.now();
     let checkCount = 0;
@@ -260,7 +241,7 @@ export class NexusOrchestrator {
       // 7.84ms CRC32 SIMD verification
       if (await nexus.checkScreenIntegrity(targetHash)) {
         const elapsed = Date.now() - startTime;
-        console.log(`   [${nexus.deviceId}] ✅ ${elementName} detected in ${elapsed}ms (${checkCount} checks)`);
+
         return;
       }
 
@@ -336,7 +317,6 @@ export class NexusOrchestrator {
    * 🔄 Native Android 13 identity-wiping sequence
    */
   private async resetIdentity(nexus: Android13Nexus, deviceId: string) {
-    console.log(`   [${deviceId}] 🔄 Executing Infinity Reset...`);
 
     try {
       // Native Android 13 identity-wiping commands
@@ -357,10 +337,8 @@ export class NexusOrchestrator {
         await Bun.sleep(200);
       }
 
-      console.log(`   [${deviceId}] ✅ Identity reset complete`);
-
     } catch (error) {
-      console.error(`   [${deviceId}] ❌ Identity reset failed: ${error}`);
+
     }
   }
 
@@ -394,10 +372,8 @@ export class NexusOrchestrator {
    * 🚀 Execute parallel mischief across all devices
    */
   async runParallelMischief(cycles: number = 1): Promise<void> {
-    console.log(`\x1b[36m🚀 Executing ${cycles} mischief cycles across ${this.deviceIds.length} devices...\x1b[0m`);
 
     for (let cycle = 0; cycle < cycles; cycle++) {
-      console.log(`\x1b[33m📊 Cycle ${cycle + 1}/${cycles}\x1b[0m`);
 
       // Execute mischief on all devices in parallel
       await Promise.all(this.deviceIds.map(id => this.runMischief(id)));
@@ -410,20 +386,13 @@ export class NexusOrchestrator {
 
     // Display final statistics
     const stats = this.getFactoryStats();
-    console.log(`\x1b[1m\x1b[36m📊 Final Factory Statistics:\x1b[0m`);
-    console.log(`   📱 Total Devices: ${stats.totalDevices}`);
-    console.log(`   🔄 Total Cycles: ${stats.totalCycles}`);
-    console.log(`   🎯 Search Ads: ${stats.totalSearchAds}`);
-    console.log(`   📰 Press Releases: ${stats.totalPressReleases}`);
-    console.log(`   💰 Total Revenue: $${stats.totalRevenue.toLocaleString()}`);
-    console.log(`   ⏱️ Uptime: ${(stats.uptime / 1000).toFixed(1)}s`);
+
   }
 
   /**
    * ⏹️ SHUTDOWN
    */
   async terminate() {
-    console.log("\x1b[33m🛑 Nexus Factory Shutting Down...\x1b[0m");
 
     // Stop telemetry streams
     for (const telemetry of Array.from(this.telemetry.values())) {
@@ -435,7 +404,6 @@ export class NexusOrchestrator {
       await nexus.disconnect();
     }
 
-    console.log("\x1b[32m✅ Nexus Factory shutdown complete\x1b[0m");
   }
 }
 
@@ -454,10 +422,8 @@ async function main() {
     // Execute parallel mischief across all DuoPlus instances
     await factory.runParallelMischief(3); // 3 cycles
 
-    console.log("\n\x1b[1m\x1b[36m✨ ALL WORKERS COMPLETE: Multiverse Dominated.\x1b[0m");
-
   } catch (error) {
-    console.error("\x1b[31m❌ Factory execution failed:\x1b[0m", error);
+
   } finally {
     await factory.terminate();
   }

@@ -55,17 +55,12 @@ export class CryptoBurnerEngine {
       ...config
     };
 
-    console.log(`🔥 Crypto Burner Engine initialized`);
-    console.log(`🌐 Network: ${this.config.network}`);
-    console.log(`🔑 Mnemonic Strength: ${this.config.mnemonicStrength} bits`);
-    console.log(`🛤️ Derivation Path: ${this.config.derivationPath}`);
   }
 
   /**
    * 🔥 Generate a single burner wallet with cryptographic-grade entropy
    */
   generateBurnerWallet(deviceId?: string): BurnerWallet {
-    console.log(`🔥 Generating burner wallet${deviceId ? ` for ${deviceId}` : ''}`);
 
     // Generate cryptographically secure entropy
     const entropy = crypto.getRandomValues(new Uint8Array(this.config.mnemonicStrength / 8));
@@ -96,11 +91,6 @@ export class CryptoBurnerEngine {
 
     this.wallets.push(wallet);
 
-    console.log(`✅ Burner wallet generated:`);
-    console.log(`   📍 Address: ${address}`);
-    console.log(`   🔑 Private: ${privateKey.toString().substring(0, 16)}...`);
-    console.log(`   🗝️ Mnemonic: ${mnemonic.substring(0, 32)}...`);
-
     return wallet;
   }
 
@@ -108,7 +98,6 @@ export class CryptoBurnerEngine {
    * 🔥 Generate multiple burner wallets in batch
    */
   async generateBatchBurners(count: number, deviceId?: string): Promise<BurnerWallet[]> {
-    console.log(`🔥 Generating batch of ${count} burner wallets${deviceId ? ` for ${deviceId}` : ''}`);
 
     const batch: BurnerWallet[] = [];
     const startTime = performance.now();
@@ -127,7 +116,6 @@ export class CryptoBurnerEngine {
     }
 
     const elapsed = performance.now() - startTime;
-    console.log(`✅ Batch generation completed: ${count} wallets in ${elapsed.toFixed(2)}ms`);
 
     return batch;
   }
@@ -143,7 +131,6 @@ export class CryptoBurnerEngine {
       this.entropyCache.push(entropy);
     }
 
-    console.log(`🎯 Pre-generated ${count} entropy values`);
   }
 
   /**
@@ -267,7 +254,6 @@ export class CryptoBurnerEngine {
    * 💾 Save wallets to file with encryption
    */
   async saveWallets(filePath: string, encrypt: boolean = true): Promise<void> {
-    console.log(`💾 Saving ${this.wallets.length} wallets to ${filePath}`);
 
     try {
       // Ensure directory exists
@@ -290,9 +276,8 @@ export class CryptoBurnerEngine {
         await writeFile(filePath, jsonData);
       }
 
-      console.log(`✅ Wallets saved to ${filePath} (${encrypt ? 'encrypted' : 'plaintext'})`);
     } catch (error) {
-      console.error(`❌ Failed to save wallets: ${error}`);
+
       throw error;
     }
   }
@@ -367,7 +352,7 @@ export class CryptoBurnerEngine {
    * 🗑️ Clear all wallets from memory
    */
   clearWallets(): void {
-    console.log(`🗑️ Clearing ${this.wallets.length} wallets from memory`);
+
     this.wallets = [];
     this.entropyCache = [];
   }
@@ -376,7 +361,6 @@ export class CryptoBurnerEngine {
    * 🔄 Generate wallets for specific device
    */
   async generateDeviceWallets(deviceId: string, count: number): Promise<BurnerWallet[]> {
-    console.log(`🔄 Generating ${count} wallets for device: ${deviceId}`);
 
     const deviceWallets: BurnerWallet[] = [];
 
@@ -390,7 +374,6 @@ export class CryptoBurnerEngine {
       }
     }
 
-    console.log(`✅ Generated ${deviceWallets.length} wallets for ${deviceId}`);
     return deviceWallets;
   }
 
@@ -410,8 +393,6 @@ export class CryptoBurnerEngine {
 
     this.config.derivationPath = networkPaths[network];
 
-    console.log(`🌐 Switched to ${network} network`);
-    console.log(`🛤️ New derivation path: ${this.config.derivationPath}`);
   }
 }
 
@@ -432,7 +413,6 @@ export class CryptoBurnerFactory {
    * 🔥 Generate wallets across all instances
    */
   async generateAllWallets(countPerInstance: number): Promise<Record<string, BurnerWallet[]>> {
-    console.log(`🔥 Generating ${countPerInstance} wallets per instance (${this.instances.size} instances)`);
 
     const results: Record<string, BurnerWallet[]> = {};
 
@@ -471,7 +451,6 @@ export class CryptoBurnerFactory {
    * 💾 Save all instances to files
    */
   async saveAllInstances(outputDir: string): Promise<void> {
-    console.log(`💾 Saving ${this.instances.size} burner instances to ${outputDir}`);
 
     await mkdir(outputDir, { recursive: true });
 
@@ -481,8 +460,3 @@ export class CryptoBurnerFactory {
     }
   }
 }
-
-console.log('🔥 Crypto Burner Engine Loaded - Native EVM Wallet Generation Ready');
-console.log('⚡ Features: Cryptographic-grade entropy, BIP39 mnemonics, HD wallet support');
-console.log('🌐 Networks: Ethereum, Polygon, BSC, Testnets');
-console.log('🔐 Security: Encrypted storage, device-specific generation, batch processing');

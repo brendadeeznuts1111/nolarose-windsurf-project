@@ -64,7 +64,7 @@ export class ConfigManager {
         performance: {
           cacheTTL: parseInt(Bun.env.DUOPLUS_CACHE_TTL || '300'),
           maxConcurrentRebalancing: parseInt(Bun.env.DUOPLUS_MAX_CONCURRENT_REBALANCING || '5'),
-          apyRefreshInterval: parseInt(Bun.env.DUPLUS_APY_REFRESH_INTERVAL || '60'),
+          apyRefreshInterval: parseInt(Bun.env.DUOPLUS_APY_REFRESH_INTERVAL || '60'),
         },
         
         // Logging Configuration
@@ -180,15 +180,14 @@ export class ConfigManager {
     
     // Validate feature dependencies
     if (config.features.aiRiskPrediction && !config.metricsEnabled) {
-      console.warn('⚠️ AI Risk Prediction requires metrics to be enabled');
+
     }
     
     // Validate paths
     if (!config.dbPath) {
       throw new Error('Database path must be specified');
     }
-    
-    console.log(`✅ Configuration validated for ${config.environment} environment`);
+
   }
 
   /**
@@ -197,7 +196,7 @@ export class ConfigManager {
   public reloadConfiguration(): void {
     this.config = this.loadConfiguration();
     this.validateConfiguration();
-    console.log('🔄 Configuration reloaded');
+
   }
 
   /**

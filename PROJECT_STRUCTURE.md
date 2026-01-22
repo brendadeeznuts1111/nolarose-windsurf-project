@@ -31,9 +31,10 @@ windsurf-project/
 │   ├── cloud-number-recovery.tsx     # Cloud number recovery component
 │   ├── cross-family-network-dashboard.tsx # Network dashboard
 │   ├── family-controls-component.tsx # Family controls component
+│   ├── feature-gated-components.tsx  # Feature-gated components
 │   ├── guardian-portal.tsx           # Guardian portal component
 │   ├── guardian-risk-dashboard.tsx   # Risk dashboard component
-│   └── feature-gated-components.tsx  # Feature-gated components
+│   └── MfaPanel.tsx                  # Real-time 2FA dashboard component
 │
 ├── styles/                            # CSS stylesheets
 │   ├── cash-app-priority-styles.css  # Cash App priority styles
@@ -53,6 +54,7 @@ windsurf-project/
 │   └── secure_vault.db              # Secure vault database
 │
 ├── scripts/                           # Utility scripts and tools
+│   ├── cli-dashboard                 # Enhanced CLI dashboard wrapper
 │   ├── minimal-feature-api.ts        # Minimal feature API
 │   ├── simple-test-api.ts            # Simple test API
 │   ├── test-feature-status.ts        # Feature status test
@@ -60,14 +62,23 @@ windsurf-project/
 │   └── test-depths.sh                # Depth testing script
 │
 ├── data/                              # Data files
-│   └── patterns.ndjson              # Pattern data file
+│   ├── exports/                     # Export files and data dumps
+│   ├── fuzz-corpus.json            # Fuzz testing corpus
+│   ├── patterns.ndjson              # Pattern data file
+│   └── temp-dashboard-data.json     # Temporary dashboard data
+│
+├── workflows/                          # Workflow automation files
+│   ├── citadel-dashboard-workflow.ts  # Citadel dashboard workflow
+│   └── citadel-workflow.sh            # Citadel workflow script
 │
 ├── docs/                              # Documentation directory
 ├── config/                            # Configuration directory
 ├── cli/                               # Command-line tools
 ├── ai/                                # AI/ML module
+│   ├── fraud/                       # Fraud detection and privacy
 ├── src/                               # Source code
 ├── tests/                             # Test files
+├── utilities/                         # Shared utility modules
 └── [other project directories...]
 ```
 
@@ -104,12 +115,14 @@ Database files and data stores:
 - SQLite databases
 - Application data stores
 - Secure vault storage
+- Metrics and analytics databases (consolidated from data/)
 
 ### **Scripts (`scripts/`)**
 Utility scripts and tools:
 - API testing scripts
 - Feature status utilities
 - Comparison and testing scripts
+- CLI dashboard wrapper
 - Deployment scripts (consolidated from deployment/)
 
 ### **Data (`data/`)**
@@ -117,6 +130,21 @@ Static data files:
 - Pattern data
 - Configuration data
 - Reference datasets
+- Export files and data dumps (in exports/ subdirectory)
+- Fuzz testing corpus and temporary data
+
+### **Workflows (`workflows/`)**
+Workflow automation and orchestration files:
+- Citadel dashboard workflows
+- Automated deployment scripts
+- Process automation tools
+
+### **Utilities (`utilities/`)**
+Shared utility modules and helpers:
+- OAuth authentication handlers
+- Plaid integration verifiers
+- Routing and validation engines
+- Logging systems
 
 ## Benefits of This Organization
 
@@ -132,8 +160,12 @@ Static data files:
 - Place styles in the `styles/` directory with descriptive names
 - Store database files in `databases/` directory
 - Keep utility scripts in `scripts/` directory
+- Place shared utility modules in `utilities/` directory
+- Place workflow automation files in `workflows/` directory
 - Use `project-config/` for build and project configuration
 - Reference data files should go in `data/`
+- Export files and data dumps go in `data/exports/`
+- Reports and metrics files go in `reports/` directory
 
 ## Migration Notes
 
@@ -143,4 +175,6 @@ Files have been moved from the root directory to their appropriate subdirectorie
 - Style imports: `./styles/...`
 - Database paths: `./databases/...`
 - Script execution: `./scripts/...`
+- Utility modules: `./utilities/...`
+- AI modules: `./ai/...` (including fraud detection in `./ai/fraud/...`)
 - Configuration files: `./project-config/...`

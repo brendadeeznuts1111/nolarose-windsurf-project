@@ -45,8 +45,6 @@ export class Android13InfinityReset {
       ...config
     };
 
-    console.log(`🔄 Android 13 Infinity Reset initialized for device: ${nexus.deviceId}`);
-    console.log(`⚙️ Reset config: ${JSON.stringify(this.config, null, 2)}`);
   }
 
   /**
@@ -62,8 +60,6 @@ export class Android13InfinityReset {
       duration: 0,
       timestamp: Date.now()
     };
-
-    console.log(`🔄 Starting Infinity Reset for ${this.nexus.deviceId}`);
 
     try {
       // Phase 1: Network isolation via airplane mode
@@ -115,11 +111,10 @@ export class Android13InfinityReset {
       await this.verifyResetCompletion(result);
 
       result.success = true;
-      console.log(`✅ Infinity Reset completed successfully for ${this.nexus.deviceId}`);
 
     } catch (error) {
       result.errors.push(error instanceof Error ? error.message : 'Unknown error');
-      console.error(`❌ Infinity Reset failed: ${error}`);
+
     }
 
     result.duration = performance.now() - startTime;
@@ -133,7 +128,6 @@ export class Android13InfinityReset {
    * ✈️ Network isolation via airplane mode
    */
   private async executeNetworkIsolation(result: ResetResult): Promise<void> {
-    console.log(`✈️ Enabling airplane mode for network isolation`);
 
     const commands = [
       "settings put global airplane_mode_on 1",
@@ -152,20 +146,18 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Network isolation completed`);
   }
 
   /**
    * 📱 Clear application data for specified packages
    */
   private async clearApplicationData(result: ResetResult): Promise<void> {
-    console.log(`📱 Clearing application data for ${this.config.clearAppData.length} apps`);
 
     for (const packageName of this.config.clearAppData) {
       try {
         await this.nexus.clearApp(packageName);
         result.commandsExecuted.push(`pm clear ${packageName}`);
-        console.log(`✅ Cleared data for: ${packageName}`);
+
       } catch (error) {
         result.errors.push(`Failed to clear ${packageName}: ${error}`);
       }
@@ -176,7 +168,6 @@ export class Android13InfinityReset {
    * 🌐 Clear browser identity and data
    */
   private async clearBrowserIdentity(result: ResetResult): Promise<void> {
-    console.log(`🌐 Clearing browser identity and data`);
 
     const commands = [
       "pm clear com.android.chrome",
@@ -195,18 +186,16 @@ export class Android13InfinityReset {
         result.commandsExecuted.push(command);
       } catch (error) {
         // Some commands might fail if apps aren't installed
-        console.log(`⚠️ Browser command failed (may be normal): ${command}`);
+
       }
     }
 
-    console.log(`✅ Browser identity cleared`);
   }
 
   /**
    * 🗑️ Clear temporary files and cache
    */
   private async clearTemporaryFiles(result: ResetResult): Promise<void> {
-    console.log(`🗑️ Clearing temporary files and cache`);
 
     const commands = [
       "rm -rf /data/local/tmp/*",
@@ -230,14 +219,12 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Temporary files cleared`);
   }
 
   /**
    * 🎯 Reset advertising and tracking IDs
    */
   private async resetAdvertisingIds(result: ResetResult): Promise<void> {
-    console.log(`🎯 Resetting advertising and tracking IDs`);
 
     const commands = [
       "settings put secure advertising_id \"\"",
@@ -258,14 +245,12 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Advertising IDs reset`);
   }
 
   /**
    * 🔍 Randomize device fingerprint
    */
   private async randomizeFingerprint(result: ResetResult): Promise<void> {
-    console.log(`🔍 Randomizing device fingerprint`);
 
     // Generate random values for fingerprint
     const randomBuildId = this.generateRandomHex(16);
@@ -292,14 +277,12 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Device fingerprint randomized`);
   }
 
   /**
    * 🧹 Clear shared memory and clipboard
    */
   private async clearSharedMemory(result: ResetResult): Promise<void> {
-    console.log(`🧹 Clearing shared memory and clipboard`);
 
     const commands = [
       "service call clipboard 1", // Clear clipboard
@@ -318,14 +301,12 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Shared memory cleared`);
   }
 
   /**
    * 📍 Reset location services
    */
   private async resetLocationServices(result: ResetResult): Promise<void> {
-    console.log(`📍 Resetting location services`);
 
     const commands = [
       "settings put secure location_providers_allowed \"\"",
@@ -345,14 +326,12 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Location services reset`);
   }
 
   /**
    * 🌐 Restore network connectivity
    */
   private async restoreNetworkConnectivity(result: ResetResult): Promise<void> {
-    console.log(`🌐 Restoring network connectivity`);
 
     const commands = [
       "settings put global airplane_mode_on 0",
@@ -372,25 +351,18 @@ export class Android13InfinityReset {
       }
     }
 
-    console.log(`✅ Network connectivity restored`);
   }
 
   /**
    * ✅ Verify reset completion
    */
   private async verifyResetCompletion(result: ResetResult): Promise<void> {
-    console.log(`✅ Verifying reset completion`);
 
     try {
       // Check key settings are reset
       const airplaneMode = await this.nexus.executeCommand("settings get global airplane_mode_on");
       const advertisingId = await this.nexus.executeCommand("settings get secure advertising_id");
       const locationProviders = await this.nexus.executeCommand("settings get secure location_providers_allowed");
-
-      console.log(`🔍 Verification results:`);
-      console.log(`   Airplane mode: ${airplaneMode.trim()}`);
-      console.log(`   Advertising ID: ${advertisingId.trim()}`);
-      console.log(`   Location providers: ${locationProviders.trim()}`);
 
       result.commandsExecuted.push("verification_completed");
 
@@ -414,14 +386,9 @@ export class Android13InfinityReset {
    * 📊 Log reset result
    */
   private logResetResult(result: ResetResult): void {
-    console.log(`📊 Reset Result for ${result.deviceId}:`);
-    console.log(`   ✅ Success: ${result.success}`);
-    console.log(`   ⏱️ Duration: ${result.duration.toFixed(2)}ms`);
-    console.log(`   🔧 Commands: ${result.commandsExecuted.length}`);
-    console.log(`   ❌ Errors: ${result.errors.length}`);
 
     if (result.errors.length > 0) {
-      console.log(`   🚨 Errors: ${result.errors.join(', ')}`);
+
     }
   }
 
@@ -471,7 +438,6 @@ export class Android13InfinityReset {
    * 🔄 Execute quick reset (essential commands only)
    */
   async executeQuickReset(): Promise<ResetResult> {
-    console.log(`⚡ Executing quick reset for ${this.nexus.deviceId}`);
 
     const quickConfig: Partial<ResetConfig> = {
       clearBrowserData: true,
@@ -493,7 +459,7 @@ export class Android13InfinityReset {
    * 🧹 Clear reset history
    */
   clearHistory(): void {
-    console.log(`🧹 Clearing reset history (${this.resetHistory.length} records)`);
+
     this.resetHistory = [];
   }
 }
@@ -515,7 +481,6 @@ export class InfinityResetFactory {
    * 🔄 Execute reset on all devices
    */
   async resetAllDevices(): Promise<ResetResult[]> {
-    console.log(`🔄 Executing infinity reset on ${this.resets.size} devices`);
 
     const promises = Array.from(this.resets.values()).map(
       reset => reset.executeInfinityReset()
@@ -524,7 +489,6 @@ export class InfinityResetFactory {
     const results = await Promise.all(promises);
 
     const successful = results.filter(r => r.success).length;
-    console.log(`✅ Reset completed: ${successful}/${results.length} devices successful`);
 
     return results;
   }
@@ -533,7 +497,6 @@ export class InfinityResetFactory {
    * ⚡ Execute quick reset on all devices
    */
   async quickResetAllDevices(): Promise<ResetResult[]> {
-    console.log(`⚡ Executing quick reset on ${this.resets.size} devices`);
 
     const promises = Array.from(this.resets.values()).map(
       reset => reset.executeQuickReset()
@@ -570,8 +533,3 @@ export class InfinityResetFactory {
     return aggregate;
   }
 }
-
-console.log('🔄 Android 13 Infinity Reset Loaded - Native Environment Reset Ready');
-console.log('⚡ Features: No VM reboot, Android 13 settings commands, identity clearing');
-console.log('🔧 Performance: Sub-30s complete reset, network isolation, fingerprint randomization');
-console.log('🛡️ Security: Advertising ID reset, temp file cleanup, clipboard clearing');

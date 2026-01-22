@@ -23,7 +23,7 @@ export class AdvancedGreenYieldDashboard {
    * Start the interactive dashboard
    */
   async start(): Promise<void> {
-    console.clear();
+
     this.isRunning = true;
     
     // Setup real-time updates
@@ -35,7 +35,7 @@ export class AdvancedGreenYieldDashboard {
         await this.render();
         await this.waitForInput();
       } catch (error) {
-        console.error(chalk.red(`Dashboard error: ${error}`));
+
         await this.sleep(2000);
       }
     }
@@ -49,15 +49,7 @@ export class AdvancedGreenYieldDashboard {
     const topPools = await this.getTopPerformingPools();
     const recentActivity = await this.getRecentActivity();
 
-    console.clear();
-    
     // Header
-    console.log(chalk.hex("#00D924").bold(`
-╔════════════════════════════════════════════════════════════════════════╗
-║   🟩 Cash App Green Yield Dashboard - Advanced Edition                ║
-║   DuoPlus Family Pool Empire - Real-time Yield Generation             ║
-╚════════════════════════════════════════════════════════════════════════╝
-`));
 
     // Main Stats Panel
     this.renderMainStats(stats);
@@ -78,44 +70,23 @@ export class AdvancedGreenYieldDashboard {
   private renderMainStats(stats: DashboardStats): void {
     const priceColor = stats.priceChange24h >= 0 ? chalk.green : chalk.red;
     const priceSymbol = stats.priceChange24h >= 0 ? "📈" : "📉";
-    
-    console.log(chalk.gray("─".repeat(80)));
-    console.log(chalk.bold("💰 Portfolio Overview:"));
-    console.log(`  Total Deposited:     ${chalk.cyan("$" + stats.totalDeposited.toLocaleString())}`);
-    console.log(`  Total Yield Generated: ${chalk.green("$" + stats.totalYieldGenerated.toLocaleString())}`);
-    console.log(`  Active Families:      ${chalk.yellow(stats.activeFamilies.toString())}`);
-    console.log(`  Current APY:          ${chalk.hex("#00D924")(stats.currentAPY.toFixed(2) + "%")}`);
-    console.log(`  BTC Price:            ${priceColor("$" + stats.btcPrice.toLocaleString() + " " + priceSymbol + " " + (stats.priceChange24h * 100).toFixed(2) + "%")}`);
-    console.log(`  Pending Routes:       ${chalk.yellow(stats.pendingRoutes.toString())}`);
-    console.log(`  Today's Routing:      ${chalk.cyan("$" + stats.totalRoutedToday.toLocaleString())}`);
-    console.log(`  Projected Monthly:    ${chalk.green("$" + stats.projectedMonthlyYield.toLocaleString())}`);
+
   }
 
   /**
    * Render performance panel
    */
   private renderPerformancePanel(pools: PoolPerformance[]): void {
-    console.log(chalk.gray("\n─".repeat(80)));
-    console.log(chalk.bold("🏆 Top Performing Families:"));
-    
+
     if (pools.length === 0) {
-      console.log(chalk.gray("  No pool data available"));
+
     } else {
-      console.log(chalk.gray("  Rank  Pool Name                    Balance     Yield     APY    Growth"));
-      console.log(chalk.gray("  ───── ────────────────────────── ─────────── ───────── ────── ───────"));
-      
+
       pools.slice(0, 8).forEach((pool, idx) => {
         const medal = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣"][idx];
         const growthColor = pool.growthRate >= 0 ? chalk.green : chalk.red;
         const growthSymbol = pool.growthRate >= 0 ? "📈" : "📉";
-        
-        console.log(
-          `  ${medal}  ${pool.poolName.padEnd(25)} ` +
-          `${chalk.cyan("$" + pool.balance.toLocaleString()).padEnd(11)} ` +
-          `${chalk.green("$" + pool.yieldGenerated.toFixed(0)).padEnd(9)} ` +
-          `${chalk.hex("#00D924")(pool.apy.toFixed(2) + "%").padEnd(7)} ` +
-          `${growthColor(growthSymbol + " " + (pool.growthRate * 100).toFixed(1) + "%")}`
-        );
+
       });
     }
   }
@@ -124,19 +95,14 @@ export class AdvancedGreenYieldDashboard {
    * Render activity panel
    */
   private renderActivityPanel(activity: any[]): void {
-    console.log(chalk.gray("\n─".repeat(80)));
-    console.log(chalk.bold("⚡ Recent Activity:"));
-    
+
     if (activity.length === 0) {
-      console.log(chalk.gray("  No recent activity"));
+
     } else {
       activity.slice(0, 5).forEach(item => {
         const timeAgo = this.getTimeAgo(item.timestamp);
         const typeColor = item.type === "deposit" ? chalk.green : chalk.blue;
-        
-        console.log(
-          `  ${typeColor("●")} ${item.description.padEnd(40)} ${chalk.gray(timeAgo)}`
-        );
+
       });
     }
   }
@@ -145,19 +111,14 @@ export class AdvancedGreenYieldDashboard {
    * Render footer with controls
    */
   private renderFooter(stats: DashboardStats): void {
-    console.log(chalk.gray("\n─".repeat(80)));
-    console.log(chalk.bold("🎮 Controls:"));
-    console.log("  [R]efresh  [D]eposit  [W]ithdraw  [P]ools  [A]nalytics  [T]ransactions  [Q]uit");
-    console.log(chalk.gray(`  Last updated: ${new Date().toLocaleString()} | Next update: 30s`));
-    
+
     // Status indicators
     const indicators = [
       stats.pendingRoutes > 0 ? chalk.yellow(`⏳ ${stats.pendingRoutes} pending`) : chalk.green("✅ All routed"),
       stats.priceChange24h > 0.02 ? chalk.red("⚠️ High volatility") : chalk.green("🟢 Stable"),
       chalk.hex("#00D924")("🟩 Green Active")
     ];
-    
-    console.log(chalk.gray("  Status: " + indicators.join(" | ")));
+
   }
 
   /**
@@ -237,7 +198,7 @@ export class AdvancedGreenYieldDashboard {
     const priceChange = (priceData.btcUsd - this.lastBtcPrice) / this.lastBtcPrice;
     
     if (Math.abs(priceChange) > 0.01) { // 1% change
-      console.log(chalk.yellow(`\n📈 Significant price movement: ${priceChange > 0 ? "+" : ""}${(priceChange * 100).toFixed(2)}%`));
+
     }
     
     this.lastBtcPrice = priceData.btcUsd;
@@ -304,27 +265,27 @@ export class AdvancedGreenYieldDashboard {
 
   private async promptDeposit(): Promise<void> {
     // Implementation for manual deposit
-    console.log(chalk.yellow("\n💰 Manual deposit feature coming soon..."));
+
     await this.sleep(2000);
   }
 
   private async promptWithdraw(): Promise<void> {
-    console.log(chalk.yellow("\n💸 Withdrawal feature coming soon..."));
+
     await this.sleep(2000);
   }
 
   private async showPoolDetails(): Promise<void> {
-    console.log(chalk.yellow("\n👨‍👩‍👧‍👦 Pool details feature coming soon..."));
+
     await this.sleep(2000);
   }
 
   private async showAnalytics(): Promise<void> {
-    console.log(chalk.yellow("\n📊 Analytics feature coming soon..."));
+
     await this.sleep(2000);
   }
 
   private async showTransactions(): Promise<void> {
-    console.log(chalk.yellow("\n📜 Transaction history feature coming soon..."));
+
     await this.sleep(2000);
   }
 

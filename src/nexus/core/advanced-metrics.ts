@@ -114,8 +114,7 @@ export class AdvancedMetricsCollector {
   }
 
   async collectPackageRegistryMetrics(): Promise<RegistryMetrics> {
-    console.log('📦 Collecting package registry metrics...');
-    
+
     // Read package.json and dependencies
     const packageJson = await this.readPackageJson();
     const dependencies = await this.analyzeDependencies(packageJson);
@@ -149,8 +148,7 @@ export class AdvancedMetricsCollector {
   }
 
   async collectTypeScriptMetrics(): Promise<TypeScriptMetrics> {
-    console.log('📘 Analyzing TypeScript metrics...');
-    
+
     const startTime = Date.now();
     
     // Count TypeScript files
@@ -207,8 +205,7 @@ export class AdvancedMetricsCollector {
   }
 
   async collectSecurityMetrics(): Promise<SecurityMetrics> {
-    console.log('🔒 Analyzing security metrics...');
-    
+
     // Analyze URL patterns using the plugin logic
     const urlPatterns = await this.analyzeURLPatterns();
     
@@ -251,7 +248,7 @@ export class AdvancedMetricsCollector {
             break;
         }
       } catch (error) {
-        console.error(`Failed to parse ${file}:`, (error as Error).message);
+
         continue; // Skip this file and continue with others
       }
       
@@ -324,7 +321,7 @@ export class AdvancedMetricsCollector {
         files.push(...(matches as string[]));
       }
     } catch (error) {
-      console.warn('Failed to use Bun.glob for config files, using fallback');
+
       // Fallback to known config files
       const fallbackFiles = [
         'bun.lockb', 'package.json', 'tsconfig.json', 'bunfig.toml',
@@ -399,7 +396,7 @@ export class AdvancedMetricsCollector {
     const files = await Array.fromAsync(glob.scan());
     return files as string[];
   } catch (error) {
-    console.warn('Failed to use Bun.glob, using fallback');
+
     // Fallback to simple file system search
     return [];
   }
@@ -455,8 +452,7 @@ export class AdvancedMetricsCollector {
   }
 
   async generateComprehensiveReport(): Promise<string> {
-    console.log('📊 Generating comprehensive metrics report...');
-    
+
     const [registryMetrics, tsMetrics, securityMetrics] = await Promise.all([
       this.collectPackageRegistryMetrics(),
       this.collectTypeScriptMetrics(),
@@ -469,9 +465,7 @@ export class AdvancedMetricsCollector {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const reportFile = `comprehensive-metrics-${timestamp}.md`;
     await Bun.write(reportFile, report);
-    
-    console.log(`📄 Report saved to ${reportFile}`);
-    
+
     return report;
   }
 

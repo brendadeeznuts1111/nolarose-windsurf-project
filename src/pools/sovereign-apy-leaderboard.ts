@@ -146,7 +146,7 @@ export class SovereignAPYLeaderboard {
 
     // CRC32 Integrity Shield validation
     if (!this.validatePoolIntegrity(entry)) {
-      console.warn(color("#fbbf24", "ansi") + `⚠️  Pool integrity warning for ${poolId}`);
+
     }
 
     this.entries.push(entry);
@@ -194,7 +194,7 @@ export class SovereignAPYLeaderboard {
     const latency = performance.now() - startTime;
     
     if (latency > ANALYTICS_CONSTANTS.CRITICAL_LATENCY) {
-      console.warn(color("#ef4444", "ansi") + `🚨 Critical latency: ${latency.toFixed(2)}ms`);
+
     }
 
     return results;
@@ -210,7 +210,7 @@ export class SovereignAPYLeaderboard {
     
     // Re-validate integrity on access
     if (!this.validatePoolIntegrity(pool)) {
-      console.error(color("#dc2626", "ansi") + `🛡️  Pool integrity compromised: ${poolId}`);
+
       return null;
     }
 
@@ -221,9 +221,7 @@ export class SovereignAPYLeaderboard {
    * Generates a high-speed table for the Dashboard
    */
   public render(): void {
-    console.log(color("#60a5fa", "ansi") + `📊 Sovereign Leaderboard: ${this.poolFamily}`);
-    console.log(color("#10b981", "ansi") + `🛰️  Pools: ${this.entries.length} | Families: ${this.families.size}`);
-    
+
     // Sort by trust score (highest first)
     const sorted = [...this.entries].sort((a, b) => b.trustScore - a.trustScore);
     
@@ -239,16 +237,10 @@ export class SovereignAPYLeaderboard {
       'Uptime': `${entry.uptime.toFixed(1)}%`
     }));
 
-    console.table(tableData);
-    
     // Performance metrics
     const avgTrust = sorted.reduce((sum, e) => sum + e.trustScore, 0) / sorted.length;
     const totalWorkers = sorted.reduce((sum, e) => sum + e.workerCount, 0);
-    
-    console.log(color("#8b5cf6", "ansi") + `📈 Analytics:`);
-    console.log(`   Average Trust Score: ${avgTrust.toFixed(1)}/100`);
-    console.log(`   Total Worker Portfolios: ${totalWorkers}`);
-    console.log(`   Top APY: ${Math.max(...sorted.map(e => e.apy)).toFixed(2)}%`);
+
   }
 
   /**

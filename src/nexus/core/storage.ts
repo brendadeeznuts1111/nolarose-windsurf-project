@@ -183,7 +183,7 @@ export const Vault = {
         updateStmt.run(deviceId);
         
         // Log audit trail
-        Vault.logAudit({
+        Vault.logAudit.run({
           device_id: deviceId,
           action: 'burned',
           integrity_hash: profile.crc32_integrity
@@ -193,7 +193,7 @@ export const Vault = {
       }
       return false;
     } catch (error) {
-      console.error(`❌ Failed to burn profile ${deviceId}: ${error}`);
+
       return false;
     }
   },
@@ -271,7 +271,7 @@ export const Vault = {
         assignStmt.run(deviceId, iccid);
         return true;
       } catch (error) {
-        console.error(`❌ Failed to assign SIM ${iccid}: ${error}`);
+
         return false;
       }
     },
@@ -286,7 +286,7 @@ export const Vault = {
         releaseStmt.run(iccid);
         return true;
       } catch (error) {
-        console.error(`❌ Failed to release SIM ${iccid}: ${error}`);
+
         return false;
       }
     }
@@ -313,7 +313,7 @@ export const Vault = {
         markUsedStmt.run(endpoint);
         return true;
       } catch (error) {
-        console.error(`❌ Failed to mark proxy as used: ${error}`);
+
         return false;
       }
     }
@@ -331,8 +331,7 @@ export const Vault = {
       WHERE status = 'burned' AND last_used < ?
     `);
     const result = cleanupStmt.run(cutoffDate.toISOString());
-    
-    console.log(`🧹 Cleaned up ${result.changes} old burned profiles`);
+
     return result.changes;
   },
 
@@ -359,11 +358,10 @@ export const Vault = {
       // Simple encryption for demo (in production use proper encryption)
       const backupJson = JSON.stringify(backupData, null, 2);
       await Bun.write(backupPath, backupJson);
-      
-      console.log(`🔒 Vault backed up to: ${backupPath}`);
+
       return true;
     } catch (error) {
-      console.error(`❌ Backup failed: ${error}`);
+
       return false;
     }
   }
@@ -371,8 +369,7 @@ export const Vault = {
 
 // Initialize with some sample data for demo
 export function initializeVault(): void {
-  console.log(`🛡️ Initializing Identity Fortress...`);
-  
+
   // Add sample SIM cards
   const sampleSIMs: SIMInventory[] = [
     {
@@ -395,7 +392,7 @@ export function initializeVault(): void {
     }
   ];
   
-  sampleSIMs.forEach(sim => Vault.SIM.add(sim));
+  sampleSIMs.forEach(sim => (Vault.SIM.add as any)(sim));
   
   // Add sample proxies
   const sampleProxies: ProxyPool[] = [
@@ -416,11 +413,6 @@ export function initializeVault(): void {
     }
   ];
   
-  sampleProxies.forEach(proxy => Vault.Proxy.add(proxy));
-  
-  console.log(`✅ Identity Fortress initialized with ${sampleSIMs.length} SIMs and ${sampleProxies.length} proxies`);
-}
+  sampleProxies.forEach(proxy => (Vault.Proxy.add as any)(proxy));
 
-console.log('🛡️ Identity Fortress Loaded - SQLite 3.51.0 High-Speed Vault Ready');
-console.log('⚡ Features: Enterprise-grade persistence, integrity verification, audit logging');
-console.log('🔐 Security: CRC32 integrity checks, encrypted backup, SIM inventory management');
+}

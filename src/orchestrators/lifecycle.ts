@@ -11,19 +11,19 @@ import { SecureVault, storeSilo } from "../security/vault-secure";
 // Extend Android13Nexus with missing methods for Operational Dominance
 class OperationalAndroid13Nexus extends Android13Nexus {
   async enableDeveloperOptions(): Promise<void> {
-    console.log(`   🔧 Enabling developer options...`);
+
     // Mock implementation
     await Bun.sleep(1000);
   }
 
   async isAppInstalled(packageName: string): Promise<boolean> {
-    console.log(`   🔍 Checking if ${packageName} is installed...`);
+
     // Mock implementation - assume Kiwi is pre-installed
     return packageName === 'com.kiwi.browser';
   }
 
   async rotateProxy(): Promise<{ ip: string; location: string; city: string; country: string }> {
-    console.log(`   🔄 Rotating to residential proxy...`);
+
     // Mock implementation
     await Bun.sleep(2000);
     return {
@@ -35,13 +35,13 @@ class OperationalAndroid13Nexus extends Android13Nexus {
   }
 
   async warmupDNS(domain: string): Promise<void> {
-    console.log(`   🌡️ Warming up DNS for ${domain}...`);
+
     // Mock implementation
     await Bun.sleep(500);
   }
 
   async checkConnectivity(): Promise<{ status: string; latency: number }> {
-    console.log(`   📊 Checking network connectivity...`);
+
     // Mock implementation
     await Bun.sleep(1000);
     return {
@@ -51,31 +51,31 @@ class OperationalAndroid13Nexus extends Android13Nexus {
   }
 
   async openKiwiBrowser(url: string): Promise<void> {
-    console.log(`   🌐 Opening Kiwi Browser: ${url}`);
+
     // Mock implementation
     await Bun.sleep(2000);
   }
 
   async installKiwiExtension(extension: string): Promise<void> {
-    console.log(`   🔧 Installing Kiwi extension: ${extension}`);
+
     // Mock implementation
     await Bun.sleep(1000);
   }
 
   async executeVenmoTransfer(from: string, to: string, amount: number): Promise<void> {
-    console.log(`   💰 Venmo transfer: ${from} → ${to} ($${amount})`);
+
     // Mock implementation
     await Bun.sleep(2000);
   }
 
   async executeCashAppTransfer(from: string, to: string, amount: number): Promise<void> {
-    console.log(`   💵 CashApp transfer: ${from} → ${to} ($${amount})`);
+
     // Mock implementation
     await Bun.sleep(2000);
   }
 
   async shell(command: string): Promise<{ stdout: string; stderr: string }> {
-    console.log(`   🔧 Executing shell: ${command}`);
+
     // Mock implementation
     await Bun.sleep(1000);
     return {
@@ -85,26 +85,26 @@ class OperationalAndroid13Nexus extends Android13Nexus {
   }
 
   async captureScreenSignature(): Promise<string> {
-    console.log(`   📸 Capturing screen signature...`);
+
     // Mock implementation
     await Bun.sleep(500);
     return "screen_signature_mock";
   }
 
   async longPress(x: number, y: number): Promise<void> {
-    console.log(`   👆 Long press at (${x}, ${y})`);
+
     // Mock implementation
     await Bun.sleep(500);
   }
 
   async type(text: string): Promise<void> {
-    console.log(`   ⌨️ Typing text: ${text}`);
+
     // Mock implementation
     await Bun.sleep(200);
   }
 
   async tap(x: number, y: number): Promise<void> {
-    console.log(`   👆 Tapping at (${x}, ${y})`);
+
     // Mock implementation
     await Bun.sleep(200);
   }
@@ -186,9 +186,6 @@ export class ProvisioningLifecycle {
    * Runs through the Trust Ladder to establish operational dominance
    */
   async executeProvisioningSequence(): Promise<ProvisioningResult> {
-    console.log(`🏛️ Starting Operational Dominance Sequence for ${this.config.deviceId}`);
-    console.log(`📊 Target Trust Level: ${this.config.trustLevel}/5`);
-    console.log(`⏱️ Estimated Time: ${this.estimateTimeToIdentity()}`);
 
     const result: ProvisioningResult = {
       deviceId: this.config.deviceId,
@@ -244,12 +241,9 @@ export class ProvisioningLifecycle {
       result.integrityHash = this.calculateIntegrityHash(result);
       result.success = this.errors.length === 0;
 
-      console.log(`✅ Provisioning Complete: Trust Level ${result.trustLevel}/5`);
-      console.log(`🔐 Integrity Hash: ${result.integrityHash}`);
-
     } catch (error) {
       result.errors.push(error instanceof Error ? error.message : 'Unknown error');
-      console.error(`❌ Provisioning failed: ${error}`);
+
     }
 
     result.errors = [...this.errors];
@@ -261,34 +255,28 @@ export class ProvisioningLifecycle {
    * VM boot and basic system initialization
    */
   private async executeLevel0_HardwareGenesis(): Promise<void> {
-    console.log(`🔧 Level 0: Hardware Genesis - VM Boot and Initialization`);
 
     try {
       // Connect to Android 13 device
       await this.nexus.connect();
-      console.log(`   ✅ Device connected: ${this.config.deviceId}`);
 
       // Verify system status
       const deviceInfo = await this.nexus.getDeviceInfo();
-      console.log(`   📱 Android ${deviceInfo.version} | API ${deviceInfo.apiLevel}`);
-      console.log(`   🏭 Model: ${deviceInfo.model} | Manufacturer: ${deviceInfo.manufacturer}`);
 
       // Enable developer options if needed
       await this.nexus.enableDeveloperOptions();
-      console.log(`   🔧 Developer options enabled`);
 
       // Verify Kiwi Browser is pre-installed
       const kiwiInstalled = await this.nexus.isAppInstalled('com.kiwi.browser');
       if (kiwiInstalled) {
-        console.log(`   ✅ Kiwi Browser pre-installed (45s saved)`);
+
       } else {
-        console.log(`   ⚠️ Kiwi Browser not found - installing...`);
+
         await this.nexus.installAPK('com.kiwi.browser');
-        console.log(`   ✅ Kiwi Browser installed`);
+
       }
 
       this.currentTrustLevel = 0;
-      console.log(`✅ Level 0 Complete: Hardware Genesis`);
 
     } catch (error) {
       this.errors.push(`Level 0 failed: ${error}`);
@@ -301,14 +289,12 @@ export class ProvisioningLifecycle {
    * Residential proxy rotation and DNS warmup
    */
   private async executeLevel1_NetworkMasking(): Promise<void> {
-    console.log(`🌐 Level 1: Network Masking - Residential Proxy + DNS Warmup`);
 
     try {
       if (this.config.enableProxyRotation) {
         // Rotate to residential proxy
         const proxyInfo = await this.nexus.rotateProxy();
-        console.log(`   🔄 Proxy rotated: ${proxyInfo.ip} (${proxyInfo.location})`);
-        console.log(`   🌍 Location: ${proxyInfo.city}, ${proxyInfo.country}`);
+
       }
 
       // DNS warmup for target domains
@@ -320,18 +306,14 @@ export class ProvisioningLifecycle {
         'cash.app'
       ];
 
-      console.log(`   🌡️ DNS Warmup for ${warmupDomains.length} domains...`);
       for (const domain of warmupDomains) {
         await this.nexus.warmupDNS(domain);
       }
-      console.log(`   ✅ DNS cache warmed for all target domains`);
 
       // Verify network connectivity
       const connectivity = await this.nexus.checkConnectivity();
-      console.log(`   📊 Network Status: ${connectivity.status} (${connectivity.latency}ms)`);
 
       this.currentTrustLevel = 1;
-      console.log(`✅ Level 1 Complete: Network Masking`);
 
     } catch (error) {
       this.errors.push(`Level 1 failed: ${error}`);
@@ -344,7 +326,6 @@ export class ProvisioningLifecycle {
    * Gmail creation with SMS verification
    */
   private async executeLevel2_PrimaryIdentity(): Promise<GmailAccount> {
-    console.log(`📧 Level 2: Primary Identity - Gmail + SMS Verification`);
 
     try {
       if (!this.config.enableGmailCreation) {
@@ -358,9 +339,6 @@ export class ProvisioningLifecycle {
         ageRange: [25, 35]
       });
 
-      console.log(`   🧬 Generated identity: ${silo.fullName}`);
-      console.log(`   📧 Target email: ${silo.email}`);
-
       // Open Kiwi Browser for Gmail signup
       await this.nexus.openKiwiBrowser('https://accounts.google.com/signup');
 
@@ -371,17 +349,14 @@ export class ProvisioningLifecycle {
 
       // Automate Gmail signup
       const gmailAccount = await this.automateGmailSignup(silo);
-      console.log(`   ✅ Gmail created: ${gmailAccount.address}`);
-      console.log(`   📱 Verification: ${gmailAccount.verificationStatus}`);
 
       // Store identity in secure vault
       if (this.config.enableVaultPersistence) {
         await storeSilo(silo);
-        console.log(`   🔐 Identity stored in secure vault`);
+
       }
 
       this.currentTrustLevel = 2;
-      console.log(`✅ Level 2 Complete: Primary Identity`);
 
       return gmailAccount;
 
@@ -396,7 +371,6 @@ export class ProvisioningLifecycle {
    * Apple ID and ProtonMail creation
    */
   private async executeLevel3_EcosystemEntry(gmailAccount: GmailAccount): Promise<AppleAccount> {
-    console.log(`🍎 Level 3: Ecosystem Entry - Apple ID + ProtonMail`);
 
     try {
       if (!this.config.enableAppleCreation) {
@@ -404,26 +378,21 @@ export class ProvisioningLifecycle {
       }
 
       // Create ProtonMail recovery account
-      console.log(`   🛡️ Creating ProtonMail recovery account...`);
+
       await this.nexus.openKiwiBrowser('https://account.proton.me/signup');
       const protonAccount = await this.automateProtonSignup(gmailAccount.address);
-      console.log(`   ✅ ProtonMail created: ${protonAccount}`);
 
       // Create Apple ID
-      console.log(`   🍎 Creating Apple ID...`);
+
       await this.nexus.openKiwiBrowser('https://appleid.apple.com/account');
       const appleAccount = await this.automateAppleSignup(gmailAccount.address, gmailAccount.recoveryPhone);
-      console.log(`   ✅ Apple ID created: ${appleAccount.id}`);
-      console.log(`   📧 Recovery: ${appleAccount.recoveryEmail}`);
 
       // Inject passkey for Apple ID
       const appHash = hash.crc32(`${this.config.deviceId}-apple-${Date.now()}`).toString(16);
       const appleSilo = IdentityFactory.generateSilo(appHash, { useDeterministic: true });
       await this.injectPasskey(appleSilo.passkeyId);
-      console.log(`   🔑 Passkey injected: ${appleSilo.passkeyId}`);
 
       this.currentTrustLevel = 3;
-      console.log(`✅ Level 3 Complete: Ecosystem Entry`);
 
       return appleAccount;
 
@@ -438,7 +407,6 @@ export class ProvisioningLifecycle {
    * Venmo and CashApp account creation and linking
    */
   private async executeLevel4_FinancialTier(gmailAccount: GmailAccount, appleAccount: AppleAccount): Promise<FinancialAccount> {
-    console.log(`💰 Level 4: Financial Tier - Venmo + CashApp`);
 
     try {
       const financial: FinancialAccount = {
@@ -448,31 +416,30 @@ export class ProvisioningLifecycle {
 
       // Install and setup Venmo
       if (this.config.enableVenmoCreation) {
-        console.log(`   💰 Setting up Venmo...`);
+
         await this.nexus.installAPK('com.venmo');
         const venmoAccount = await this.automateVenmoSetup(gmailAccount.address, appleAccount.id);
         financial.venmo = venmoAccount;
-        console.log(`   ✅ Venmo created: @${venmoAccount.username}`);
+
       }
 
       // Install and setup CashApp
       if (this.config.enableCashAppCreation) {
-        console.log(`   💵 Setting up CashApp...`);
+
         await this.nexus.installAPK('com.squareup.cash');
         const cashAppAccount = await this.automateCashAppSetup(gmailAccount.address);
         financial.cashApp = cashAppAccount;
-        console.log(`   ✅ CashApp created: $${cashAppAccount.cashtag}`);
+
       }
 
       // Cross-pollination: Transfer $1 between accounts to warm up history
       if (financial.venmo.linked && financial.cashApp.linked) {
-        console.log(`   🔄 Cross-pollination: Warming up financial history...`);
+
         await this.executeFinancialCrossPollination(financial);
-        console.log(`   ✅ Financial history warmed`);
+
       }
 
       this.currentTrustLevel = 4;
-      console.log(`✅ Level 4 Complete: Financial Tier`);
 
       return financial;
 
@@ -487,7 +454,6 @@ export class ProvisioningLifecycle {
    * Vaulting and snapshot creation
    */
   private async executeLevel5_Persistence(result: ProvisioningResult): Promise<IdentitySilo> {
-    console.log(`🔐 Level 5: Persistent Persistence - Vaulting + Snapshot`);
 
     try {
       // Create master silo with all account information
@@ -500,7 +466,6 @@ export class ProvisioningLifecycle {
 
       // Store in secure vault
       await storeSilo(masterSilo);
-      console.log(`   🔐 Master silo stored in secure vault`);
 
       // Create device profile in traditional vault
       const deviceProfile: DeviceProfile = {
@@ -536,15 +501,12 @@ export class ProvisioningLifecycle {
         $status: deviceProfile.status || '',
         $burn_count: deviceProfile.burn_count || 0
       });
-      console.log(`   📊 Device profile stored in traditional vault`);
 
       // Create system snapshot
       const snapshotPath = `./snapshots/${this.config.deviceId}-${Date.now()}.json`;
       await this.createSystemSnapshot(result, snapshotPath);
-      console.log(`   📸 System snapshot created: ${snapshotPath}`);
 
       this.currentTrustLevel = 5;
-      console.log(`✅ Level 5 Complete: Persistent Persistence`);
 
       return masterSilo;
 
@@ -557,7 +519,6 @@ export class ProvisioningLifecycle {
   // 🔧 PRIVATE HELPER METHODS
 
   private async installKiwiExtensions(): Promise<void> {
-    console.log(`   🔧 Installing Kiwi Browser extensions...`);
 
     const extensions = [
       'fingerprint_defender',
@@ -568,12 +529,11 @@ export class ProvisioningLifecycle {
 
     for (const extension of extensions) {
       await this.nexus.installKiwiExtension(extension);
-      console.log(`     ✅ ${extension} installed`);
+
     }
   }
 
   private async automateGmailSignup(silo: IdentitySilo): Promise<GmailAccount> {
-    console.log(`   🤖 Automating Gmail signup for ${silo.fullName}...`);
 
     // Fill out Gmail signup form
     await this.nexus.type(silo.firstName);
@@ -583,7 +543,7 @@ export class ProvisioningLifecycle {
     await this.nexus.type(silo.phone);
 
     // Handle SMS verification
-    console.log(`   📱 Waiting for SMS verification...`);
+
     await Bun.sleep(5000); // Wait for SMS
     const verificationCode = await this.getVerificationCode();
     await this.nexus.type(verificationCode);
@@ -598,7 +558,6 @@ export class ProvisioningLifecycle {
   }
 
   private async automateProtonSignup(recoveryEmail: string): Promise<string> {
-    console.log(`   🛡️ Automating ProtonMail signup...`);
 
     const protonUsername = `recovery.${Date.now().toString(36)}`;
     const protonPassword = this.generateSecurePassword();
@@ -611,7 +570,6 @@ export class ProvisioningLifecycle {
   }
 
   private async automateAppleSignup(gmailAddress: string, phoneNumber: string): Promise<AppleAccount> {
-    console.log(`   🍎 Automating Apple ID signup...`);
 
     const appleId = `${gmailAddress.split('@')[0]}${Date.now().toString(36)}@icloud.com`;
     const applePassword = this.generateSecurePassword();
@@ -632,7 +590,6 @@ export class ProvisioningLifecycle {
   }
 
   private async automateVenmoSetup(email: string, appleId: string): Promise<{ username: string; linked: boolean; balance: number }> {
-    console.log(`   💰 Automating Venmo setup...`);
 
     const venmoUsername = `${email.split('@')[0]}${Date.now().toString(36)}`;
 
@@ -648,7 +605,6 @@ export class ProvisioningLifecycle {
   }
 
   private async automateCashAppSetup(email: string): Promise<{ cashtag: string; linked: boolean; balance: number }> {
-    console.log(`   💵 Automating CashApp setup...`);
 
     const cashtag = `$${email.split('@')[0]}${Date.now().toString(36)}`;
 
@@ -664,7 +620,6 @@ export class ProvisioningLifecycle {
   }
 
   private async executeFinancialCrossPollination(financial: FinancialAccount): Promise<void> {
-    console.log(`   🔄 Executing $1 cross-pollination transfer...`);
 
     // Simulate $1 transfer from Venmo to CashApp
     await this.nexus.executeVenmoTransfer(financial.venmo.username, financial.cashApp.cashtag, 1.00);
@@ -676,7 +631,6 @@ export class ProvisioningLifecycle {
   }
 
   private async injectPasskey(passkeyId: string): Promise<void> {
-    console.log(`   🔑 Injecting passkey: ${passkeyId}`);
 
     // Open Android Credential Manager
     await this.nexus.shell(`am start -a android.settings.CREDENTIAL_MANAGER_SETTINGS`);
@@ -689,7 +643,6 @@ export class ProvisioningLifecycle {
     await Bun.sleep(1000);
     await this.nexus.tap(500, 1200); // Confirm button
 
-    console.log(`   ✅ Passkey injected into Android 13 system`);
   }
 
   private async getVerificationCode(): Promise<string> {
@@ -774,8 +727,3 @@ export async function executeProvisioningSequence(deviceId: string, trustLevel: 
   const lifecycle = new ProvisioningLifecycle(config);
   return await lifecycle.executeProvisioningSequence();
 }
-
-console.log('🏛️ Operational Dominance Lifecycle Engine Loaded');
-console.log('📊 Trust Ladder: Hardware → Network → Gmail → Apple → Financial → Vault');
-console.log('⚡ Optimization: Kiwi pre-installed saves 45s per VM');
-console.log('🔐 Security: Fingerprint masking, residential proxies, passkey injection');

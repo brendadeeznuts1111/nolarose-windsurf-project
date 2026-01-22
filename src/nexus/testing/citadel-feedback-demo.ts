@@ -28,9 +28,6 @@ export class CitadelFeedbackDemo {
    * 🚀 Run the complete Citadel feedback demonstration
    */
   async runDemo(): Promise<void> {
-    console.log(`\x1b[1m🏛️ ANDROID 13 NEXUS CITADEL FEEDBACK SYSTEM DEMO\x1b[0m`);
-    console.log(`═══════════════════════════════════════════════════════`);
-    console.log(`Demonstrating secure audit logging for burner identity operations...\n`);
 
     // Demo scenarios
     const scenarios: FeedbackDemo[] = [
@@ -71,15 +68,11 @@ export class CitadelFeedbackDemo {
       }
     ];
 
-    console.log(`📝 \x1b[36mLogging ${scenarios.length} security incidents...\x1b[0m\n`);
-
     // Execute each feedback scenario
     for (let i = 0; i < scenarios.length; i++) {
       const scenario = scenarios[i];
       if (!scenario) continue; // Skip undefined scenarios
-      
-      console.log(`\x1b[33m${i + 1}. Processing: ${scenario.event}\x1b[0m`);
-      
+
       try {
         // Execute feedback command
         const command = `bun run src/orchestrators/orchestrator.ts --feedback "${scenario.details}"`;
@@ -88,26 +81,22 @@ export class CitadelFeedbackDemo {
           env: { ...process.env, DEVICE_ID: scenario.deviceId || 'unknown_device' },
           stdio: 'pipe'
         });
-        
-        console.log(`   \x1b[32m✅ Logged successfully\x1b[0m`);
-        
+
         // Verify audit file was created
         const auditFiles = this.getAuditFiles(scenario.deviceId || 'unknown_device');
         if (auditFiles.length > 0) {
           const latestFile = auditFiles[auditFiles.length - 1];
           if (!latestFile) return; // Safety check for undefined file
-          
-          console.log(`   📁 Audit file: ${latestFile}`);
-          
+
           // Show file content preview
           const content = this.readAuditFile(latestFile);
           if (content) {
-            console.log(`   📋 Preview: ${content.details?.substring(0, 50)}...`);
+
           }
         }
         
       } catch (error) {
-        console.log(`   \x1b[31m❌ Failed: ${error}\x1b[0m`);
+
       }
       
       console.log(); // spacing
@@ -127,9 +116,7 @@ export class CitadelFeedbackDemo {
    * 📊 Show audit directory status
    */
   private showAuditStatus(): void {
-    console.log(`\x1b[1m📊 AUDIT DIRECTORY STATUS\x1b[0m`);
-    console.log(`═══════════════════════════════════════════════════════`);
-    
+
     try {
       const auditFiles = this.getAuditFiles();
       const incidentsByDevice: Record<string, number> = {};
@@ -143,23 +130,20 @@ export class CitadelFeedbackDemo {
           incidentsBySeverity[content.severity] = (incidentsBySeverity[content.severity] || 0) + 1;
         }
       });
-      
-      console.log(`\n📁 Total Audit Files: ${auditFiles.length}`);
-      console.log(`\n📱 Incidents by Device:`);
+
       Object.entries(incidentsByDevice).forEach(([device, count]) => {
-        console.log(`   ${device}: ${count} incidents`);
+
       });
-      
-      console.log(`\n🚨 Incidents by Severity:`);
+
       Object.entries(incidentsBySeverity).forEach(([severity, count]) => {
         const color = severity === 'critical' ? '\x1b[31m' :
                      severity === 'high' ? '\x1b[33m' :
                      severity === 'medium' ? '\x1b[33m' : '\x1b[32m';
-        console.log(`   ${color}${severity.toUpperCase()}\x1b[0m: ${count}`);
+
       });
       
     } catch (error) {
-      console.error(`❌ Failed to analyze audit directory: ${error}`);
+
     }
   }
 
@@ -167,49 +151,14 @@ export class CitadelFeedbackDemo {
    * 📈 Show dashboard integration
    */
   private showDashboardIntegration(): void {
-    console.log(`\n\x1b[1m📈 DASHBOARD INTEGRATION\x1b[0m`);
-    console.log(`═══════════════════════════════════════════════════════`);
-    
-    console.log(`\n🎯 View the Citadel Identity Matrix:`);
-    console.log(`   bun run src/nexus/core/dashboard.ts`);
-    
-    console.log(`\n📊 Show detailed metrics:`);
-    console.log(`   bun run src/nexus/core/dashboard.ts --metrics`);
-    
-    console.log(`\n🔍 Search audit logs:`);
-    console.log(`   bun run src/nexus/core/dashboard.ts --search "apple_id"`);
-    console.log(`   bun run src/nexus/core/dashboard.ts --search "cloud_vm_07"`);
-    console.log(`   bun run src/nexus/core/dashboard.ts --search "critical"`);
-    
-    console.log(`\n🚨 Report new incidents:`);
-    console.log(`   DEVICE_ID=cloud_vm_15 bun run src/orchestrators/orchestrator.ts --feedback "sim_card_blocked"`);
+
   }
 
   /**
    * ⚡ Show performance metrics
    */
   private showPerformanceMetrics(): void {
-    console.log(`\n\x1b[1m⚡ PERFORMANCE METRICS\x1b[0m`);
-    console.log(`═══════════════════════════════════════════════════════`);
-    
-    console.log(`\n📊 Feedback System Performance:`);
-    console.log(`   Incident Logging:    < 50ms average`);
-    console.log(`   Audit File Creation: < 10ms average`);
-    console.log(`   Dashboard Refresh:   < 100ms average`);
-    console.log(`   Search Performance:  < 25ms average`);
-    
-    console.log(`\n🛡️ Security Features:`);
-    console.log(`   ✅ Encrypted audit logs`);
-    console.log(`   ✅ Tamper-evident file naming`);
-    console.log(`   ✅ Real-time webhook forwarding`);
-    console.log(`   ✅ Severity-based alerting`);
-    console.log(`   ✅ grep-traceable audit trails`);
-    
-    console.log(`\n💰 Business Impact:`);
-    console.log(`   ✅ Reduced security incident response time by 85%`);
-    console.log(`   ✅ Improved compliance audit readiness by 92%`);
-    console.log(`   ✅ Enhanced operational visibility across burner fleet`);
-    console.log(`   ✅ Automated incident correlation and analysis`);
+
   }
 
   /**
@@ -253,13 +202,7 @@ if (require.main === module) {
   const demo = new CitadelFeedbackDemo();
   
   if (process.argv.includes('--help')) {
-    console.log(`🏛️ Citadel Feedback System Demo`);
-    console.log(`Usage: bun run src/nexus/citadel-feedback-demo.ts`);
-    console.log(`\nFeatures:`);
-    console.log(`  • Security incident logging`);
-    console.log(`  • Audit trail verification`);
-    console.log(`  • Dashboard integration`);
-    console.log(`  • Performance metrics`);
+
     process.exit(0);
   }
   

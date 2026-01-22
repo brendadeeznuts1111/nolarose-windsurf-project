@@ -68,13 +68,12 @@ export class APYLeaderboard {
       const cached = this.cache.get(cacheKey)!;
       if (Date.now() - cached.timestamp < this.CACHE_TTL) {
         this.cacheHits++;
-        console.log(`📋 Cache hit for ${fullConfig.scope} leaderboard`);
+
         return cached.data;
       }
     }
 
     this.cacheMisses++;
-    console.log(`🔄 Calculating fresh ${fullConfig.scope} leaderboard`);
 
     // Calculate fresh leaderboard
     const entries = await this.calculateLeaderboard(fullConfig);
@@ -293,7 +292,7 @@ export class APYLeaderboard {
    */
   clearCache(): void {
     this.cache.clear();
-    console.log("🗑️ Leaderboard cache cleared");
+
   }
 
   /**
@@ -359,7 +358,7 @@ export class APYLeaderboard {
 
   private async cacheToS3(key: string, data: LeaderboardEntry[]): Promise<void> {
     // Mock S3 caching with ZSTD compression
-    console.log(`💾 Cached ${data.length} entries to S3: ${key}`);
+
   }
 
   /**
@@ -469,6 +468,5 @@ export class APYLeaderboard {
       this.pools.set(pool.id, pool);
     });
 
-    console.log(`🏊 Initialized ${mockPools.length} pools for leaderboard`);
   }
 }

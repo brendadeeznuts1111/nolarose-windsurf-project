@@ -14,9 +14,10 @@
     "build:beta": "bun run cosmic-bundle-optimizer.ts build beta",
     "build:mock": "bun run cosmic-bundle-optimizer.ts build mock",
     "build:variants": "bun run cosmic-bundle-optimizer.ts variants",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage",
-    "test:watch": "bun test --watch",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest watch",
+    "test:ui": "vitest --ui",
     "type-check": "tsc --noEmit",
     "lint": "bunx @biomejs/biome check .",
     "lint:fix": "bunx @biomejs/biome check --write .",
@@ -227,7 +228,11 @@
     "@types/lodash": "^4.17.23",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
-    "typescript": "^5.9.3"
+    "@vitest/coverage-v8": "^2.0.5",
+    "@vitest/ui": "^2.0.5",
+    "mitata": "^0.1.11",
+    "typescript": "^5.9.3",
+    "vitest": "^2.0.5"
   },
   "files": [
     "dist/",

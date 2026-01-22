@@ -3,8 +3,8 @@
 // Cross-pollination between silos for human-like transaction behavior
 
 import { hash } from "bun";
-import { Android13Nexus } from "./adb-bridge";
-import { Vault, type DeviceProfile } from "./storage";
+import { Android13Nexus } from "../nexus/bridges/adb-bridge";
+import { Vault, type DeviceProfile } from "../nexus/core/storage";
 import warmingConfig from "../../config/warming-behavior.toml" with { type: "toml" };
 
 // Mock Vault for demo purposes
@@ -26,7 +26,7 @@ const MockVault = {
     burn_count: 0
   }),
   markAsWarmed: (deviceId: string) => {
-    console.log(`   🔥 Marking device ${deviceId} as "Warmed"`);
+
   }
 };
 
@@ -41,42 +41,42 @@ class MockAndroid13Nexus {
   }
 
   async shell(command: string): Promise<{ stdout: string; stderr: string }> {
-    console.log(`   🔧 Executing shell: ${command}`);
+
     await Bun.sleep(1000);
     return { stdout: "mock_output", stderr: "" };
   }
 
   async captureScreen(): Promise<string> {
-    console.log(`   📸 Capturing screen for CRC32 analysis...`);
+
     await Bun.sleep(200);
     // Return different mock data based on what's being checked
     return "mock_venmo_pay_button_data";
   }
 
   async scroll(x: number, y: number): Promise<void> {
-    console.log(`   📜 Scrolling: (${x}, ${y})`);
+
     await Bun.sleep(500);
   }
 
   async type(text: string): Promise<void> {
-    console.log(`   ⌨️ Typing: ${text}`);
+
     for (const char of text) {
       await Bun.sleep(Math.random() * 150 + 50);
     }
   }
 
   async tap(x: number, y: number): Promise<void> {
-    console.log(`   👆 Tapping at (${x}, ${y})`);
+
     await Bun.sleep(200);
   }
 
   async connect(): Promise<void> {
-    console.log(`   🔌 Connecting to device...`);
+
     await Bun.sleep(1000);
   }
 
   async isAppInstalled(packageName: string): Promise<boolean> {
-    console.log(`   🔍 Checking if ${packageName} is installed...`);
+
     return packageName === 'com.venmo' || packageName === 'com.square.cash';
   }
 }
@@ -151,8 +151,6 @@ export class FinancialWarmer {
    * Full warming loop with human-like behavior patterns
    */
   async executeCrossPollination(): Promise<WarmingSession> {
-    console.log(`\x1b[36m🔄 Financial Warming Loop: ${this.senderProfile.apple_id} -> ${this.receiverProfile.apple_id}\x1b[0m`);
-    console.log(`\x1b[36m📱 Session: ${this.session.sessionId}\x1b[0m`);
 
     try {
       // Initialize both devices
@@ -160,27 +158,25 @@ export class FinancialWarmer {
 
       // Execute multi-day warming schedule
       for (let day = 1; day <= warmingConfig.warming_schedule.total_warming_days; day++) {
-        console.log(`\x1b[33m📅 Warming Day ${day}/${warmingConfig.warming_schedule.total_warming_days}\x1b[0m`);
-        
+
         const transfersToday = this.getTransfersForDay(day);
         
         for (let i = 0; i < transfersToday; i++) {
-          console.log(`\x1b[34m💸 Transfer ${i + 1}/${transfersToday} for Day ${day}\x1b[0m`);
-          
+
           const result = await this.executeSingleTransfer();
           this.session.transactions.push(result);
           
           if (result.success) {
-            console.log(`\x1b[32m✅ Transfer successful: $${result.amount} (${result.note})\x1b[0m`);
+
             this.session.totalTransferred += result.amount;
           } else {
-            console.log(`\x1b[31m❌ Transfer failed: ${result.errors.join(', ')}\x1b[0m`);
+
           }
 
           // Delay between transfers (human-like behavior)
           if (i < transfersToday - 1) {
             const delay = this.getRandomDelay(warmingConfig.delays.transaction_delay_min, warmingConfig.delays.transaction_delay_max);
-            console.log(`\x1b[90m⏱️ Delaying ${delay}ms between transfers...\x1b[0m`);
+
             await Bun.sleep(delay);
           }
         }
@@ -193,7 +189,7 @@ export class FinancialWarmer {
             warmingConfig.warming_schedule.min_hours_between_transfers * 3600000,
             warmingConfig.warming_schedule.max_hours_between_transfers * 3600000
           );
-          console.log(`\x1b[90m🌙 End of Day ${day}. Sleeping ${Math.round(endOfDayDelay / 3600000)} hours...\x1b[0m`);
+
           await Bun.sleep(endOfDayDelay);
         }
       }
@@ -206,14 +202,11 @@ export class FinancialWarmer {
       if (this.session.successRate >= warmingConfig.success_metrics.warming_completion_threshold) {
         ExtendedVault.markAsWarmed(this.senderId);
         ExtendedVault.markAsWarmed(this.receiverId);
-        console.log(`\x1b[32m🎉 Warming Complete! Both devices marked as "Warmed"\x1b[0m`);
+
       }
 
-      console.log(`\x1b[32m✅ Financial Warmup Success: ${this.session.sessionId}\x1b[0m`);
-      console.log(`\x1b[32m📊 Summary: ${successfulTransfers}/${this.session.transactions.length} successful, $${this.session.totalTransferred} total transferred\x1b[0m`);
-
     } catch (error) {
-      console.error(`\x1b[31m❌ Financial warming failed: ${error}\x1b[0m`);
+
     }
 
     return this.session;
@@ -243,8 +236,6 @@ export class FinancialWarmer {
       result.amount = transactionNote.amount || 1.00;
       result.note = `${transactionNote.emoji || '💸'} ${transactionNote.text || 'Payment'}`;
 
-      console.log(`\x1b[36m💸 Initiating transfer: $${transactionNote.amount} - "${result.note}"\x1b[0m`);
-
       // Step 1: Open Venmo on sender device
       await this.openVenmoSender();
 
@@ -257,14 +248,14 @@ export class FinancialWarmer {
       if (received) {
         result.success = true;
         result.integrityHash = await this.generateIntegrityHash();
-        console.log(`\x1b[32m✅ Transfer verified on receiver device\x1b[0m`);
+
       } else {
         result.errors.push('Receipt verification failed on receiver device');
       }
 
     } catch (error) {
       result.errors.push(error instanceof Error ? error.message : 'Unknown error');
-      console.error(`\x1b[31m❌ Transfer error: ${error}\x1b[0m`);
+
     }
 
     result.latency = performance.now() - startTime;
@@ -275,15 +266,14 @@ export class FinancialWarmer {
    * 📱 OPEN VENMO ON SENDER DEVICE
    */
   private async openVenmoSender(): Promise<void> {
-    console.log(`\x1b[34m📱 Opening Venmo on sender device...\x1b[0m`);
-    
+
     // Launch Venmo app
     await this.senderNexus.shell("am start -n com.venmo/com.venmo.main.MainActivity");
     await Bun.sleep(warmingConfig.delays.screen_scan_interval * 2);
 
     // Simulate human-like app opening behavior
     if (Math.random() < warmingConfig.behavior.random_scroll_probability) {
-      console.log(`\x1b[90m📜 Simulating random scroll...\x1b[0m`);
+
       await this.senderNexus.scroll(0, -300);
       await Bun.sleep(500);
       await this.senderNexus.scroll(0, 300);
@@ -294,30 +284,28 @@ export class FinancialWarmer {
    * 💰 EXECUTE VENMO PAYMENT
    */
   private async executeVenmoPayment(note: TransactionNote): Promise<void> {
-    console.log(`\x1b[34m💰 Executing Venmo payment...\x1b[0m`);
 
     // Find and tap Pay button using SIMD CRC32 verification
     if (await this.verifyScreenIntegrity(this.senderNexus, warmingConfig.simd_targets.venmo_pay_button)) {
-      console.log(`\x1b[32m✅ Pay button detected via CRC32: ${warmingConfig.simd_targets.venmo_pay_button}\x1b[0m`);
-      
+
       await this.humanLikeTap(this.senderNexus, 500, 1500);
       await Bun.sleep(this.getRandomDelay(warmingConfig.delays.tap_delay_min, warmingConfig.delays.tap_delay_max));
 
       // Type receiver phone number with human-like typing
-      console.log(`\x1b[34m⌨️ Typing receiver phone number...\x1b[0m`);
+
       await this.humanLikeType(this.senderNexus, this.receiverProfile.phone_number || '+1-555-0000000');
       
       // Type amount
-      console.log(`\x1b[34m💵 Typing amount: $${note.amount}\x1b[0m`);
+
       await this.humanLikeType(this.senderNexus, note.amount.toString());
       
       // Type note with emoji
-      console.log(`\x1b[34m📝 Typing note: ${note.emoji} ${note.text}\x1b[0m`);
+
       await this.humanLikeType(this.senderNexus, `${note.emoji} ${note.text}`);
 
       // Simulate hesitation before confirming (human behavior)
       if (Math.random() < 0.3) {
-        console.log(`\x1b[90m⏸️ Simulating hesitation before confirm...\x1b[0m`);
+
         await Bun.sleep(warmingConfig.behavior.hesitation_delay);
       }
 
@@ -330,7 +318,7 @@ export class FinancialWarmer {
       // Verify success checkmark
       const successVerified = await this.verifyTransactionSuccess(this.senderNexus);
       if (successVerified) {
-        console.log(`\x1b[32m✅ Venmo transaction completed successfully\x1b[0m`);
+
       } else {
         throw new Error('Venmo transaction verification failed');
       }
@@ -344,7 +332,6 @@ export class FinancialWarmer {
    * 📱 VERIFY CASH APP RECEIPT
    */
   private async verifyCashAppReceipt(): Promise<boolean> {
-    console.log(`\x1b[34m📱 Switching to receiver device to verify receipt...\x1b[0m`);
 
     // Open Cash App on receiver
     await this.receiverNexus.shell("am start -n com.square.cash/com.cardinalblue.main.MainActivity");
@@ -357,8 +344,7 @@ export class FinancialWarmer {
     );
 
     if (receiveScreenDetected) {
-      console.log(`\x1b[32m✅ Cash App receive screen detected\x1b[0m`);
-      
+
       // Wait for transaction to appear
       await Bun.sleep(3000);
       
@@ -369,7 +355,7 @@ export class FinancialWarmer {
       );
 
       if (successToast) {
-        console.log(`\x1b[32m✅ Cash App success toast detected\x1b[0m`);
+
         return true;
       }
     }
@@ -381,10 +367,9 @@ export class FinancialWarmer {
    * 🔍 VERIFY TRANSACTION SUCCESS USING SIMD CRC32
    */
   private async verifyTransactionSuccess(nexus: MockAndroid13Nexus): Promise<boolean> {
-    console.log(`\x1b[34m🔍 Verifying transaction success with CRC32: ${warmingConfig.simd_targets.venmo_success_checkmark}\x1b[0m`);
-    
+
     // Mock implementation - always return true for demo
-    console.log(`\x1b[32m✅ Transaction success verified via CRC32 match\x1b[0m`);
+
     return true;
   }
 
@@ -393,7 +378,7 @@ export class FinancialWarmer {
    */
   private async verifyScreenIntegrity(nexus: MockAndroid13Nexus, targetHash: string): Promise<boolean> {
     // Mock implementation - always return true for demo
-    console.log(`   🔍 Verifying CRC32: ${targetHash} ✅`);
+
     return true;
   }
 
@@ -413,7 +398,7 @@ export class FinancialWarmer {
       
       // Simulate typing error occasionally
       if (Math.random() < warmingConfig.behavior.typing_errors && i > 0) {
-        console.log(`\x1b[90m⌨️ Simulating typing error...\x1b[0m`);
+
         await nexus.type(String.fromCharCode(char.charCodeAt(0) + 1)); // Wrong character
         await Bun.sleep(100);
         await nexus.tap(300, 1200); // Backspace
@@ -473,8 +458,7 @@ export class FinancialWarmer {
    * 🔧 DEVICE INITIALIZATION
    */
   private async initializeDevices(): Promise<void> {
-    console.log(`\x1b[34m🔧 Initializing devices...\x1b[0m`);
-    
+
     // Connect to both devices
     await this.senderNexus.connect();
     await this.receiverNexus.connect();
@@ -490,8 +474,7 @@ export class FinancialWarmer {
     if (!cashappInstalled) {
       throw new Error('Cash App not installed on receiver device');
     }
-    
-    console.log(`\x1b[32m✅ Both devices initialized and apps verified\x1b[0m`);
+
   }
 }
 
@@ -530,9 +513,3 @@ export async function executeQuickTransfer(senderId: string, receiverId: string,
 
 // Export the extended Vault for external use
 export { ExtendedVault as Vault };
-
-console.log('💸 Financial Warmer Loaded - Cross-Pollination Engine Ready');
-console.log('🔄 Features: Human-like behavior, SIMD verification, multi-day warming');
-console.log('⚡ Performance: 5.1x faster spawning with Bun 1.3.6');
-console.log('🔐 Security: CRC32 integrity verification, anti-detection patterns');
-console.log('📊 Success Rate: 95%+ with natural transaction behavior');

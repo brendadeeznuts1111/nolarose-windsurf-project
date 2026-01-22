@@ -1,7 +1,6 @@
 // src/admin/config-freeze.ts - Configuration Freeze/Lock System
 // Prevents hot reloading and provides configuration locking mechanism
 
-import { writeFileSync, readFileSync, existsSync } from "fs";
 import { join } from "path";
 
 interface FreezeState {
@@ -16,6 +15,7 @@ export class ConfigFreeze {
   private static instance: ConfigFreeze;
   private isFrozen: boolean = false;
   private freezeReason?: string;
+  private freezeTimestamp?: string;
 
   private constructor() {
     this.loadFreezeState();
@@ -31,22 +31,24 @@ export class ConfigFreeze {
   /**
    * Load freeze state from file
    */
-  private loadFreezeState(): void {
-    if (existsSync(ConfigFreeze.FREEZE_FILE)) {
+  private async loadFreezeState(): Promise<void> {
+    const file = Bun.file(ConfigFreeze.FREEZE_FILE);
+    if (await file.exists()) {
       try {
-        const data = readFileSync(ConfigFreeze.FREEZE_FILE, "utf-8");
+        const data = await file.text();
         const state: FreezeState = JSON.parse(data);
         this.isFrozen = state.frozen;
         this.freezeReason = state.reason;
-        
+        this.freezeTimestamp = state.timestamp;
+
         if (this.isFrozen) {
-          console.log(`🔒 Configuration is frozen (since ${state.timestamp})`);
+
           if (state.reason) {
-            console.log(`   Reason: ${state.reason}`);
+
           }
         }
       } catch (error) {
-        console.warn("⚠️ Could not load freeze state:", error);
+
       }
     }
   }
@@ -54,68 +56,66 @@ export class ConfigFreeze {
   /**
    * Save freeze state to file
    */
-  private saveFreezeState(reason?: string): void {
+  private async saveFreezeState(reason?: string): Promise<void> {
     const state: FreezeState = {
       frozen: this.isFrozen,
       timestamp: new Date().toISOString(),
       reason: reason || this.freezeReason,
-      configHash: this.getCurrentConfigHash(),
+      configHash: await this.getCurrentConfigHash(),
     };
 
     try {
-      writeFileSync(ConfigFreeze.FREEZE_FILE, JSON.stringify(state, null, 2));
+      await Bun.write(ConfigFreeze.FREEZE_FILE, JSON.stringify(state, null, 2));
     } catch (error) {
-      console.error("❌ Could not save freeze state:", error);
+
     }
   }
 
   /**
    * Freeze the configuration (prevent hot reloading)
    */
-  public freeze(reason?: string): void {
+  public async freeze(reason?: string): Promise<void> {
     if (this.isFrozen) {
-      console.log("⚠️ Configuration is already frozen");
+
       return;
     }
 
     this.isFrozen = true;
     this.freezeReason = reason || "Manual freeze";
-    this.saveFreezeState();
-    
-    console.log("🔒 Configuration frozen!");
-    console.log(`   Reason: ${this.freezeReason}`);
-    console.log("   Hot reloading is now disabled");
-    console.log("   Use 'config:unfreeze' to re-enable");
+    this.freezeTimestamp = new Date().toISOString();
+    await this.saveFreezeState();
+
   }
 
   /**
    * Unfreeze the configuration (enable hot reloading)
    */
-  public unfreeze(): void {
+  public async unfreeze(): Promise<void> {
     if (!this.isFrozen) {
-      console.log("ℹ️ Configuration is not frozen");
+
       return;
     }
 
     this.isFrozen = false;
     const previousReason = this.freezeReason;
     this.freezeReason = undefined;
-    
+    this.freezeTimestamp = undefined;
+
     // Remove freeze file
     try {
-      if (existsSync(ConfigFreeze.FREEZE_FILE)) {
-        const fs = require("fs");
-        fs.unlinkSync(ConfigFreeze.FREEZE_FILE);
+      const file = Bun.file(ConfigFreeze.FREEZE_FILE);
+      if (await file.exists()) {
+        const { unlink } = await import("fs/promises");
+        await unlink(ConfigFreeze.FREEZE_FILE);
       }
     } catch (error) {
-      console.warn("⚠️ Could not remove freeze file:", error);
+
     }
-    
-    console.log("🔓 Configuration unfrozen!");
+
     if (previousReason) {
-      console.log(`   Previously frozen for: ${previousReason}`);
+
     }
-    console.log("   Hot reloading is now enabled");
+
   }
 
   /**
@@ -128,7 +128,7 @@ export class ConfigFreeze {
   /**
    * Get freeze status
    */
-  public getFreezeStatus(): FreezeState | null {
+  public async getFreezeStatus(): Promise<FreezeState | null> {
     if (!this.isFrozen) {
       return null;
     }
@@ -137,35 +137,35 @@ export class ConfigFreeze {
       frozen: this.isFrozen,
       timestamp: new Date().toISOString(),
       reason: this.freezeReason,
-      configHash: this.getCurrentConfigHash(),
+      configHash: await this.getCurrentConfigHash(),
     };
   }
 
   /**
    * Get current configuration hash
    */
-  private getCurrentConfigHash(): string {
-    const crypto = require("crypto");
+  private async getCurrentConfigHash(): Promise<string> {
+    const crypto = await import("crypto");
     const envContent = Object.entries(process.env)
       .filter(([key]) => key.startsWith("DUOPLUS_"))
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, value]) => `${key}=${value}`)
       .join("\n");
-    
+
     return crypto.createHash("sha256").update(envContent).digest("hex").substring(0, 8);
   }
 
   /**
    * Validate configuration changes (prevents changes when frozen)
    */
-  public validateConfigChange(newConfig: any): { valid: boolean; reason?: string } {
+  public async validateConfigChange(newConfig: any): Promise<{ valid: boolean; reason?: string }> {
     if (!this.isFrozen) {
       return { valid: true };
     }
 
-    const newHash = this.getConfigHash(newConfig);
-    const currentHash = this.getCurrentConfigHash();
-    
+    const newHash = await this.getConfigHash(newConfig);
+    const currentHash = await this.getCurrentConfigHash();
+
     if (newHash !== currentHash) {
       return {
         valid: false,
@@ -179,8 +179,8 @@ export class ConfigFreeze {
   /**
    * Get configuration hash for any config object
    */
-  private getConfigHash(config: any): string {
-    const crypto = require("crypto");
+  private async getConfigHash(config: any): Promise<string> {
+    const crypto = await import("crypto");
     const configString = JSON.stringify(config, Object.keys(config).sort());
     return crypto.createHash("sha256").update(configString).digest("hex").substring(0, 8);
   }
@@ -201,11 +201,13 @@ export class ConfigFreeze {
       `;
     }
 
+    const displayTimestamp = this.freezeTimestamp ? new Date(this.freezeTimestamp).toLocaleString() : new Date().toLocaleString();
+
     return `
       <div class="freeze-status frozen">
         <div class="freeze-indicator">🔒 Frozen</div>
         <div class="freeze-description">
-          Configuration is locked (since ${new Date().toLocaleString()})
+          Configuration is locked (since ${displayTimestamp})
           ${this.freezeReason ? `<br>Reason: ${this.freezeReason}` : ""}
         </div>
         <button class="unfreeze-btn" onclick="unfreezeConfig()">

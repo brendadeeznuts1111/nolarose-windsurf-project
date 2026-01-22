@@ -47,16 +47,14 @@ export class BunTerminal {
    * Clear screen and render frame
    */
   renderFrame(content: string): void {
-    console.clear();
-    
+
     // Render header with title
     const header = this.renderHeader();
     const footer = this.renderFooter();
     
     // Combine all parts
     const fullFrame = header + content + footer;
-    
-    console.log(fullFrame);
+
     this.currentFrame = fullFrame;
   }
 
@@ -64,7 +62,7 @@ export class BunTerminal {
    * Simple render without frame
    */
   render(content: string): void {
-    console.log(content);
+
   }
 
   /**
@@ -101,8 +99,7 @@ export class BunTerminal {
    * Prompt for user input
    */
   async prompt(question: string): Promise<string> {
-    console.log(`\n❓ ${question}`);
-    
+
     // Return a promise that resolves when user presses Enter
     return new Promise((resolve) => {
       let input = "";
@@ -202,28 +199,28 @@ export class BunTerminal {
    * Show success message
    */
   success(message: string): void {
-    console.log(`✅ ${message}`);
+
   }
 
   /**
    * Show error message
    */
   error(message: string): void {
-    console.log(`❌ ${message}`);
+
   }
 
   /**
    * Show warning message
    */
   warning(message: string): void {
-    console.log(`⚠️  ${message}`);
+
   }
 
   /**
    * Show info message
    */
   info(message: string): void {
-    console.log(`ℹ️  ${message}`);
+
   }
 
   /**
@@ -231,7 +228,6 @@ export class BunTerminal {
    */
   cleanup(): void {
     this.disableRawMode();
-    console.clear();
-    console.log("👋 Dashboard terminated. Goodbye!");
+
   }
 }

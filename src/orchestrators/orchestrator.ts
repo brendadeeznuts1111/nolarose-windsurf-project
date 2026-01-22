@@ -73,12 +73,9 @@ export class NexusOrchestrator {
     try {
       mkdirSync(this.auditDirectory, { recursive: true });
     } catch (error) {
-      console.warn(`⚠️ Audit directory creation failed: ${error}`);
+
     }
 
-    console.log(`🚀 Nexus Orchestrator initialized`);
-    console.log(`📱 Target devices: ${config.deviceIds.join(', ')}`);
-    console.log(`⚙️ Features: Telemetry=${config.enableTelemetry}, IAP=${config.enableIAPLoop}, Crypto=${config.enableCryptoBurners}, Reset=${config.enableInfinityReset}`);
   }
 
   /**
@@ -86,52 +83,47 @@ export class NexusOrchestrator {
    */
   async initialize(): Promise<void> {
     if (this.isInitialized) {
-      console.log(`⚠️ Nexus already initialized`);
+
       return;
     }
 
-    console.log(`🚀 Initializing Nexus Orchestrator...`);
-
     try {
       // Phase 1: Connect to all Android 13 devices
-      console.log(`📱 Phase 1: Connecting to ${this.config.deviceIds.length} Android 13 devices...`);
+
       const nexusCluster = await this.nexusFactory.createNexusCluster(this.config.deviceIds);
       
       if (nexusCluster.length === 0) {
         throw new Error("No devices connected successfully");
       }
 
-      console.log(`✅ Connected to ${nexusCluster.length}/${this.config.deviceIds.length} devices`);
-
       // Phase 2: Initialize telemetry streams if enabled
       if (this.config.enableTelemetry) {
-        console.log(`📡 Phase 2: Starting ZSTD telemetry streams...`);
+
         await this.initializeTelemetry();
       }
 
       // Phase 3: Initialize IAP controllers if enabled
       if (this.config.enableIAPLoop) {
-        console.log(`💎 Phase 3: Initializing IAP Loop controllers...`);
+
         await this.initializeIAPControllers();
       }
 
       // Phase 4: Initialize crypto burners if enabled
       if (this.config.enableCryptoBurners) {
-        console.log(`🔥 Phase 4: Initializing crypto burner engines...`);
+
         await this.initializeCryptoBurners();
       }
 
       // Phase 5: Initialize infinity reset controllers if enabled
       if (this.config.enableInfinityReset) {
-        console.log(`🔄 Phase 5: Initializing infinity reset controllers...`);
+
         await this.initializeResetControllers();
       }
 
       this.isInitialized = true;
-      console.log(`🎆 Nexus Orchestrator fully initialized and ready!`);
 
     } catch (error) {
-      console.error(`❌ Nexus initialization failed: ${error}`);
+
       throw error;
     }
   }
@@ -202,7 +194,6 @@ export class NexusOrchestrator {
       throw new Error("Nexus not initialized");
     }
 
-    console.log(`💎 Executing IAP Loop on all devices (${iterations} iterations)`);
     await this.iapFactory.runAllLoops(iterations);
   }
 
@@ -214,13 +205,11 @@ export class NexusOrchestrator {
       throw new Error("Nexus not initialized");
     }
 
-    console.log(`🔥 Generating ${countPerDevice} crypto wallets per device`);
     const results = await this.cryptoFactory.generateAllWallets(countPerDevice);
     
     // Save all wallets
     await this.cryptoFactory.saveAllInstances(this.config.walletDirectory);
-    
-    console.log(`✅ Crypto wallets generated and saved to ${this.config.walletDirectory}`);
+
   }
 
   /**
@@ -231,11 +220,10 @@ export class NexusOrchestrator {
       throw new Error("Nexus not initialized");
     }
 
-    console.log(`🔄 Executing infinity reset on all devices`);
     const results = await this.resetFactory.resetAllDevices();
     
     const successful = results.filter(r => r.success).length;
-    console.log(`✅ Infinity reset completed: ${successful}/${results.length} devices successful`);
+
   }
 
   /**
@@ -246,7 +234,6 @@ export class NexusOrchestrator {
       throw new Error("Nexus not initialized");
     }
 
-    console.log(`⚡ Executing quick reset on all devices`);
     await this.resetFactory.quickResetAllDevices();
   }
 
@@ -261,8 +248,8 @@ export class NexusOrchestrator {
       connectedDevices: clusterStatus.connectedDevices,
       activeStreams: telemetryStatus.activeStreams,
       iapControllers: Array.from(this.iapFactory.controllers.keys()),
-      cryptoEngines: [], // TODO: Implement proper crypto factory status
-      resetControllers: [], // TODO: Implement proper reset factory status
+      cryptoEngines: Array.from(this.cryptoFactory.instances.keys()),
+      resetControllers: Array.from(this.resetFactory.resets.keys()),
       totalDevices: this.config.deviceIds.length,
       uptime: Date.now() - this.startTime
     };
@@ -284,8 +271,8 @@ export class NexusOrchestrator {
         initialized: this.isInitialized
       },
       iap: iapStats,
-      crypto: {}, // TODO: Implement proper crypto stats
-      reset: {}, // TODO: Implement proper reset stats
+      crypto: this.cryptoFactory.getAggregateStats(),
+      reset: this.resetFactory.getAggregateStats(),
       telemetry: {
         activeStreams: telemetryStatus.activeStreams,
         totalDevices: this.config.deviceIds.length
@@ -350,7 +337,6 @@ export class NexusOrchestrator {
    * 🛑 Shutdown the complete Nexus system
    */
   async shutdown(): Promise<void> {
-    console.log(`🛑 Shutting down Nexus Orchestrator...`);
 
     try {
       // Stop telemetry streams
@@ -363,10 +349,9 @@ export class NexusOrchestrator {
       await this.nexusFactory.disconnectAll();
 
       this.isInitialized = false;
-      console.log(`✅ Nexus Orchestrator shutdown complete`);
 
     } catch (error) {
-      console.error(`❌ Shutdown error: ${error}`);
+
       throw error;
     }
   }
@@ -375,7 +360,7 @@ export class NexusOrchestrator {
    * 🔄 Restart the Nexus system
    */
   async restart(): Promise<void> {
-    console.log(`🔄 Restarting Nexus Orchestrator...`);
+
     await this.shutdown();
     await Bun.sleep(2000);
     await this.initialize();
@@ -423,10 +408,7 @@ export class NexusOrchestrator {
       
       // Write to sealed audit log
       writeFileSync(auditFile, JSON.stringify(enrichedData, null, 2));
-      
-      console.log(`\x1b[33m[${feedbackData.deviceId}] 🚨 ${feedbackData.event.toUpperCase()} Logged to Citadel Audit\x1b[0m`);
-      console.log(`📁 Audit file: ${auditFile}`);
-      
+
       // Forward to security team if webhook configured
       if (process.env.SECURITY_WEBHOOK) {
         try {
@@ -435,20 +417,20 @@ export class NexusOrchestrator {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(enrichedData)
           });
-          console.log(`📡 Security alert forwarded to team`);
+
         } catch (webhookError) {
-          console.warn(`⚠️ Security webhook failed: ${webhookError}`);
+
         }
       }
       
       // Critical incidents trigger immediate alert
       if (feedbackData.severity === 'critical') {
-        console.log(`🚨 CRITICAL INCIDENT DETECTED - Immediate attention required!`);
+
         // Could integrate with pager systems, Slack alerts, etc.
       }
       
     } catch (error) {
-      console.error(`❌ Failed to log Citadel feedback: ${error}`);
+
       throw error;
     }
   }
@@ -483,8 +465,6 @@ class NexusSuperCommand {
    * 🚀 Execute the complete domination sequence
    */
   async executeDomination(): Promise<void> {
-    console.log(`🎆 EXECUTING ANDROID 13 DOMINATION SEQUENCE`);
-    console.log(`🎯 Target: Absolute Machine Dominion over DuoPlus Cloud`);
 
     try {
       // Initialize Nexus
@@ -503,16 +483,12 @@ class NexusSuperCommand {
 
       // Get performance metrics
       const metrics = await this.orchestrator.getPerformanceMetrics();
-      console.log(`📊 Performance Metrics:`, JSON.stringify(metrics, null, 2));
 
       // Execute infinity reset
       await this.orchestrator.executeInfinityReset();
 
-      console.log(`🎆 ANDROID 13 DOMINATION COMPLETE`);
-      console.log(`💰 Empire Status: Absolute Machine Dominion Achieved`);
-
     } catch (error) {
-      console.error(`❌ Domination failed: ${error}`);
+
       throw error;
     } finally {
       await this.orchestrator.shutdown();
@@ -523,18 +499,16 @@ class NexusSuperCommand {
    * 🎯 Quick demo mode
    */
   async executeDemo(): Promise<void> {
-    console.log(`🎯 ANDROID 13 NEXUS DEMO MODE`);
 
     try {
       await this.orchestrator.initialize();
       
       const status = await this.orchestrator.getSystemStatus();
-      console.log(`📊 System Status:`, JSON.stringify(status, null, 2));
 
       await this.orchestrator.shutdown();
       
     } catch (error) {
-      console.error(`❌ Demo failed: ${error}`);
+
       throw error;
     }
   }
@@ -568,16 +542,7 @@ if (process.argv.includes('--demo')) {
 } else if (process.argv.includes('--dominate')) {
   superCommand.executeDomination().catch(console.error);
 } else {
-  console.log(`🚀 Android 13 Nexus Super-Command Ready`);
-  console.log(`🎯 Usage: bun run nexus/orchestrator.ts --demo | --dominate | --feedback "<details>"`);
-  console.log(`📊 Dashboard: bun run nexus/dashboard.ts [--metrics | --search <query>]`);
-  console.log(`⚡ Features: SIMD ADB Bridge, ZSTD Telemetry, IAP Automation, Crypto Burners, Infinity Reset`);
-  console.log(`🛡️ Security: Citadel feedback channel, audit logging, incident tracking`);
-  console.log(`🎆 Performance: 7.84ms UI detection, 75% data reduction, sub-30s resets`);
-  console.log(`\n🚨 Security Incident Reporting:`);
-  console.log(`   bun run nexus/orchestrator.ts --feedback "apple_id_lockout cloud_vm_07 sarah.a1b2c3d4@icloud.com"`);
-  console.log(`   bun run nexus/orchestrator.ts --feedback "captcha_failure device_id details"`);
-  console.log(`   bun run nexus/orchestrator.ts --feedback "performance_anomaly sim_api_delay"`);
+
 }
 
 export {
@@ -588,12 +553,6 @@ export {
   Android13InfinityReset,
   UI_HASHES
 };
-
-console.log('🚀 Android 13 Nexus Orchestrator Loaded - Super-Command Ready');
-console.log('🎯 Absolute Machine Dominion over DuoPlus Cloud Instances');
-console.log('⚡ Performance: 7.84ms UI detection, ZSTD compression, SIMD acceleration');
-console.log('🛡️ Security: Native crypto, encrypted storage, identity rotation');
-console.log('🎆 Empire Status: Hardware-Accelerated Android Control Achieved');
 
 // 🚨 CLI Feedback Channel - Security Incident Reporting
 async function handleCliFeedback() {
@@ -629,11 +588,7 @@ async function handleCliFeedback() {
       // Write audit log
       const auditFile = join(auditDirectory, `${feedbackData.deviceId}-${feedbackData.timestamp}.feedback.json`);
       writeFileSync(auditFile, JSON.stringify(feedbackData, null, 2));
-      
-      console.log(`[${feedbackData.deviceId}] 🚨 Security Incident Logged to Citadel Audit`);
-      console.log(`📁 Audit file: ${auditFile}`);
-      console.log(`🔍 Details: ${feedbackDetails}`);
-      
+
       // Forward to security webhook if configured
       if (process.env.SECURITY_WEBHOOK) {
         try {
@@ -642,14 +597,14 @@ async function handleCliFeedback() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(feedbackData)
           });
-          console.log(`📡 Security alert forwarded to team`);
+
         } catch (webhookError) {
-          console.warn(`⚠️ Security webhook failed: ${webhookError}`);
+
         }
       }
       
     } catch (error) {
-      console.error(`❌ Failed to log feedback: ${error}`);
+
       process.exit(1);
     }
   }

@@ -61,22 +61,21 @@ export class PoolRebalancingEngine {
    */
   startCron(intervalMinutes: number = 60): void {
     if (this.isRunning) {
-      console.log("⚠️ Rebalancing engine already running");
+
       return;
     }
 
-    console.log(`🚀 Starting rebalancing engine (every ${intervalMinutes} minutes)`);
     this.isRunning = true;
     
     // Run immediately on start
     this.rebalancePools().catch(error => {
-      console.error("❌ Initial rebalancing failed:", error);
+
     });
 
     // Set up recurring rebalancing
     this.rebalancingInterval = setInterval(() => {
       this.rebalancePools().catch(error => {
-        console.error("❌ Scheduled rebalancing failed:", error);
+
       });
     }, intervalMinutes * 60 * 1000);
   }
@@ -90,7 +89,7 @@ export class PoolRebalancingEngine {
       this.rebalancingInterval = null;
     }
     this.isRunning = false;
-    console.log("🛑 Rebalancing engine stopped");
+
   }
 
   /**
@@ -110,8 +109,7 @@ export class PoolRebalancingEngine {
     };
 
     try {
-      console.log("🔄 Starting pool rebalancing analysis...");
-      
+
       // Get all active pools
       const activePools = Array.from(this.pools.values()).filter(pool => pool.isActive);
       
@@ -149,13 +147,11 @@ export class PoolRebalancingEngine {
       
       // Log the rebalancing event
       await this.logRebalancing(report);
-      
-      console.log(`✅ Rebalancing completed: ${report.totalMovements} movements, ${report.executionTimeMs}ms`);
-      
+
     } catch (error) {
       report.errors.push(`Rebalancing failed: ${error}`);
       report.executionTimeMs = Date.now() - startTime;
-      console.error("❌ Rebalancing failed:", error);
+
     }
 
     // Store in history
@@ -175,8 +171,6 @@ export class PoolRebalancingEngine {
   private async calculateOptimalAllocation(pools: Pool[]): Promise<Map<string, number>> {
     const allocation = new Map<string, number>();
     const totalBalance = pools.reduce((sum, pool) => sum + pool.balance, 0);
-    
-    console.log(`💰 Analyzing ${pools.length} pools with total balance $${totalBalance.toLocaleString()}`);
 
     for (const pool of pools) {
       // Risk-adjusted yield calculation
@@ -236,7 +230,6 @@ export class PoolRebalancingEngine {
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
 
-    console.log(`📋 Generated ${movements.length} rebalancing movements`);
     return movements;
   }
 
@@ -248,8 +241,6 @@ export class PoolRebalancingEngine {
     if (!pool) {
       throw new Error(`Pool ${movement.poolId} not found`);
     }
-
-    console.log(`💸 Executing ${movement.amount > 0 ? 'deposit' : 'withdrawal'} of $${Math.abs(movement.amount).toFixed(2)} for pool ${pool.name}`);
 
     // Generate Lightning invoice for the movement
     if (movement.amount > 0) {
@@ -302,7 +293,6 @@ export class PoolRebalancingEngine {
       expiry: 3600 // 1 hour
     };
 
-    console.log(`⚡ Generated Lightning invoice: ${invoice.paymentHash.substring(0, 16)}...`);
     return invoice;
   }
 
@@ -341,7 +331,7 @@ export class PoolRebalancingEngine {
    * Manual rebalancing trigger
    */
   async triggerManualRebalancing(): Promise<RebalancingReport> {
-    console.log("🎯 Manual rebalancing triggered");
+
     return await this.rebalancePools();
   }
 
@@ -397,7 +387,7 @@ export class PoolRebalancingEngine {
 
   private async logRebalancing(report: RebalancingReport): Promise<void> {
     // In production, this would write to S3 with ZSTD compression
-    console.log(`📝 Rebalancing logged: ${report.totalMovements} movements, ${report.totalYieldIncrease} bps yield increase`);
+
   }
 
   /**
@@ -476,6 +466,5 @@ export class PoolRebalancingEngine {
       this.pools.set(pool.id, pool);
     });
 
-    console.log(`🏊 Initialized ${mockPools.length} mock pools`);
   }
 }

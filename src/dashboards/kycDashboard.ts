@@ -1,7 +1,7 @@
 // src/admin/kycDashboard.ts - Production-grade KYC Admin Dashboard
 // Bun-native terminal interface with real-time updates and FinCEN compliance
 
-import { BunTerminal } from "./terminalManager";
+import { BunTerminal } from "../admin/terminalManager";
 import { KYCValidator, type KYCUser, type ReviewQueueItem } from "../compliance/kycValidator";
 import { setTimeout } from "timers";
 import { s3 } from "bun";
@@ -28,10 +28,9 @@ export class KYCDashboard {
    * Start the interactive dashboard
    */
   async start(): Promise<void> {
-    console.clear();
+
     this.terminal.enableRawMode();
-    
-    console.log("🚀 Starting DuoPlus KYC Admin Dashboard...");
+
     await this.sleep(1000);
     
     // Setup signal handlers for graceful shutdown

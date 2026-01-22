@@ -5,7 +5,7 @@
 import { ConfigPage } from "./config-page";
 import { config } from "../config/config";
 import { configFreeze } from "./config-freeze";
-import packageJson from "../../package.json";
+import packageJson from "../../package.json" assert { type: "json" };
 
 class ConfigServer {
   private configPage = new ConfigPage();
@@ -21,13 +21,22 @@ class ConfigServer {
   }
 
   /**
+   * Escape HTML characters to prevent XSS
+   */
+  private escapeHtml(text: string): string {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&')
+      .replace(/</g, '<')
+      .replace(/>/g, '>')
+      .replace(/"/g, '"')
+      .replace(/'/g, '&#39;');
+  }
+
+  /**
    * Start the configuration server
    */
   async start(): Promise<void> {
-    console.log("🌐 Starting DuoPlus Configuration Server...");
-    console.log(`📊 Port: ${this.port}`);
-    console.log(`🔧 Environment: ${config.getDuoPlusConfig().environment}`);
-    console.log("");
 
     // Create Bun server with enhanced lifecycle management
     this.server = Bun.serve({
@@ -53,7 +62,6 @@ class ConfigServer {
 
         // Log request with client IP
         const clientIP = server.requestIP(req);
-        console.log(`📥 ${req.method} ${url.pathname} - ${clientIP?.address || 'unknown'} [${requestId}]`);
 
         try {
           // Route the request
@@ -66,7 +74,7 @@ class ConfigServer {
 
           return response;
         } catch (error) {
-          console.error(`❌ Request error [${requestId}]:`, error);
+
           this.activeConnections.delete(requestId);
           return new Response("Internal Server Error", { status: 500 });
         }
@@ -74,31 +82,13 @@ class ConfigServer {
 
       // Error handler
       error(error: Error) {
-        console.error("❌ Server error:", error);
+
         return new Response("Internal Server Error", { status: 500 });
       },
 
       // Development mode settings
       development: config.getDuoPlusConfig().debug,
     });
-
-    console.log(`✅ Configuration server started successfully!`);
-    console.log(`🌐 Unified Dashboard: http://${config.getDuoPlusConfig().host}:${this.port}/`);
-    console.log(`📊 Configuration Page: http://${config.getDuoPlusConfig().host}:${this.port}/config`);
-    console.log(`🔧 Config API: http://${config.getDuoPlusConfig().host}:${this.port}/api/config`);
-    console.log(`📈 Status API: http://${config.getDuoPlusConfig().host}:${this.port}/api/status`);
-    console.log(`📊 Metrics API: http://${config.getDuoPlusConfig().host}:${this.port}/api/metrics`);
-    console.log(`🏥 Health Check: http://${config.getDuoPlusConfig().host}:${this.port}/health`);
-    console.log("");
-    console.log("🔄 Auto-refresh enabled (60-second intervals)");
-    console.log("⌨️  Keyboard shortcuts: Ctrl+R (refresh), Ctrl+Shift+C (config)");
-    console.log("🔒 Use freeze/unfreeze buttons to control hot reloading");
-    console.log("⌨️  Press Ctrl+C to stop the server");
-    console.log("");
-    console.log("📊 Server Metrics:");
-    console.log(`   • Server ID: ${this.server.id}`);
-    console.log(`   • Development Mode: ${this.server.development}`);
-    console.log(`   • Process Ref: Enabled (keeps process alive)`);
 
     // Set up graceful shutdown handlers
     this.setupGracefulShutdown();
@@ -112,25 +102,28 @@ class ConfigServer {
 
     switch (url.pathname) {
       case "/":
-        return this.handleUnifiedLanding();
+        return await this.handleUnifiedLanding();
       case "/config":
-        return this.handleConfigPage();
+        return await this.handleConfigPage();
       case "/api/config":
         return this.handleConfigAPI();
       case "/api/status":
         return this.handleStatusAPI();
       case "/api/config/freeze":
-        return this.handleFreezeConfig(req);
+        return await this.handleFreezeConfig(req);
       case "/api/config/unfreeze":
-        return this.handleUnfreezeConfig();
+        return await this.handleUnfreezeConfig();
       case "/api/config/freeze-status":
-        return this.handleFreezeStatus();
+        return await this.handleFreezeStatus();
       case "/health":
         return this.handleHealth();
       case "/api/metrics":
+      case "/metrics":
         return this.handleMetrics(server);
+      case "/api/config/export":
+        return this.handleConfigAPI(); // Export as JSON for now
       case "/api/reload":
-        return this.handleReload();
+        return await this.handleReload();
       case "/demo":
         return this.handleDemo();
       default:
@@ -144,38 +137,35 @@ class ConfigServer {
   private setupGracefulShutdown(): void {
     const shutdown = async (signal: string) => {
       if (this.isStopping) {
-        console.log("\n⚠️ Force shutdown detected...");
+
         process.exit(1);
       }
 
       this.isStopping = true;
-      console.log(`\n📡 Received ${signal}, shutting down gracefully...`);
 
       try {
         // Stop accepting new connections
-        console.log("🛑 Stopping new connections...");
 
         // Wait for active connections to finish (with timeout)
         const maxWaitTime = 10000; // 10 seconds
         const startTime = Date.now();
 
         while (this.activeConnections.size > 0 && Date.now() - startTime < maxWaitTime) {
-          console.log(`⏳ Waiting for ${this.activeConnections.size} active connections...`);
+
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
 
         if (this.activeConnections.size > 0) {
-          console.log(`⚡ Force closing ${this.activeConnections.size} remaining connections...`);
+
           await this.server.stop(true); // Force stop
         } else {
-          console.log("✅ All connections completed, stopping server...");
+
           await this.server.stop(); // Graceful stop
         }
 
-        console.log("✅ Server stopped successfully");
         process.exit(0);
       } catch (error) {
-        console.error("❌ Error during shutdown:", error);
+
         process.exit(1);
       }
     };
@@ -186,12 +176,12 @@ class ConfigServer {
 
     // Handle uncaught exceptions
     process.on("uncaughtException", (error: any) => {
-      console.error("💥 Uncaught Exception:", error);
+
       shutdown("uncaughtException");
     });
 
     process.on("unhandledRejection", (reason: any, promise: any) => {
-      console.error("💥 Unhandled Rejection at:", promise, "reason:", reason);
+
       shutdown("unhandledRejection");
     });
   }
@@ -270,8 +260,6 @@ class ConfigServer {
       throw new Error("Cannot reload configuration while frozen");
     }
 
-    console.log("🔄 Hot reloading configuration...");
-
     // Reload configuration
     this.server.reload({
       fetch: (req: any, server: any) => {
@@ -279,35 +267,33 @@ class ConfigServer {
         return this.routeRequest(req, server);
       },
       error: (error: Error) => {
-        console.error("❌ Server error:", error);
+
         return new Response("Internal Server Error", { status: 500 });
       },
       development: config.getDuoPlusConfig().debug,
     });
 
-    console.log("✅ Configuration reloaded successfully");
   }
 
   /**
    * Handle configuration reload endpoint
    */
-  private handleReload(): Response {
+  private async handleReload(): Promise<Response> {
     try {
       // Check if configuration is frozen
       if (configFreeze.isConfigurationFrozen()) {
-        console.log("🚫 Reload blocked - configuration is frozen");
+        const status = await configFreeze.getFreezeStatus();
+
         return new Response(JSON.stringify({
           success: false,
           error: "Cannot reload configuration while frozen",
           frozen: true,
-          reason: configFreeze.getFreezeStatus()?.reason
+          reason: status?.reason
         }), {
           status: 423,
           headers: { "Content-Type": "application/json" },
         });
       }
-
-      console.log("🔄 Hot reloading configuration...");
 
       // Trigger hot reload
       this.reloadConfiguration();
@@ -320,7 +306,7 @@ class ConfigServer {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error: any) {
-      console.error("❌ Error reloading config:", error);
+
       return new Response(JSON.stringify({
         success: false,
         error: (error as any).message
@@ -385,7 +371,7 @@ class ConfigServer {
       `;
       return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" } });
     } catch (error: any) {
-      console.error("❌ Error generating demo page:", error);
+
       return new Response("Error generating demo page", { status: 500 });
     }
   }
@@ -409,11 +395,11 @@ class ConfigServer {
   /**
    * Handle unified landing page
    */
-  private handleUnifiedLanding(): Response {
+  private async handleUnifiedLanding(): Promise<Response> {
     try {
       const stats = this.getServerStats();
       const isFrozen = configFreeze.isConfigurationFrozen();
-      const freezeInfo = isFrozen ? configFreeze.getFreezeStatus() : null;
+      const freezeInfo = isFrozen ? await configFreeze.getFreezeStatus() : null;
 
       const html = `
 <!DOCTYPE html>
@@ -430,23 +416,23 @@ class ConfigServer {
     }
     
     :root {
-      --primary: #6366f1;
-      --primary-dark: #4f46e5;
-      --success: #10b981;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --success: #22c55e;
       --warning: #f59e0b;
       --danger: #ef4444;
-      --bg-dark: #0f172a;
-      --bg-card: #1e293b;
-      --bg-card-hover: #334155;
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --border-color: #334155;
-      --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-      --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-      --gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-      --shadow-lg: 0 10px 40px -10px rgba(0,0,0,0.3);
-      --shadow-sm: 0 2px 10px rgba(0,0,0,0.2);
+      --bg-dark: #1f2937;
+      --bg-card: #111827;
+      --bg-card-hover: #374151;
+      --text-primary: #f9fafb;
+      --text-secondary: #9ca3af;
+      --border-color: #374151;
+      --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      --gradient-success: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --shadow-lg: 0 10px 40px -10px rgba(0,0,0,0.5);
+      --shadow-sm: 0 2px 10px rgba(0,0,0,0.4);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
@@ -495,7 +481,7 @@ class ConfigServer {
     .logo h1 {
       font-size: 1.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #f1f5f9 0%, #94a3b8 100%);
+      background: linear-gradient(135deg, #f9fafb 0%, #9ca3af 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -652,7 +638,7 @@ class ConfigServer {
     .btn-primary {
       background: var(--gradient-primary);
       color: white;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
     }
     
     .btn-primary:hover {
@@ -663,7 +649,7 @@ class ConfigServer {
     .btn-success {
       background: var(--gradient-success);
       color: white;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
     }
     
     .btn-success:hover {
@@ -739,8 +725,8 @@ class ConfigServer {
     }
     
     .freeze-status.unfrozen {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(34, 197, 94, 0.05) 100%);
+      border: 1px solid rgba(34, 197, 94, 0.3);
     }
     
     .freeze-indicator {
@@ -830,12 +816,12 @@ class ConfigServer {
     }
     
     .feature-status.enabled {
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(34, 197, 94, 0.2);
       color: var(--success);
     }
     
     .feature-status.disabled {
-      background: rgba(148, 163, 184, 0.2);
+      background: rgba(156, 163, 175, 0.2);
       color: var(--text-secondary);
     }
     
@@ -982,10 +968,10 @@ class ConfigServer {
         <div class="progress-container" style="margin-top: 1rem;">
           <div class="progress-label">
             <span>Memory</span>
-            <span id="memory-value">${Math.round((process.memoryUsage().heapUsed / 1024 / 1024) / 100)}%</span>
+            <span id="memory-value">${Math.round((process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100)}%</span>
           </div>
           <div class="progress-bar">
-            <div class="progress-fill" id="memory-bar" style="width: ${Math.min((process.memoryUsage().heapUsed / 1024 / 1024) / 100, 100)}%"></div>
+            <div class="progress-fill" id="memory-bar" style="width: ${Math.min((process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100, 100)}%"></div>
           </div>
         </div>
         
@@ -1166,7 +1152,7 @@ class ConfigServer {
           location.reload();
         }
       } catch (error) {
-        console.error('Refresh failed:', error);
+
       }
     }
 
@@ -1199,7 +1185,7 @@ class ConfigServer {
             location.reload();
           }
         } catch (error) {
-          console.error('Unfreeze failed:', error);
+
         }
       }
     }
@@ -1231,7 +1217,7 @@ class ConfigServer {
     // Initialize auto-refresh on page load
     document.addEventListener('DOMContentLoaded', () => {
       refreshTimer = setInterval(refreshStatus, REFRESH_INTERVAL);
-      console.log('Dashboard auto-refresh enabled (5s interval)');
+
     });
   </script>
 </body>
@@ -1244,8 +1230,11 @@ class ConfigServer {
         },
       });
     } catch (error: any) {
-      console.error("❌ Error generating unified landing page:", error);
-      return new Response("Error generating landing page", { status: 500 });
+
+      return new Response(JSON.stringify({ error: "Configuration error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
   }
 
@@ -1262,7 +1251,7 @@ class ConfigServer {
         },
       });
     } catch (error: any) {
-      console.error("❌ Error generating config page:", error);
+
       return new Response("Error generating configuration page", { status: 500 });
     }
   }
@@ -1280,7 +1269,7 @@ class ConfigServer {
         },
       });
     } catch (error: any) {
-      console.error("❌ Error serving config API:", error);
+
       return new Response(JSON.stringify({ error: "Configuration error" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -1299,7 +1288,8 @@ class ConfigServer {
       const uptime = process.uptime();
 
       const memoryMB = Math.round(memUsage.rss / 1024 / 1024);
-      const cpuPercent = Math.round((cpuUsage.user / 1000000) / uptime);
+      // CPU usage as percentage (rough estimate)
+      const cpuPercent = Math.min(Math.round(((cpuUsage.user + cpuUsage.system) / 10000) / uptime), 100);
 
       const memoryScore = memoryMB < 500 ? 100 : memoryMB < 1000 ? 75 : 50;
       const cpuScore = cpuPercent < 50 ? 100 : cpuPercent < 80 ? 75 : 50;
@@ -1378,7 +1368,7 @@ class ConfigServer {
         },
       });
     } catch (error: any) {
-      console.error("❌ Health check failed:", error);
+
       return new Response(JSON.stringify({
         status: "unhealthy",
         error: error.message,
@@ -1395,24 +1385,44 @@ class ConfigServer {
    */
   private async handleFreezeConfig(request: Request): Promise<Response> {
     try {
+      // Validate content type
+      const contentType = request.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        return new Response(JSON.stringify({ error: "Content-Type must be application/json" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
       const body = await request.json();
-      const reason = body?.reason;
 
-      configFreeze.freeze(reason);
+      // Validate reason parameter
+      let reason = body.reason;
+      if (reason !== undefined && typeof reason !== "string") {
+        return new Response(JSON.stringify({ error: "Reason must be a string" }), {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
 
-      return new Response(JSON.stringify({
-        success: true,
-        message: "Configuration frozen",
-        status: configFreeze.getFreezeStatus()
-      }), {
+      // Sanitize reason
+      if (reason) {
+        reason = reason.trim();
+        if (reason.length > 500) {
+          return new Response(JSON.stringify({ error: "Reason must be less than 500 characters" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      }
+
+      await configFreeze.freeze(reason);
+      return new Response(JSON.stringify({ success: true }), {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error: any) {
-      console.error("❌ Error freezing config:", error);
-      return new Response(JSON.stringify({
-        success: false,
-        error: (error as any).message
-      }), {
+
+      return new Response(JSON.stringify({ error: "Failed to freeze configuration" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
@@ -1422,22 +1432,15 @@ class ConfigServer {
   /**
    * Handle unfreeze configuration endpoint
    */
-  private handleUnfreezeConfig(): Response {
+  private async handleUnfreezeConfig(): Promise<Response> {
     try {
-      configFreeze.unfreeze();
-
-      return new Response(JSON.stringify({
-        success: true,
-        message: "Configuration unfrozen"
-      }), {
+      await configFreeze.unfreeze();
+      return new Response(JSON.stringify({ success: true }), {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error: any) {
-      console.error("❌ Error unfreezing config:", error);
-      return new Response(JSON.stringify({
-        success: false,
-        error: (error as any).message
-      }), {
+
+      return new Response(JSON.stringify({ error: "Failed to unfreeze configuration" }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
@@ -1447,9 +1450,9 @@ class ConfigServer {
   /**
    * Handle freeze status endpoint
    */
-  private handleFreezeStatus(): Response {
+  private async handleFreezeStatus(): Promise<Response> {
     try {
-      const status = configFreeze.getFreezeStatus();
+      const status = await configFreeze.getFreezeStatus();
 
       return new Response(JSON.stringify({
         frozen: configFreeze.isConfigurationFrozen(),
@@ -1458,7 +1461,7 @@ class ConfigServer {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error: any) {
-      console.error("❌ Error getting freeze status:", error);
+
       return new Response(JSON.stringify({
         frozen: false,
         error: (error as any).message
@@ -1472,17 +1475,17 @@ class ConfigServer {
   /**
    * Stop the server
    */
-  async stop(): Promise<void> {
+  public async stop(): Promise<void> {
     if (this.server) {
-      console.log("\n🛑 Shutting down configuration server...");
+
       this.server.stop();
-      console.log("✅ Server stopped successfully");
+
     }
   }
 }
 
 // Start server if run directly
-if (require.main === module) {
+if (import.meta.main) {
   const server = new ConfigServer();
 
   // Handle graceful shutdown
@@ -1498,7 +1501,7 @@ if (require.main === module) {
 
   // Start the server
   server.start().catch((error) => {
-    console.error("❌ Failed to start configuration server:", error);
+
     process.exit(1);
   });
 }

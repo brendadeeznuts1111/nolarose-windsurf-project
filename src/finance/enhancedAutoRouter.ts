@@ -47,7 +47,7 @@ export class EnhancedLightningToGreenRouter {
       
       return decision;
     } catch (error) {
-      console.error(`Routing failed for invoice ${invoice.paymentHash}:`, error);
+
       throw error;
     }
   }
@@ -141,8 +141,6 @@ export class EnhancedLightningToGreenRouter {
       traceId: `route-${invoice.paymentHash}-${Date.now()}`
     });
 
-    console.log(`💰 Routed $${amountUsd.toFixed(2)} → Green (projected yield: $${result.yieldProjection.toFixed(2)}/yr)`);
-    
     // Store routing decision for analytics
     await this.logRoutingDecision({
       invoiceId: invoice.paymentHash,
@@ -206,8 +204,7 @@ export class EnhancedLightningToGreenRouter {
    */
   private handlePriceUpdate(priceData: any): void {
     const btcPrice = priceData?.btcUsd || 0;
-    console.log(`📈 BTC Price updated: $${btcPrice.toLocaleString()}`);
-    
+
     // Could trigger re-routing decisions based on price changes
     this.evaluatePendingRoutes();
   }

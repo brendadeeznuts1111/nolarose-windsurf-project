@@ -62,7 +62,7 @@ export class RealtimePriceFeed extends EventEmitter {
             prices.push(price);
           }
         } catch (error) {
-          console.warn(`Price fetch failed for ${apiUrl}:`, error);
+
         }
       }
 
@@ -86,7 +86,7 @@ export class RealtimePriceFeed extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error("Failed to fetch price:", error);
+
     }
   }
 

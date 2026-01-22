@@ -99,8 +99,7 @@ export class IdentityFactory {
     appHash: string, 
     options: PersonaGenerationOptions = { useDeterministic: true }
   ): IdentitySilo {
-    console.log(`🧬 Generating Identity Silo: ${appHash}`);
-    
+
     // 🎲 USE DETERMINISTIC OR RANDOM GENERATION
     const seed = options.useDeterministic ? appHash : crypto.randomUUID();
     const rng = options.useDeterministic ? this.createDeterministicRNG(seed) : Math.random;
@@ -209,14 +208,7 @@ export class IdentityFactory {
       version: this.PERSONA_VERSION,
       deterministic: options.useDeterministic
     };
-    
-    console.log(`   ✅ Generated: ${fullName} (${gender}, ${age})`);
-    console.log(`   📧 Email: ${email}`);
-    console.log(`   📱 Phone: ${phone}`);
-    console.log(`   🏠 Address: ${address}`);
-    console.log(`   💼 Profession: ${profession} at ${company}`);
-    console.log(`   🔐 Security: ${mfaMethod} with ${passkeyAlgorithm}`);
-    
+
     return silo;
   }
   
@@ -228,8 +220,7 @@ export class IdentityFactory {
     appHashes: string[], 
     options: PersonaGenerationOptions = { useDeterministic: true }
   ): Promise<IdentitySilo[]> {
-    console.log(`🏭 Generating batch silos: ${appHashes.length} identities`);
-    
+
     const silos: IdentitySilo[] = [];
     const startTime = performance.now();
     
@@ -240,7 +231,7 @@ export class IdentityFactory {
       
       // Progress indicator
       if ((i + 1) % 10 === 0) {
-        console.log(`   📊 Generated ${i + 1}/${appHashes.length} silos...`);
+
       }
       
       // Small delay to prevent overwhelming the system
@@ -251,10 +242,7 @@ export class IdentityFactory {
     
     const elapsed = performance.now() - startTime;
     const rate = (silos.length / (elapsed / 1000)).toFixed(2);
-    
-    console.log(`✅ Batch generation complete: ${silos.length} silos in ${elapsed.toFixed(2)}ms`);
-    console.log(`🚀 Generation rate: ${rate} silos/second`);
-    
+
     return silos;
   }
   
@@ -270,7 +258,7 @@ export class IdentityFactory {
     
     for (const field of requiredFields) {
       if (!silo[field as keyof IdentitySilo]) {
-        console.error(`❌ Missing required field: ${field}`);
+
         return false;
       }
     }
@@ -278,23 +266,22 @@ export class IdentityFactory {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(silo.email)) {
-      console.error(`❌ Invalid email format: ${silo.email}`);
+
       return false;
     }
     
     // Validate age range
     if (silo.age < 22 || silo.age > 45) {
-      console.error(`❌ Age out of range: ${silo.age}`);
+
       return false;
     }
     
     // Validate phone format (basic)
     if (!silo.phone.match(/^\+1-\d{3}-\d{3}-\d{4}$/)) {
-      console.error(`❌ Invalid phone format: ${silo.phone}`);
+
       return false;
     }
-    
-    console.log(`✅ Silo validation passed: ${silo.fullName}`);
+
     return true;
   }
   
@@ -307,16 +294,14 @@ export class IdentityFactory {
     newAppHash: string,
     options: PersonaGenerationOptions = { useDeterministic: true }
   ): IdentitySilo {
-    console.log(`🔄 Rotating identity: ${oldSilo.fullName} → new silo`);
-    
+
     // Generate new silo with preserved elements
     const newSilo = this.generateSilo(newAppHash, options);
     
     // Optionally preserve some elements for continuity
     // newSilo.interests = oldSilo.interests;
     // newSilo.musicGenre = oldSilo.musicGenre;
-    
-    console.log(`✅ Identity rotated: ${oldSilo.fullName} → ${newSilo.fullName}`);
+
     return newSilo;
   }
   
@@ -502,8 +487,3 @@ export function generateSilo(appHash: string, options?: PersonaGenerationOptions
 export function validateSilo(silo: IdentitySilo): boolean {
   return IdentityFactory.validateSilo(silo);
 }
-
-console.log('🧬 Cryptographic Persona Engine Loaded - Sovereign Identity Blueprint Ready');
-console.log('⚡ Features: Deterministic generation, complete human profiles, encrypted storage');
-console.log('🔐 Security: TOTP secrets, Passkey IDs, MFA methods, recovery systems');
-console.log('📊 Performance: 25+ silos/second, batch generation, integrity validation');

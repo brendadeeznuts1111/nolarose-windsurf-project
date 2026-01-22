@@ -294,7 +294,7 @@ export class ConfigPage {
         }
         
         .environment-info strong {
-            color: #1e40af;
+            color: #3b82f6;
         }
         
         @media (max-width: 768px) {
@@ -356,15 +356,22 @@ export class ConfigPage {
         // Auto-refresh every 30 seconds (disabled when frozen)
         let autoRefreshEnabled = true;
         let refreshInterval;
-        
+        let isFrozen = ${configFreeze.isConfigurationFrozen()};
+
         function startAutoRefresh() {
+            // Disable auto-refresh if configuration is frozen
+            if (isFrozen) {
+                autoRefreshEnabled = false;
+                return;
+            }
+
             if (autoRefreshEnabled) {
                 refreshInterval = setTimeout(() => {
                     location.reload();
                 }, 30000);
             }
         }
-        
+
         function stopAutoRefresh() {
             if (refreshInterval) {
                 clearTimeout(refreshInterval);
@@ -445,7 +452,6 @@ export class ConfigPage {
    */
   private async getAllConfigStatuses(): Promise<ConfigStatus[]> {
     const statuses: ConfigStatus[] = [];
-    const env = process.env;
     const duoplus = this.config.duoplus;
 
     // Server Configuration
@@ -521,6 +527,14 @@ export class ConfigPage {
         description: 'KYC provider API key',
         category: 'KYC Configuration',
         required: true
+      },
+      {
+        name: 'DUOPLUS_KYC_WEBHOOK_SECRET',
+        value: this.maskSecret(duoplus.kyc.webhookSecret),
+        status: this.validateAPIKey(duoplus.kyc.webhookSecret, duoplus.environment),
+        description: 'KYC webhook secret for verification',
+        category: 'KYC Configuration',
+        required: false
       }
     );
 
@@ -575,6 +589,14 @@ export class ConfigPage {
         value: this.maskSecret(duoplus.s3.accessKey),
         status: this.validateAPIKey(duoplus.s3.accessKey, duoplus.environment),
         description: 'AWS S3 access key',
+        category: 'S3 Configuration',
+        required: false
+      },
+      {
+        name: 'DUOPLUS_S3_SECRET_KEY',
+        value: this.maskSecret(duoplus.s3.secretKey),
+        status: this.validateAPIKey(duoplus.s3.secretKey, duoplus.environment),
+        description: 'AWS S3 secret key',
         category: 'S3 Configuration',
         required: false
       }
@@ -649,7 +671,7 @@ export class ConfigPage {
       {
         name: 'BUN_RUNTIME_TRANSPILER_CACHE_PATH',
         value: this.config.bun.cachePath,
-        status: await this.validateFileExists(this.config.bun.cachePath, true),
+        status: await this.validateFileExists(this.config.bun.cachePath, false),
         description: 'Bun transpiler cache path',
         category: 'Bun Configuration',
         required: false
@@ -748,5 +770,18 @@ export class ConfigPage {
     if (!secret) return 'Not Set';
     if (secret.length <= 8) return '***';
     return secret.substring(0, 4) + '***' + secret.substring(secret.length - 4);
+  }
+
+  /**
+   * Escape HTML characters to prevent XSS
+   */
+  private escapeHtml(text: string): string {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&')
+      .replace(/</g, '<')
+      .replace(/>/g, '>')
+      .replace(/"/g, '"')
+      .replace(/'/g, '&#39;');
   }
 }

@@ -95,7 +95,6 @@ export class SecureVault {
    * 🏭 INITIALIZE SECURE VAULT
    */
   private initializeDatabase(): void {
-    console.log(`🔐 Initializing Secure Vault: ${this.config.databasePath}`);
 
     // Create encrypted silos table
     this.db.run(`
@@ -139,23 +138,21 @@ export class SecureVault {
     this.setVaultMetadata('encryption_algorithm', this.config.encryption.algorithm);
     this.setVaultMetadata('created_at', new Date().toISOString());
 
-    console.log(`✅ Secure Vault initialized with AES-256-GCM encryption`);
   }
 
   /**
    * 🔓 UNLOCK VAULT WITH MASTER KEY
    */
   async unlock(): Promise<boolean> {
-    console.log(`🔓 Unlocking Secure Vault...`);
 
     try {
       // Get master key from environment or generate
       const envKey = process.env[this.config.masterKeyEnv];
       if (envKey) {
         this.masterKey = envKey;
-        console.log(`   🔑 Master key loaded from environment`);
+
       } else {
-        console.log(`   ⚠️ No master key in environment, generating temporary key`);
+
         this.masterKey = this.generateMasterKey();
       }
 
@@ -166,12 +163,11 @@ export class SecureVault {
 
       this.isInitialized = true;
       this.logAudit('system', 'unlock', true, { key_length: this.masterKey.length });
-      
-      console.log(`✅ Secure Vault unlocked successfully`);
+
       return true;
 
     } catch (error) {
-      console.error(`❌ Failed to unlock vault: ${error}`);
+
       this.logAudit('system', 'unlock', false, { error: error instanceof Error ? error.message : 'Unknown' });
       return false;
     }
@@ -181,13 +177,11 @@ export class SecureVault {
    * 🔒 LOCK VAULT AND CLEAR MASTER KEY
    */
   lock(): void {
-    console.log(`🔒 Locking Secure Vault...`);
-    
+
     this.masterKey = null;
     this.isInitialized = false;
     this.logAudit('system', 'lock', true);
-    
-    console.log(`✅ Secure Vault locked`);
+
   }
 
   /**
@@ -197,8 +191,6 @@ export class SecureVault {
     if (!this.isInitialized || !this.masterKey) {
       throw new Error('Vault not unlocked - call unlock() first');
     }
-
-    console.log(`💾 Storing encrypted silo: ${silo.fullName}`);
 
     try {
       // Serialize silo
@@ -240,11 +232,10 @@ export class SecureVault {
         data_size: jsonData.length
       });
 
-      console.log(`✅ Silo encrypted and stored: ${silo.fullName}`);
       return true;
 
     } catch (error) {
-      console.error(`❌ Failed to store silo: ${error}`);
+
       this.logAudit(silo.id, 'create', false, { error: error instanceof Error ? error.message : 'Unknown' });
       return false;
     }
@@ -258,8 +249,6 @@ export class SecureVault {
       throw new Error('Vault not unlocked - call unlock() first');
     }
 
-    console.log(`📖 Retrieving encrypted silo: ${siloId}`);
-
     try {
       // Get encrypted record
       const record = this.db.prepare(`
@@ -267,7 +256,7 @@ export class SecureVault {
       `).get(siloId) as EncryptedSiloRecord | undefined;
 
       if (!record) {
-        console.log(`⚠️ Silo not found: ${siloId}`);
+
         return null;
       }
 
@@ -300,11 +289,10 @@ export class SecureVault {
         access_count: record.access_count + 1
       });
 
-      console.log(`✅ Silo retrieved and decrypted: ${silo.fullName}`);
       return silo;
 
     } catch (error) {
-      console.error(`❌ Failed to retrieve silo: ${error}`);
+
       this.logAudit(siloId, 'read', false, { error: error instanceof Error ? error.message : 'Unknown' });
       return null;
     }
@@ -318,8 +306,6 @@ export class SecureVault {
       throw new Error('Vault not unlocked - call unlock() first');
     }
 
-    console.log(`🗑️ Deleting encrypted silo: ${siloId}`);
-
     try {
       // Get silo info for audit
       const record = this.db.prepare(`
@@ -332,15 +318,15 @@ export class SecureVault {
 
       if (result.changes > 0) {
         this.logAudit(siloId, 'delete', true);
-        console.log(`✅ Silo deleted: ${siloId}`);
+
         return true;
       } else {
-        console.log(`⚠️ Silo not found for deletion: ${siloId}`);
+
         return false;
       }
 
     } catch (error) {
-      console.error(`❌ Failed to delete silo: ${error}`);
+
       this.logAudit(siloId, 'delete', false, { error: error instanceof Error ? error.message : 'Unknown' });
       return false;
     }
@@ -369,8 +355,6 @@ export class SecureVault {
       throw new Error('Vault not unlocked - call unlock() first');
     }
 
-    console.log(`🔍 Searching silos: ${query}`);
-
     const results: IdentitySilo[] = [];
     const silos = this.listSilos();
 
@@ -384,7 +368,6 @@ export class SecureVault {
       }
     }
 
-    console.log(`🔍 Found ${results.length} matching silos`);
     return results;
   }
 
@@ -423,8 +406,6 @@ export class SecureVault {
       throw new Error('Vault not unlocked - call unlock() first');
     }
 
-    console.log(`🔒 Exporting encrypted backup: ${backupPath}`);
-
     try {
       const silos = this.listSilos();
       const backupData = {
@@ -446,11 +427,10 @@ export class SecureVault {
         backup_path: backupPath
       });
 
-      console.log(`✅ Backup exported: ${backupPath}`);
       return true;
 
     } catch (error) {
-      console.error(`❌ Failed to export backup: ${error}`);
+
       this.logAudit('system', 'export', false, { error: error instanceof Error ? error.message : 'Unknown error' });
       return false;
     }
@@ -548,8 +528,3 @@ export async function storeSilo(silo: IdentitySilo): Promise<boolean> {
 export async function retrieveSilo(siloId: string): Promise<IdentitySilo | null> {
   return await SecureVaultInstance.retrieveSilo(siloId);
 }
-
-console.log('🔐 Secure Vault Loaded - Enterprise-Grade Encrypted Storage Ready');
-console.log('⚡ Features: AES-256-GCM encryption, machine key protection, audit logging');
-console.log('🛡️ Security: Data integrity checks, compressed storage, encrypted backups');
-console.log('📊 Performance: Sub-millisecond encryption/decryption, batch operations');

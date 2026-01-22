@@ -200,7 +200,7 @@ export class EnhancedAPYLeaderboard {
   private getCachedDetails(poolId: string): any | null {
     const cached = this.detailsCache.get(poolId);
     if (cached && Date.now() - cached.timestamp < this.DETAILS_CACHE_TTL) {
-      console.log(`📋 Cache hit for pool: ${poolId}`);
+
       return { ...cached.data }; // Return copy to prevent mutation
     }
     return null;
@@ -217,7 +217,7 @@ export class EnhancedAPYLeaderboard {
       const oldestKey = this.detailsCache.keys().next().value;
       if (oldestKey) {
         this.detailsCache.delete(oldestKey);
-        console.log(`🗑️ Evicted oldest cache entry: ${oldestKey}`);
+
       }
     }
   }
@@ -253,7 +253,7 @@ export class EnhancedAPYLeaderboard {
 
       return metrics;
     } catch (error) {
-      console.error(`❌ Metrics calculation failed for pool ${pool?.id}:`, error);
+
       throw error;
     }
   }
@@ -355,9 +355,9 @@ export class EnhancedAPYLeaderboard {
 
     // Log to console for development
     if (entry.success) {
-      console.log(`✅ ${entry.action}: ${entry.poolId} (${entry.performance}ms)`);
+
     } else {
-      console.error(`❌ ${entry.action}: ${entry.poolId} - ${entry.error} (${entry.performance}ms)`);
+
     }
   }
 
@@ -430,6 +430,6 @@ export class EnhancedAPYLeaderboard {
 
   clearCache(): void {
     this.detailsCache.clear();
-    console.log("🗑️ Pool details cache cleared");
+
   }
 }

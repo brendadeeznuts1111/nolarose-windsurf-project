@@ -26,7 +26,7 @@ export class Android13Telemetry {
 
   constructor(deviceId: string) {
     this.deviceId = deviceId;
-    console.log(`📡 Android 13 Telemetry initialized for device: ${deviceId}`);
+
   }
 
   /**
@@ -34,12 +34,10 @@ export class Android13Telemetry {
    */
   async startLogStream(outputPath: string): Promise<void> {
     if (this.isStreaming) {
-      console.log(`⚠️ Log stream already active for ${this.deviceId}`);
+
       return;
     }
 
-    console.log(`🌀 Starting ZSTD-compressed log stream for ${this.deviceId}`);
-    
     try {
       // Ensure output directory exists
       await mkdir(outputPath.split('/').slice(0, -1).join('/'), { recursive: true });
@@ -63,21 +61,19 @@ export class Android13Telemetry {
       const fileWriter = await Bun.write(outputPath, this.outputStream);
 
       this.isStreaming = true;
-      
-      console.log(`✅ ZSTD log stream started: ${outputPath}`);
-      
+
       // Setup error handling
       this.logProcess.stderr.on("data", (data: Buffer) => {
-        console.error(`🔴 Log stream error [${this.deviceId}]: ${data.toString()}`);
+
       });
 
       this.logProcess.on("exit", (code: number) => {
-        console.log(`📡 Log stream ended [${this.deviceId}]: exit code ${code}`);
+
         this.isStreaming = false;
       });
 
     } catch (error) {
-      console.error(`❌ Failed to start log stream: ${error}`);
+
       this.isStreaming = false;
       throw error;
     }
@@ -88,26 +84,23 @@ export class Android13Telemetry {
    */
   async stopLogStream(): Promise<void> {
     if (!this.isStreaming) {
-      console.log(`⚠️ No active log stream for ${this.deviceId}`);
+
       return;
     }
 
-    console.log(`🛑 Stopping log stream for ${this.deviceId}`);
-    
     if (this.logProcess && !this.logProcess.killed) {
       this.logProcess.kill();
     }
     
     this.isStreaming = false;
-    console.log(`✅ Log stream stopped for ${this.deviceId}`);
+
   }
 
   /**
    * 📊 Stream real-time metrics with compression
    */
   async streamMetrics(outputPath: string, interval: number = 5000): Promise<void> {
-    console.log(`📊 Starting metrics stream for ${this.deviceId} (${interval}ms interval)`);
-    
+
     // Simplified metrics collection - write directly to file
     const metricsData: any[] = [];
     
@@ -121,7 +114,7 @@ export class Android13Telemetry {
           await writeFile(outputPath, JSON.stringify(metricsData, null, 2));
         }
       } catch (error) {
-        console.error(`❌ Metrics collection failed: ${error}`);
+
       }
     }, interval);
 
@@ -174,7 +167,7 @@ export class Android13Telemetry {
         }
       };
     } catch (error) {
-      console.error(`❌ Metrics collection failed: ${error}`);
+
       return {
         timestamp: Date.now(),
         deviceId: this.deviceId,
@@ -195,7 +188,7 @@ export class Android13Telemetry {
       const result = await process.exited;
       return process.stdout ? await new Response(process.stdout).text() : '';
     } catch (error) {
-      console.error(`❌ ADB command failed: ${command}`);
+
       return '';
     }
   }
@@ -204,8 +197,7 @@ export class Android13Telemetry {
    * 📥 Decompress and read ZSTD logs
    */
   async decompressLogs(compressedPath: string, outputPath: string): Promise<void> {
-    console.log(`📥 Decompressing ZSTD logs: ${compressedPath}`);
-    
+
     try {
       // Simplified decompression - read file and write decompressed content
       const compressedData = await Bun.file(compressedPath).arrayBuffer();
@@ -214,9 +206,9 @@ export class Android13Telemetry {
       const decompressedData = new TextDecoder().decode(compressedData);
       
       await Bun.write(outputPath, decompressedData);
-      console.log(`✅ Logs decompressed to: ${outputPath}`);
+
     } catch (error) {
-      console.error(`❌ Failed to decompress logs: ${error}`);
+
       throw error;
     }
   }
@@ -225,8 +217,7 @@ export class Android13Telemetry {
    * 🔍 Parse JSON logs from decompressed data
    */
   async parseLogs(logPath: string): Promise<LogEntry[]> {
-    console.log(`🔍 Parsing JSON logs: ${logPath}`);
-    
+
     try {
       const logData = await Bun.file(logPath).text();
       const lines = logData.split('\n').filter(line => line.trim());
@@ -256,11 +247,10 @@ export class Android13Telemetry {
           });
         }
       }
-      
-      console.log(`✅ Parsed ${logs.length} log entries`);
+
       return logs;
     } catch (error) {
-      console.error(`❌ Log parsing failed: ${error}`);
+
       return [];
     }
   }
@@ -279,8 +269,7 @@ export class Android13Telemetry {
    * 🌐 Stream network traffic with compression
    */
   async streamNetworkTraffic(outputPath: string): Promise<void> {
-    console.log(`🌐 Starting network traffic stream for ${this.deviceId}`);
-    
+
     try {
       // Use tcpdump or netstat for network monitoring
       const netProcess = spawn([
@@ -295,11 +284,9 @@ export class Android13Telemetry {
       // Simplified network stream - convert stream to buffer before writing
       const networkData = await new Response(netProcess.stdout).arrayBuffer();
       await Bun.write(outputPath, networkData);
-      
-      console.log(`✅ Network traffic stream started: ${outputPath}`);
-      
+
     } catch (error) {
-      console.error(`❌ Network stream failed: ${error}`);
+
       throw error;
     }
   }
@@ -308,8 +295,7 @@ export class Android13Telemetry {
    * 📱 Stream app performance data
    */
   async streamAppPerformance(packageName: string, outputPath: string): Promise<void> {
-    console.log(`📱 Starting app performance stream for ${packageName} on ${this.deviceId}`);
-    
+
     try {
       const perfProcess = spawn([
         "adb", "-s", this.deviceId, "shell",
@@ -334,13 +320,15 @@ export class Android13Telemetry {
         }
       });
 
-      // Simplified app performance stream - write directly without complex piping
-      await Bun.write(outputPath, metadataStream.readable);
-      
-      console.log(`✅ App performance stream started: ${outputPath}`);
-      
+      // Pipe adb output through metadata transform and write to file
+      await perfProcess.stdout.pipeThrough(metadataStream).pipeTo(new WritableStream({
+        write(chunk) {
+          Bun.write(outputPath, chunk);
+        }
+      }));
+
     } catch (error) {
-      console.error(`❌ App performance stream failed: ${error}`);
+
       throw error;
     }
   }
@@ -363,8 +351,7 @@ export class TelemetryFactory {
    * 📊 Start streaming for all devices
    */
   async startAllStreams(outputDir: string): Promise<void> {
-    console.log(`🌊 Starting streams for ${this.streams.size} devices`);
-    
+
     for (const [deviceId, telemetry] of this.streams) {
       const logPath = `${outputDir}/${deviceId}-logs.zst`;
       await telemetry.startLogStream(logPath);
@@ -375,8 +362,7 @@ export class TelemetryFactory {
    * 🛑 Stop all streams
    */
   async stopAllStreams(): Promise<void> {
-    console.log(`🛑 Stopping ${this.streams.size} telemetry streams`);
-    
+
     for (const [deviceId, telemetry] of this.streams) {
       await telemetry.stopLogStream();
     }
@@ -395,7 +381,3 @@ export class TelemetryFactory {
     return statuses;
   }
 }
-
-console.log('🌀 Android 13 Telemetry Loaded - ZSTD Compression Streaming Ready');
-console.log('📊 Features: 75% data reduction, zero-memory buffering, real-time metrics');
-console.log('⚡ Performance: 10x throughput, native compression streams');

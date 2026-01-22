@@ -23,15 +23,14 @@ export class Android13Nexus {
 
     // Setup error handling
     this.adb.stderr.on("data", (data: Buffer) => {
-      console.error(`🔴 ADB Error [${deviceId}]: ${data.toString()}`);
+
     });
 
     this.adb.on("exit", (code: number) => {
-      console.log(`🔌 ADB Disconnected [${deviceId}]: exit code ${code}`);
+
       this.isConnected = false;
     });
 
-    console.log(`🔗 Android 13 Nexus initialized for device: ${deviceId}`);
   }
 
   /**
@@ -43,11 +42,11 @@ export class Android13Nexus {
       const result = await $`adb -s ${this.deviceId} echo "NEXUS_CONNECTED"`.text();
       if (result.includes("NEXUS_CONNECTED")) {
         this.isConnected = true;
-        console.log(`✅ Nexus connected to ${this.deviceId}`);
+
         return true;
       }
     } catch (error) {
-      console.error(`❌ Failed to connect to ${this.deviceId}: ${error}`);
+
     }
     return false;
   }
@@ -71,11 +70,10 @@ export class Android13Nexus {
       const currentHash = hash.crc32(new Uint8Array(screenshot)).toString(16);
       
       const elapsed = performance.now() - startTime;
-      console.log(`🔍 Screen integrity check: ${elapsed.toFixed(2)}ms - Hash: ${currentHash}`);
-      
+
       return currentHash === targetHash;
     } catch (error) {
-      console.error(`❌ Screen integrity check failed: ${error}`);
+
       return false;
     }
   }
@@ -90,7 +88,7 @@ export class Android13Nexus {
 
     const command = `input tap ${x} ${y}\n`;
     this.adb.stdin.write(command);
-    console.log(`👆 Nexus tap: (${x}, ${y}) on ${this.deviceId}`);
+
   }
 
   /**
@@ -104,7 +102,7 @@ export class Android13Nexus {
     const escapedText = text.replace(/"/g, '\\"');
     const command = `input text "${escapedText}"\n`;
     this.adb.stdin.write(command);
-    console.log(`⌨️ Nexus type: "${text}" on ${this.deviceId}`);
+
   }
 
   /**
@@ -115,8 +113,6 @@ export class Android13Nexus {
       throw new Error(`Nexus not connected to ${this.deviceId}`);
     }
 
-    console.log(`📱 Installing APK: ${apkPath} on ${this.deviceId}`);
-    
     try {
       const installProcess = spawn(["adb", "-s", this.deviceId, "install", "-r", apkPath], {
         stdout: "pipe",
@@ -129,14 +125,14 @@ export class Android13Nexus {
       await installProcess.exited;
       
       if (installProcess.exitCode === 0) {
-        console.log(`✅ APK installed successfully on ${this.deviceId}`);
+
         return true;
       } else {
-        console.error(`❌ APK installation failed: ${stderr}`);
+
         return false;
       }
     } catch (error) {
-      console.error(`❌ APK installation error: ${error}`);
+
       return false;
     }
   }
@@ -151,10 +147,10 @@ export class Android13Nexus {
 
     try {
       await $`adb -s ${this.deviceId} shell pm clear ${packageName}`.quiet();
-      console.log(`🧹 Cleared app data: ${packageName} on ${this.deviceId}`);
+
       return true;
     } catch (error) {
-      console.error(`❌ Failed to clear app data: ${error}`);
+
       return false;
     }
   }
@@ -167,8 +163,6 @@ export class Android13Nexus {
       throw new Error(`Nexus not connected to ${this.deviceId}`);
     }
 
-    console.log(`🌐 Resetting network on ${this.deviceId}`);
-    
     const commands = [
       "settings put global airplane_mode_on 1",
       "sleep 2",
@@ -183,7 +177,6 @@ export class Android13Nexus {
       await Bun.sleep(1000);
     }
 
-    console.log(`✅ Network reset completed on ${this.deviceId}`);
   }
 
   /**
@@ -217,7 +210,7 @@ export class Android13Nexus {
         device: props['ro.product.device'] || 'Unknown'
       };
     } catch (error) {
-      console.error(`❌ Failed to get device info: ${error}`);
+
       return {};
     }
   }
@@ -249,7 +242,7 @@ export class Android13Nexus {
         storage: storageMatch ? parseInt(storageMatch[1] || '0') : 0
       };
     } catch (error) {
-      console.error(`❌ Failed to get resource usage: ${error}`);
+
       return { cpu: 0, memory: 0, storage: 0 };
     }
   }
@@ -261,7 +254,7 @@ export class Android13Nexus {
     if (this.adb && !this.adb.killed) {
       this.adb.kill();
       this.isConnected = false;
-      console.log(`🔌 Nexus disconnected from ${this.deviceId}`);
+
     }
   }
 
@@ -275,10 +268,10 @@ export class Android13Nexus {
 
     try {
       const result = await $`adb -s ${this.deviceId} shell ${command}`.text();
-      console.log(`🔧 Executed: ${command} on ${this.deviceId}`);
+
       return result;
     } catch (error) {
-      console.error(`❌ Command execution failed: ${error}`);
+
       throw error;
     }
   }
@@ -287,19 +280,17 @@ export class Android13Nexus {
    * 🎯 Wait for screen to match target hash
    */
   async waitForScreen(targetHash: string, timeout: number = 30000): Promise<boolean> {
-    console.log(`⏳ Waiting for screen hash: ${targetHash} on ${this.deviceId}`);
-    
+
     const startTime = Date.now();
     
     while (Date.now() - startTime < timeout) {
       if (await this.checkScreenIntegrity(targetHash)) {
-        console.log(`✅ Screen hash matched on ${this.deviceId}`);
+
         return true;
       }
       await Bun.sleep(100); // 7.84ms latency checks
     }
-    
-    console.log(`⏱️ Timeout waiting for screen hash on ${this.deviceId}`);
+
     return false;
   }
 
@@ -314,9 +305,9 @@ export class Android13Nexus {
     try {
       const screenshot = await $`adb -s ${this.deviceId} exec-out screencap -p`.arrayBuffer();
       await writeFile(savePath, new Uint8Array(screenshot));
-      console.log(`📸 Screenshot saved: ${savePath} from ${this.deviceId}`);
+
     } catch (error) {
-      console.error(`❌ Screenshot capture failed: ${error}`);
+
       throw error;
     }
   }
@@ -330,8 +321,7 @@ export class NexusFactory {
    * 🏭 Create and connect to multiple Android 13 devices
    */
   async createNexusCluster(deviceIds: string[]): Promise<Android13Nexus[]> {
-    console.log(`🏭 Creating Nexus cluster for ${deviceIds.length} devices`);
-    
+
     const cluster: Android13Nexus[] = [];
     
     for (const deviceId of deviceIds) {
@@ -340,13 +330,12 @@ export class NexusFactory {
       if (await nexus.connect()) {
         this.devices.set(deviceId, nexus);
         cluster.push(nexus);
-        console.log(`✅ Added ${deviceId} to Nexus cluster`);
+
       } else {
-        console.log(`❌ Failed to connect to ${deviceId}`);
+
       }
     }
-    
-    console.log(`🏭 Nexus cluster ready: ${cluster.length}/${deviceIds.length} devices`);
+
     return cluster;
   }
 
@@ -390,17 +379,12 @@ export class NexusFactory {
    * 🧹 Disconnect all devices
    */
   async disconnectAll(): Promise<void> {
-    console.log(`🧹 Disconnecting ${this.devices.size} Nexus devices`);
-    
+
     for (const [deviceId, nexus] of this.devices) {
       await nexus.disconnect();
     }
     
     this.devices.clear();
-    console.log(`✅ All Nexus devices disconnected`);
+
   }
 }
-
-console.log('🛰️ Android 13 Nexus Loaded - SIMD-Accelerated ADB Bridge Ready');
-console.log('⚡ Features: 5.1x faster spawn, CRC32 screen verification, native IPC');
-console.log('🎯 Performance: 7.84ms screen checks, 2.5ms command latency');

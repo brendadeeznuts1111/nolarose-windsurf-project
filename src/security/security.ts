@@ -52,10 +52,6 @@ export class CredentialManager {
       ...config
     };
 
-    console.log(`🔐 Credential Manager initialized`);
-    console.log(`   🛡️ Keychain Storage: ${this.config.enableKeychainStorage ? 'Enabled' : 'Disabled'}`);
-    console.log(`   🔒 Algorithm: ${this.config.encryptionAlgorithm}`);
-    console.log(`   🔄 Key Derivation: ${this.config.keyDerivationRounds.toLocaleString()} rounds`);
   }
 
   /**
@@ -63,7 +59,6 @@ export class CredentialManager {
    * Creates the master key for database encryption and stores it in system keychain
    */
   async lockFortress(): Promise<string> {
-    console.log(`🔒 Locking Identity Fortress...`);
 
     try {
       // 1. 🎲 GENERATE MASTER KEY
@@ -109,10 +104,6 @@ export class CredentialManager {
 
       this.masterKey = masterKeyString;
 
-      console.log(`✅ Fortress locked successfully`);
-      console.log(`   🔑 Key ID: ${keyId}`);
-      console.log(`   ⏰ Expires: ${keyData.expiresAt}`);
-
       return masterKeyString;
 
     } catch (error) {
@@ -123,7 +114,6 @@ export class CredentialManager {
         details: error instanceof Error ? error.message : 'Unknown error'
       });
 
-      console.error(`❌ Failed to lock fortress: ${error}`);
       throw error;
     }
   }
@@ -133,7 +123,6 @@ export class CredentialManager {
    * Loads the master key from system keychain for database access
    */
   async unlockFortress(): Promise<string | null> {
-    console.log(`🔓 Unlocking Identity Fortress...`);
 
     try {
       // 1. 📥 RETRIEVE KEY DATA
@@ -146,13 +135,13 @@ export class CredentialManager {
       }
 
       if (!keyData) {
-        console.log(`⚠️ No fortress key found - creating new one`);
+
         return await this.lockFortress();
       }
 
       // 2. ⏰ CHECK EXPIRATION
       if (new Date() > new Date(keyData.expiresAt)) {
-        console.log(`⏰ Fortress key expired - creating new one`);
+
         return await this.lockFortress();
       }
 
@@ -169,9 +158,6 @@ export class CredentialManager {
 
       this.masterKey = masterKey;
 
-      console.log(`✅ Fortress unlocked successfully`);
-      console.log(`   🔑 Key ID: ${keyData.keyId}`);
-
       return masterKey;
 
     } catch (error) {
@@ -182,7 +168,6 @@ export class CredentialManager {
         details: error instanceof Error ? error.message : 'Unknown error'
       });
 
-      console.error(`❌ Failed to unlock fortress: ${error}`);
       return null;
     }
   }
@@ -217,7 +202,7 @@ export class CredentialManager {
       return btoa(String.fromCharCode(...combined));
 
     } catch (error) {
-      console.error(`❌ Encryption failed: ${error}`);
+
       throw error;
     }
   }
@@ -249,7 +234,7 @@ export class CredentialManager {
       return new TextDecoder().decode(decrypted);
 
     } catch (error) {
-      console.error(`❌ Decryption failed: ${error}`);
+
       throw error;
     }
   }
@@ -259,7 +244,6 @@ export class CredentialManager {
    * Remove master key from system keychain
    */
   async deleteMasterKey(): Promise<boolean> {
-    console.log(`🗑️ Deleting fortress master key...`);
 
     try {
       if (this.config.enableKeychainStorage) {
@@ -276,7 +260,6 @@ export class CredentialManager {
         success: true
       });
 
-      console.log(`✅ Master key deleted successfully`);
       return true;
 
     } catch (error) {
@@ -287,7 +270,6 @@ export class CredentialManager {
         details: error instanceof Error ? error.message : 'Unknown error'
       });
 
-      console.error(`❌ Failed to delete master key: ${error}`);
       return false;
     }
   }
@@ -428,8 +410,3 @@ export async function encryptData(data: string): Promise<string> {
 export async function decryptData(encryptedData: string): Promise<string> {
   return await SecurityManager.decryptData(encryptedData);
 }
-
-console.log('🔐 Security Manager Loaded - Enterprise-Grade Credential Persistence Ready');
-console.log('⚡ Features: System keychain integration, AES-256 encryption, audit logging');
-console.log('🛡️ Security: Master key management, secure data storage, credential rotation');
-console.log('🔒 Compliance: Audit trails, secure deletion, key expiration policies');

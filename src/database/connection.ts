@@ -9,8 +9,7 @@ class MockDatabase implements DatabaseConnection {
 
   async query(sql: string, params: any[] = []): Promise<any[]> {
     // Mock implementation - in production this would execute actual SQL
-    console.log(`[DB] Executing: ${sql}`, params);
-    
+
     // Return mock data based on query pattern
     if (sql.includes("user_lightning_balances")) {
       return [{ balance: 0 }];
@@ -29,9 +28,9 @@ class MockDatabase implements DatabaseConnection {
 
   async transaction(callback: (trx: any) => Promise<void>): Promise<void> {
     // Mock transaction implementation
-    console.log("[DB] Starting transaction");
+
     await callback(this);
-    console.log("[DB] Transaction completed");
+
   }
 }
 

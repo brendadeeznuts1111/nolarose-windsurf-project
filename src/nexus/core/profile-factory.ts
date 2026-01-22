@@ -141,8 +141,7 @@ export class ProfileFactory {
     simDataList: SIMData[],
     options: ProfileGenerationOptions = {}
   ): Promise<GeneratedProfile[]> {
-    console.log(`🏭 Generating batch profiles: ${deviceIds.length} devices, ${simDataList.length} SIMs`);
-    
+
     const profiles: GeneratedProfile[] = [];
     const startTime = performance.now();
     
@@ -155,7 +154,7 @@ export class ProfileFactory {
       
       // Progress indicator
       if ((i + 1) % 10 === 0) {
-        console.log(`   📊 Generated ${i + 1}/${deviceIds.length} profiles...`);
+
       }
       
       // Small delay to prevent overwhelming the system
@@ -166,10 +165,7 @@ export class ProfileFactory {
     
     const elapsed = performance.now() - startTime;
     const rate = (profiles.length / (elapsed / 1000)).toFixed(2);
-    
-    console.log(`✅ Batch generation complete: ${profiles.length} profiles in ${elapsed.toFixed(2)}ms`);
-    console.log(`🚀 Generation rate: ${rate} profiles/second`);
-    
+
     return profiles;
   }
 
@@ -181,23 +177,28 @@ export class ProfileFactory {
     deviceId: string, 
     options: ProfileGenerationOptions = {}
   ): Promise<GeneratedProfile | null> {
-    console.log(`📱 Provisioning device: ${deviceId}`);
-    
+
     try {
       // 1. 📋 GET AVAILABLE SIM
       const availableSIMs = Vault.SIM.getAvailable();
       if (availableSIMs.length === 0) {
-        console.error(`❌ No available SIMs for device ${deviceId}`);
+
         return null;
       }
       
       const simData = availableSIMs[0];
-      console.log(`   📋 Assigned SIM: ${simData.phone_number} (${simData.carrier})`);
-      
+
+      // Convert SIMInventory to SIMData
+      const simDataFormatted: SIMData = {
+        iccid: simData.iccid,
+        number: simData.phone_number,
+        carrier: simData.carrier,
+        country: simData.country
+      };
+
       // 2. 🏭 GENERATE PROFILE
-      const profile = this.createDeviceIdentity(deviceId, simData, options);
-      console.log(`   👤 Generated identity: ${profile.apple_id}`);
-      
+      const profile = this.createDeviceIdentity(deviceId, simDataFormatted, options);
+
       // 3. 💾 VAULT THE PROFILE
       Vault.saveProfile.run({
         ...profile,
@@ -205,22 +206,21 @@ export class ProfileFactory {
         status: 'active',
         burn_count: 0
       });
-      
+
       // 4. 🔄 MARK SIM AS ASSIGNED
       Vault.SIM.assign(simData.iccid, deviceId);
-      
+
       // 5. 📊 LOG AUDIT TRAIL
-      Vault.logAudit({
+      Vault.logAudit.run({
         device_id: deviceId,
         action: 'provisioned',
         integrity_hash: profile.crc32_integrity
       });
-      
-      console.log(`✅ Device ${deviceId} provisioned and vaulted`);
+
       return profile;
       
     } catch (error) {
-      console.error(`❌ Failed to provision device ${deviceId}: ${error}`);
+
       return null;
     }
   }
@@ -233,8 +233,7 @@ export class ProfileFactory {
     deviceIds: string[], 
     options: ProfileGenerationOptions = {}
   ): Promise<GeneratedProfile[]> {
-    console.log(`🔄 Batch provisioning ${deviceIds.length} devices...`);
-    
+
     const profiles: GeneratedProfile[] = [];
     
     for (const deviceId of deviceIds) {
@@ -246,8 +245,7 @@ export class ProfileFactory {
       // Small delay between provisions
       await Bun.sleep(100);
     }
-    
-    console.log(`✅ Batch provisioning complete: ${profiles.length}/${deviceIds.length} devices`);
+
     return profiles;
   }
 
@@ -309,7 +307,7 @@ export class ProfileFactory {
   static verifyProfileIntegrity(profile: GeneratedProfile): boolean {
     const profileCopy = { ...profile };
     const expectedHash = profileCopy.crc32_integrity;
-    delete profileCopy.crc32_integrity;
+    delete (profileCopy as Partial<GeneratedProfile>).crc32_integrity;
     
     const actualHash = hash.crc32(JSON.stringify(profileCopy)).toString(16);
     return expectedHash === actualHash;
@@ -323,13 +321,12 @@ export class ProfileFactory {
     deviceId: string, 
     options: ProfileGenerationOptions = {}
   ): Promise<GeneratedProfile | null> {
-    console.log(`🔄 Rotating identity for device: ${deviceId}`);
-    
+
     try {
       // 1. 📋 GET CURRENT PROFILE
       const currentProfile = Vault.getProfile(deviceId);
       if (!currentProfile) {
-        console.log(`⚠️ No existing profile for ${deviceId}, creating new one`);
+
         return await this.provisionDevice(deviceId, options);
       }
       
@@ -343,12 +340,11 @@ export class ProfileFactory {
       
       // 4. 🏭 GENERATE NEW IDENTITY
       const newProfile = await this.provisionDevice(deviceId, options);
-      
-      console.log(`✅ Identity rotated for ${deviceId}: ${currentProfile.apple_id} → ${newProfile?.apple_id}`);
+
       return newProfile;
       
     } catch (error) {
-      console.error(`❌ Failed to rotate identity for ${deviceId}: ${error}`);
+
       return null;
     }
   }
@@ -385,8 +381,3 @@ export function createDeviceIdentity(deviceId: string, simData: SIMData): Genera
 export async function provisionDevice(deviceId: string): Promise<GeneratedProfile | null> {
   return await ProfileFactory.provisionDevice(deviceId);
 }
-
-console.log('🏭 Profile Factory Loaded - SIMD-Accelerated Identity Generation Ready');
-console.log('⚡ Features: CRC32 app hash IDs, secure password generation, proxy rotation');
-console.log('🔐 Security: Integrity verification, audit logging, SIM inventory management');
-console.log('🚀 Performance: 40.8 profiles/second, batch provisioning, identity rotation');

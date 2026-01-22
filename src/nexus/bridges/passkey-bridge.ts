@@ -8,7 +8,7 @@ import { Android13Nexus } from "./adb-bridge";
 // Extend Android13Nexus with missing methods for Passkey Bridge
 class PasskeyAndroid13Nexus extends Android13Nexus {
   async shell(command: string): Promise<{ stdout: string; stderr: string }> {
-    console.log(`   🔧 Executing shell: ${command}`);
+
     // Mock implementation
     await Bun.sleep(1000);
     return {
@@ -18,14 +18,14 @@ class PasskeyAndroid13Nexus extends Android13Nexus {
   }
 
   async captureScreenSignature(): Promise<string> {
-    console.log(`   📸 Capturing screen signature...`);
+
     // Mock implementation
     await Bun.sleep(500);
     return "screen_signature_mock";
   }
 
   async longPress(x: number, y: number): Promise<void> {
-    console.log(`   👆 Long press at (${x}, ${y})`);
+
     // Mock implementation
     await Bun.sleep(500);
   }
@@ -67,7 +67,6 @@ export class PasskeyBridge {
    * Uses ADB and UI automation to inject passkey into Credential Manager
    */
   async injectPasskey(passkeyId: string, config: Partial<PasskeyConfig> = {}): Promise<InjectedPasskey> {
-    console.log(`🔑 Injecting passkey ${passkeyId} into Android 13 system...`);
 
     const passkeyConfig: PasskeyConfig = {
       algorithm: 'ES256',
@@ -90,41 +89,41 @@ export class PasskeyBridge {
 
     try {
       // Step 1: Open Android Credential Manager
-      console.log(`   📱 Opening Android Credential Manager...`);
+
       await this.nexus.shell(`am start -a android.settings.CREDENTIAL_MANAGER_SETTINGS`);
       await Bun.sleep(2000);
 
       // Step 2: Navigate to "Add new passkey"
-      console.log(`   🧭 Navigating to passkey creation...`);
+
       await this.navigateToPasskeyCreation();
 
       // Step 3: Configure passkey details
-      console.log(`   ⚙️ Configuring passkey details...`);
+
       await this.configurePasskey(passkeyConfig);
 
       // Step 4: Inject passkey ID
-      console.log(`   💉 Injecting passkey ID: ${passkeyId}`);
+
       await this.injectPasskeyId(passkeyId);
 
       // Step 5: Confirm and save
-      console.log(`   ✅ Confirming and saving passkey...`);
+
       await this.confirmPasskeyCreation();
 
       // Step 6: Verify injection
-      console.log(`   🔍 Verifying passkey injection...`);
+
       const success = await this.verifyPasskeyInjection(passkeyId);
       
       injectedPasskey.status = success ? 'injected' : 'failed';
       
       if (success) {
-        console.log(`✅ Passkey ${passkeyId} successfully injected into Android 13 system`);
+
       } else {
-        console.log(`❌ Passkey injection verification failed`);
+
       }
 
     } catch (error) {
       injectedPasskey.status = 'failed';
-      console.error(`❌ Passkey injection failed: ${error}`);
+
     }
 
     return injectedPasskey;
@@ -135,7 +134,6 @@ export class PasskeyBridge {
    * Inject multiple passkeys for different services
    */
   async batchInjectPasskeys(passkeys: Array<{ id: string; config?: Partial<PasskeyConfig> }>): Promise<InjectedPasskey[]> {
-    console.log(`🔄 Batch injecting ${passkeys.length} passkeys...`);
 
     const results: InjectedPasskey[] = [];
     
@@ -144,8 +142,7 @@ export class PasskeyBridge {
       if (!passkey) continue;
       
       const { id, config } = passkey;
-      console.log(`   📱 Processing passkey ${i + 1}/${passkeys.length}: ${id}`);
-      
+
       const result = await this.injectPasskey(id, config || {});
       results.push(result);
       
@@ -156,7 +153,6 @@ export class PasskeyBridge {
     }
 
     const successCount = results.filter(r => r.status === 'injected').length;
-    console.log(`✅ Batch injection complete: ${successCount}/${passkeys.length} successful`);
 
     return results;
   }
@@ -166,7 +162,6 @@ export class PasskeyBridge {
    * Remove a previously injected passkey
    */
   async removePasskey(passkeyId: string): Promise<boolean> {
-    console.log(`🗑️ Removing passkey: ${passkeyId}`);
 
     try {
       // Open Credential Manager
@@ -175,12 +170,11 @@ export class PasskeyBridge {
 
       // Find and remove the passkey
       await this.findAndRemovePasskey(passkeyId);
-      
-      console.log(`✅ Passkey ${passkeyId} removed successfully`);
+
       return true;
 
     } catch (error) {
-      console.error(`❌ Failed to remove passkey: ${error}`);
+
       return false;
     }
   }
@@ -190,7 +184,6 @@ export class PasskeyBridge {
    * List all passkeys injected into the system
    */
   async listInjectedPasskeys(): Promise<string[]> {
-    console.log(`📊 Listing injected passkeys...`);
 
     try {
       // Query credential manager for stored passkeys
@@ -206,11 +199,10 @@ export class PasskeyBridge {
         .filter((cred: any) => cred.type === 'passkey')
         .map((cred: any) => cred.id);
 
-      console.log(`📊 Found ${passkeyIds.length} injected passkeys`);
       return passkeyIds;
 
     } catch (error) {
-      console.error(`❌ Failed to list passkeys: ${error}`);
+
       return [];
     }
   }
@@ -220,22 +212,21 @@ export class PasskeyBridge {
    * Verify that injected passkey is working correctly
    */
   async verifyPasskeyIntegrity(passkeyId: string): Promise<boolean> {
-    console.log(`🔍 Verifying passkey integrity: ${passkeyId}`);
 
     try {
       // Test passkey authentication flow
       const testResult = await this.testPasskeyAuthentication(passkeyId);
       
       if (testResult.success) {
-        console.log(`✅ Passkey integrity verified: ${passkeyId}`);
+
         return true;
       } else {
-        console.log(`❌ Passkey integrity check failed: ${testResult.error}`);
+
         return false;
       }
 
     } catch (error) {
-      console.error(`❌ Passkey verification error: ${error}`);
+
       return false;
     }
   }
@@ -422,8 +413,3 @@ export async function batchInjectServicePasskeys(deviceId: string, services: str
 
   return await bridge.batchInjectPasskeys(passkeys);
 }
-
-console.log('🔑 Passkey Bridge Loaded - Android 13 Passkey Injection Ready');
-console.log('⚡ Features: Native injection, batch operations, integrity verification');
-console.log('🔐 Security: Hardware-backed storage, algorithm selection, RP configuration');
-console.log('📱 Compatibility: Android 13+ Credential Manager, ADB automation');

@@ -18,16 +18,17 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
     "cli-dashboard",
-    "advanced-metrics.ts"
+    "advanced-metrics.ts",
+    "vitest.config.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "build",
     "examples",
-    "tests",
-    "__tests__",
     "*.js"
   ]
 }
