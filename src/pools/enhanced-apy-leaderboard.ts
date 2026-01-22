@@ -1,5 +1,5 @@
 // Enhanced version of getPoolDetails with production-ready improvements
-import type { ValidationResult } from "../../examples/pool-validation-example";
+import type { ValidationResult } from "../../examples/pool-validation/pool-validation-example";
 
 export interface EnhancedPoolDetailsOptions {
   timeframe?: "24h" | "7d" | "30d" | "90d";
@@ -25,10 +25,10 @@ export class EnhancedAPYLeaderboard {
     error?: string;
     performance: number;
   }> = [];
-  
+
   // Mock pools storage (would come from actual data source)
   private pools: Map<string, any> = new Map();
-  
+
   // Cache performance tracking
   private cacheHits = 0;
   private cacheMisses = 0;
@@ -37,7 +37,7 @@ export class EnhancedAPYLeaderboard {
    * Enhanced getPoolDetails with validation, error handling, caching, and audit logging
    */
   async getPoolDetails(
-    poolId: string, 
+    poolId: string,
     options: EnhancedPoolDetailsOptions = {}
   ): Promise<any> {
     const startTime = Date.now();
@@ -149,7 +149,7 @@ export class EnhancedAPYLeaderboard {
       if (error instanceof Error && "code" in error) {
         throw error;
       }
-      
+
       const enhancedError: PoolDetailsError = new Error(`Unexpected error: ${error?.message || 'Unknown error'}`) as PoolDetailsError;
       enhancedError.code = "CALCULATION_ERROR";
       enhancedError.poolId = poolId;
@@ -170,16 +170,16 @@ export class EnhancedAPYLeaderboard {
 
     // Sanitize input
     const sanitized = poolId.trim().toLowerCase();
-    
+
     // Format validation
     if (sanitized.length < 3) {
       errors.push("Pool ID must be at least 3 characters");
     }
-    
+
     if (sanitized.length > 50) {
       errors.push("Pool ID must be less than 50 characters");
     }
-    
+
     if (!/^[a-z0-9-_]+$/.test(sanitized)) {
       errors.push("Pool ID can only contain letters, numbers, hyphens, and underscores");
     }
@@ -211,7 +211,7 @@ export class EnhancedAPYLeaderboard {
       data: { ...data }, // Store copy to prevent mutation
       timestamp: Date.now()
     });
-    
+
     // Implement cache size limits
     if (this.detailsCache.size > 1000) {
       const oldestKey = this.detailsCache.keys().next().value;
@@ -236,7 +236,7 @@ export class EnhancedAPYLeaderboard {
 
       // Call original calculation with validation
       const metrics = await this.calculatePoolMetrics(pool, timeframe);
-      
+
       // Validate calculation results
       if (!metrics || typeof metrics !== "object") {
         throw new Error("Metrics calculation returned invalid result");
@@ -347,7 +347,7 @@ export class EnhancedAPYLeaderboard {
   // ✅ AUDIT TRAIL & LOGGING
   private logAudit(entry: any): void {
     this.auditLog.push(entry);
-    
+
     // Keep audit log size manageable
     if (this.auditLog.length > 10000) {
       this.auditLog = this.auditLog.slice(-5000);
@@ -368,24 +368,24 @@ export class EnhancedAPYLeaderboard {
       poolId: pool.id,
       poolName: pool.name,
       familyId: pool.familyId,
-      
+
       // Calculated performance metrics
       apy: metrics.apy,
       balance: metrics.balance,
       members: pool.memberCount,
       volume24h: metrics.volume24h,
       yieldGenerated: metrics.yieldGenerated,
-      
+
       // Risk-adjusted analytics
       tier: this.calculateTier(metrics.apy, metrics.riskScore),
       riskScore: metrics.riskScore,
       strategy: pool.strategy,
-      
+
       // Ranking information
       rank: 0,
       previousRank: pool.previousRank || 0,
       rankChange: 0,
-      
+
       // Metadata
       lastUpdated: new Date(),
       timeframe: options.timeframe || "30d"

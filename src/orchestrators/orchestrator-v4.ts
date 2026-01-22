@@ -3,14 +3,14 @@
 // Complete human profile generation with encrypted storage and 2FA dashboard
 
 import { hash, spawn } from "bun";
-import { Android13Nexus } from "./adb-bridge";
-import { Android13Telemetry } from "./telemetry";
-import { CryptoBurnerEngine } from "./phases/crypto-onramp";
-import { Vault, DeviceProfile, initializeVault } from "./storage";
-import { ProfileFactory, GeneratedProfile, SIMData } from "./profile-factory";
-import { SecurityManager, lockFortress, unlockFortress } from "./security";
-import { IdentityFactory, IdentitySilo, PersonaGenerationOptions } from "./identity-factory";
-import { SecureVault, initializeSecureVault, storeSilo, retrieveSilo } from "./vault-secure";
+import { Android13Nexus } from "../nexus/bridges/adb-bridge";
+import { Android13Telemetry } from "../nexus/core/telemetry";
+import { CryptoBurnerEngine } from "../nexus/phases/crypto-onramp";
+import { Vault, DeviceProfile, initializeVault } from "../nexus/core/storage";
+import { ProfileFactory, GeneratedProfile, SIMData } from "../nexus/core/profile-factory";
+import { SecurityManager, lockFortress, unlockFortress } from "../security/security";
+import { IdentityFactory, IdentitySilo, PersonaGenerationOptions } from "../security/identity-factory";
+import { SecureVault, initializeSecureVault, storeSilo, retrieveSilo } from "../security/vault-secure";
 
 export interface SovereignConfig {
   deviceIds: string[];
@@ -69,7 +69,7 @@ export class SovereignIdentityOrchestrator {
       enableAudit: true,
       enableCompression: true
     });
-    
+
     console.log(`🧬 Initializing Sovereign Identity Orchestrator v4.0 with ${config.deviceIds.length} devices...`);
     console.log(`🧬 Sovereign Identities: ${config.enableSovereignIdentities ? 'Enabled' : 'Disabled'}`);
     console.log(`🔐 Secure Vault: ${config.enableSecureVault ? 'Enabled' : 'Disabled'}`);
@@ -82,7 +82,7 @@ export class SovereignIdentityOrchestrator {
    */
   async initialize(): Promise<void> {
     console.log(`\n🧬 Phase 00: Sovereign Identity Blueprint Initialization...`);
-    
+
     try {
       // 1. 🔐 INITIALIZE SECURITY AND UNLOCK FORTRESS
       console.log(`   🔐 Unlocking Identity Fortress...`);
@@ -92,26 +92,26 @@ export class SovereignIdentityOrchestrator {
         this.masterKey = await lockFortress();
       }
       console.log(`   ✅ Fortress unlocked successfully`);
-      
+
       // 2. 💾 INITIALIZE IDENTITY VAULT
       console.log(`   💾 Initializing Identity Vault...`);
       initializeVault();
       console.log(`   ✅ Vault initialized with SIM inventory and proxy pool`);
-      
+
       // 3. 🔐 INITIALIZE SECURE VAULT FOR ENCRYPTED SILOS
       if (this.config.enableSecureVault) {
         console.log(`   🔐 Initializing Secure Vault for encrypted silos...`);
         await initializeSecureVault();
         console.log(`   ✅ Secure vault ready with AES-256-GCM encryption`);
       }
-      
+
       // 4. 📱 CONNECT ANDROID 13 DEVICES
       console.log(`   📱 Connecting Android 13 cloud instances...`);
       for (const deviceId of this.config.deviceIds) {
         const nexus = new Android13Nexus(deviceId);
         await nexus.connect();
         this.instances.set(deviceId, nexus);
-        
+
         // Initialize device status
         this.deviceStatus.set(deviceId, {
           deviceId,
@@ -122,10 +122,10 @@ export class SovereignIdentityOrchestrator {
           integrityVerified: false,
           securityScore: 0
         });
-        
+
         console.log(`   ✅ Device ${deviceId} connected`);
       }
-      
+
       // 5. 🌐 INITIALIZE TELEMETRY STREAMS
       if (this.config.enableTelemetry) {
         console.log(`   🌀 Starting ZSTD telemetry streams...`);
@@ -136,7 +136,7 @@ export class SovereignIdentityOrchestrator {
         }
         console.log(`   ✅ Telemetry streams active`);
       }
-      
+
       // 6. 🔥 INITIALIZE CRYPTO BURNERS
       if (this.config.enableCryptoBurners) {
         console.log(`   🔥 Initializing crypto burner engines...`);
@@ -150,15 +150,15 @@ export class SovereignIdentityOrchestrator {
         }
         console.log(`   ✅ Crypto engines ready`);
       }
-      
+
       // 7. 🧬 AUTO-PROVISION DEVICES WITH SOVEREIGN IDENTITIES
       if (this.config.autoProvision && this.config.enableIdentityManagement) {
         console.log(`   🧬 Auto-provisioning devices with sovereign identities...`);
         await this.provisionAllSovereignDevices();
       }
-      
+
       console.log(`\n🎆 Sovereign Identity Blueprint v4.0 fully initialized!`);
-      
+
     } catch (error) {
       console.error(`❌ Sovereign Identity initialization failed: ${error}`);
       throw error;
@@ -171,12 +171,12 @@ export class SovereignIdentityOrchestrator {
    */
   async provisionAllSovereignDevices(): Promise<void> {
     console.log(`\n🧬 Provisioning ${this.config.deviceIds.length} devices with sovereign identities...`);
-    
+
     for (const deviceId of this.config.deviceIds) {
       await this.provisionSovereignDevice(deviceId);
       await Bun.sleep(500); // Brief delay between provisions
     }
-    
+
     console.log(`✅ All devices provisioned with sovereign identities`);
   }
 
@@ -184,16 +184,16 @@ export class SovereignIdentityOrchestrator {
    * 🧬 PROVISION SINGLE DEVICE WITH SOVEREIGN IDENTITY
    * Create complete human profile with encrypted storage
    */
-  async provisionSovereignDevice(deviceId: string): Promise<IdentitySilo | null> {
+  async provisionSovereignDevice(deviceId: string): Promise<IdentitySilo | undefined> {
     console.log(`   🧬 Provisioning sovereign identity for ${deviceId}...`);
-    
+
     try {
       // 1. 📋 CHECK IF SILO ALREADY EXISTS
       if (this.config.enableSecureVault) {
         const existingSilo = await retrieveSilo(deviceId);
         if (existingSilo) {
           console.log(`   ⚠️ Device ${deviceId} already has sovereign identity: ${existingSilo.fullName}`);
-          
+
           // Update device status
           const status = this.deviceStatus.get(deviceId);
           if (status) {
@@ -203,30 +203,30 @@ export class SovereignIdentityOrchestrator {
             status.securityScore = this.calculateSecurityScore(existingSilo);
             status.lastActivity = new Date().toISOString();
           }
-          
+
           return existingSilo;
         }
       }
-      
+
       // 2. 🏭 GENERATE APP HASH ID
       const appHash = hash.crc32(`${deviceId}-${Date.now()}`).toString(16);
-      
+
       // 3. 🧬 GENERATE COMPLETE HUMAN PROFILE
       console.log(`   🧬 Generating complete human profile...`);
       const silo = IdentityFactory.generateSilo(appHash, this.config.personaOptions);
-      
+
       // 4. 🔍 VALIDATE SILO INTEGRITY
       if (!IdentityFactory.validateSilo(silo)) {
         throw new Error(`Generated silo failed validation for ${deviceId}`);
       }
-      
+
       // 5. 🔐 ENCRYPT AND STORE IN SECURE VAULT
       if (this.config.enableSecureVault) {
         console.log(`   🔐 Encrypting and storing sovereign identity...`);
         await storeSilo(silo);
         console.log(`   ✅ Sovereign identity encrypted and stored`);
       }
-      
+
       // 6. 📱 UPDATE DEVICE STATUS
       const status = this.deviceStatus.get(deviceId);
       if (status) {
@@ -237,7 +237,7 @@ export class SovereignIdentityOrchestrator {
         status.securityScore = this.calculateSecurityScore(silo);
         status.lastActivity = new Date().toISOString();
       }
-      
+
       console.log(`   ✅ ${deviceId} sovereign identity created: ${silo.fullName}`);
       console.log(`      👤 ${silo.gender}, ${silo.age} years old`);
       console.log(`      📧 ${silo.email}`);
@@ -245,12 +245,12 @@ export class SovereignIdentityOrchestrator {
       console.log(`      🏠 ${silo.address}`);
       console.log(`      💼 ${silo.profession} at ${silo.company}`);
       console.log(`      🔐 2FA: ${silo.totpSecret} | Passkey: ${silo.passkeyId}`);
-      
+
       return silo;
-      
+
     } catch (error) {
       console.error(`   ❌ Failed to provision sovereign identity for ${deviceId}: ${error}`);
-      return null;
+      return undefined;
     }
   }
 
@@ -261,7 +261,7 @@ export class SovereignIdentityOrchestrator {
   async runSovereignMischief(deviceId: string): Promise<void> {
     const nexus = this.instances.get(deviceId);
     const status = this.deviceStatus.get(deviceId);
-    
+
     if (!nexus || !status) {
       console.error(`❌ Device ${deviceId} not found`);
       return;
@@ -276,14 +276,14 @@ export class SovereignIdentityOrchestrator {
         console.log(`   [${deviceId}] 🧬 No sovereign identity found, provisioning...`);
         silo = await this.provisionSovereignDevice(deviceId);
       }
-      
+
       if (!silo) {
         throw new Error(`No sovereign identity available for ${deviceId}`);
       }
-      
+
       console.log(`   [${deviceId}] 👤 Using sovereign identity: ${silo.fullName}`);
       console.log(`   [${deviceId}] 📧 Email: ${silo.email} | 📱 Phone: ${silo.phone}`);
-      
+
       // 2. 🔍 VERIFY IDENTITY INTEGRITY
       if (!IdentityFactory.validateSilo(silo)) {
         console.log(`   [${deviceId}] ⚠️ Identity integrity check failed, regenerating...`);
@@ -292,7 +292,7 @@ export class SovereignIdentityOrchestrator {
           throw new Error(`Failed to regenerate sovereign identity for ${deviceId}`);
         }
       }
-      
+
       // 3. 🍎 APPLE ID VERIFICATION WITH SOVEREIGN IDENTITY
       console.log(`   [${deviceId}] 🍎 Apple ID verification with ${silo.email}...`);
       await nexus.type(silo.email);
@@ -301,14 +301,14 @@ export class SovereignIdentityOrchestrator {
       await Bun.sleep(2000);
       await nexus.tap(500, 1100); // Verify button
       await Bun.sleep(3000);
-      
+
       // 4. 📱 PHONE VERIFICATION WITH SOVEREIGN IDENTITY
       console.log(`   [${deviceId}] 📱 Phone verification with ${silo.phone}...`);
       await nexus.type(silo.phone);
       await Bun.sleep(1000);
       await nexus.tap(500, 1200); // Send verification code
       await Bun.sleep(3000);
-      
+
       // 5. 🔐 2FA VERIFICATION WITH TOTP
       console.log(`   [${deviceId}] 🔐 2FA verification with TOTP: ${silo.totpSecret}...`);
       const totpCode = this.generateTOTPCode(silo.totpSecret);
@@ -316,7 +316,7 @@ export class SovereignIdentityOrchestrator {
       await Bun.sleep(2000);
       await nexus.tap(500, 1300); // Verify 2FA
       await Bun.sleep(3000);
-      
+
       // 6. 💎 GENERATE BURNER WALLET
       if (this.config.enableCryptoBurners) {
         console.log(`   [${deviceId}] 💎 Generating crypto wallet...`);
@@ -327,39 +327,39 @@ export class SovereignIdentityOrchestrator {
           console.log(`   [${deviceId}] 💎 Wallet generated: ${wallet.address}`);
         }
       }
-      
+
       // 7. 🎯 SEARCH ADS ARBITRAGE
       if (this.config.enableSearchAds) {
         console.log(`   [${deviceId}] 🎯 Running Search Ads Arbitrage...`);
         await this.runSearchAdsArbitrage(nexus, deviceId);
       }
-      
+
       // 8. 💰 IAP REVENUE LOOP
       if (this.config.enableIAPLoop) {
         console.log(`   [${deviceId}] 💰 Executing IAP Revenue Loop...`);
         await this.runIAPRevenueLoop(nexus, deviceId);
         status.revenueGenerated += 150; // Enhanced revenue with sovereign identity
       }
-      
+
       // 9. 📰 PRESS RELEASE SPAM
       if (this.config.enablePressRelease) {
         console.log(`   [${deviceId}] 📰 Executing Press Release Spam...`);
         await this.runPressReleaseSpam(nexus, deviceId);
       }
-      
+
       // 10. 🔄 INFINITY RESET
       if (this.config.enableInfinityReset) {
         console.log(`   [${deviceId}] 🔄 Executing Infinity Reset...`);
         await this.resetSovereignIdentity(nexus, deviceId);
       }
-      
+
       // Update status
       status.cyclesCompleted++;
       status.lastActivity = new Date().toISOString();
       status.securityScore = this.calculateSecurityScore(silo);
-      
+
       console.log(`\x1b[32m[${deviceId}] ✔ Sovereign Identity Mischief Cycle Complete\x1b[0m`);
-      
+
     } catch (error) {
       status.status = 'error';
       console.error(`\x1b[31m[${deviceId}] ❌ Sovereign Identity Mischief Failed: ${error}\x1b[0m`);
@@ -370,28 +370,28 @@ export class SovereignIdentityOrchestrator {
    * 🔄 ROTATE SOVEREIGN IDENTITY
    * Generate new complete human profile and archive old one
    */
-  async rotateSovereignIdentity(deviceId: string): Promise<IdentitySilo | null> {
+  async rotateSovereignIdentity(deviceId: string): Promise<IdentitySilo | undefined> {
     console.log(`🔄 Rotating sovereign identity for device: ${deviceId}`);
-    
+
     try {
       const status = this.deviceStatus.get(deviceId);
       const oldSilo = status?.silo;
-      
+
       // Generate new app hash
       const newAppHash = hash.crc32(`${deviceId}-${Date.now()}-rotated`).toString(16);
-      
+
       // Generate new sovereign identity
       const newSilo = IdentityFactory.generateSilo(newAppHash, this.config.personaOptions);
-      
+
       if (!IdentityFactory.validateSilo(newSilo)) {
         throw new Error(`Generated silo failed validation for ${deviceId}`);
       }
-      
+
       // Store new silo
       if (this.config.enableSecureVault) {
         await storeSilo(newSilo);
       }
-      
+
       // Update device status
       if (status) {
         status.silo = newSilo;
@@ -400,13 +400,13 @@ export class SovereignIdentityOrchestrator {
         status.securityScore = this.calculateSecurityScore(newSilo);
         status.lastActivity = new Date().toISOString();
       }
-      
+
       console.log(`✅ Sovereign identity rotated for ${deviceId}: ${oldSilo?.fullName} → ${newSilo.fullName}`);
       return newSilo;
-      
+
     } catch (error) {
       console.error(`❌ Failed to rotate sovereign identity for ${deviceId}: ${error}`);
-      return null;
+      return undefined;
     }
   }
 
@@ -419,7 +419,7 @@ export class SovereignIdentityOrchestrator {
     const vaultStats = Vault.getStats();
     const secureVaultStats = this.config.enableSecureVault ? this.secureVault.getVaultStats() : null;
     const securityStatus = SecurityManager.getSecurityStatus();
-    
+
     return {
       overview: {
         totalDevices: this.config.deviceIds.length,
@@ -437,8 +437,8 @@ export class SovereignIdentityOrchestrator {
       secureVault: secureVaultStats,
       security: securityStatus,
       performance: {
-        avgCyclesPerDevice: deviceStats.length > 0 
-          ? deviceStats.reduce((sum, d) => sum + d.cyclesCompleted, 0) / deviceStats.length 
+        avgCyclesPerDevice: deviceStats.length > 0
+          ? deviceStats.reduce((sum, d) => sum + d.cyclesCompleted, 0) / deviceStats.length
           : 0,
         totalRevenue: deviceStats.reduce((sum, d) => sum + d.revenueGenerated, 0),
         avgSecurityScore: deviceStats.length > 0
@@ -459,7 +459,7 @@ export class SovereignIdentityOrchestrator {
     console.log(`┌─────────────────────────────────────────────────────────────────────────────────┐`);
     console.log(`│ DEVICE     │ STATUS   │ IDENTITY              │ AGE  │ 2FA    │ SECURITY │ CYCLES │ REVENUE │`);
     console.log(`├─────────────────────────────────────────────────────────────────────────────────┤`);
-    
+
     for (const status of this.deviceStatus.values()) {
       const deviceId = status.deviceId.padEnd(10);
       const statusStr = status.status.padEnd(8);
@@ -469,36 +469,36 @@ export class SovereignIdentityOrchestrator {
       const security = status.securityScore.toString().padEnd(8);
       const cycles = status.cyclesCompleted.toString().padEnd(6);
       const revenue = `$${status.revenueGenerated}`.padEnd(6);
-      
+
       console.log(`│ ${deviceId} │ ${statusStr} │ ${identity} │ ${age} │ ${totp} │ ${security} │ ${cycles} │ ${revenue} │`);
     }
-    
+
     console.log(`└─────────────────────────────────────────────────────────────────────────────────┘`);
   }
 
   // Private methods
   private calculateSecurityScore(silo: IdentitySilo): number {
     let score = 0;
-    
+
     // Base score for having complete profile
     score += 20;
-    
+
     // TOTP secret
     if (silo.totpSecret) score += 20;
-    
+
     // Passkey
     if (silo.passkeyId) score += 20;
-    
+
     // MFA method
     if (silo.mfaMethod) score += 15;
-    
+
     // Recovery setup
     if (silo.recoveryHint && silo.recoveryAnswer) score += 15;
-    
+
     // Additional security features
     if (silo.bankAccount) score += 5;
     if (silo.socialPlatforms.length > 0) score += 5;
-    
+
     return Math.min(score, 100);
   }
 
@@ -506,7 +506,7 @@ export class SovereignIdentityOrchestrator {
     // Simple TOTP simulation
     const timeSlot = Math.floor(Date.now() / 30000);
     const hash = Bun.hash(secret + timeSlot.toString());
-    return Math.floor(hash % 1000000).toString().padStart(6, '0');
+    return Math.floor(Number(hash) % 1000000).toString().padStart(6, '0');
   }
 
   private async runSearchAdsArbitrage(nexus: Android13Nexus, deviceId: string): Promise<void> {
@@ -530,25 +530,25 @@ export class SovereignIdentityOrchestrator {
    */
   async shutdown(): Promise<void> {
     console.log(`\n🛑 Shutting down Sovereign Identity System...`);
-    
+
     // Stop telemetry streams
     for (const telemetry of this.telemetry.values()) {
       await telemetry.stopLogStream();
     }
-    
+
     // Disconnect devices
     for (const nexus of this.instances.values()) {
       await nexus.disconnect();
     }
-    
+
     // Backup vault
     await Vault.backup(`./backups/vault-backup-${Date.now()}.json`);
-    
+
     // Backup secure vault
     if (this.config.enableSecureVault) {
       await this.secureVault.exportBackup(`./backups/secure-vault-backup-${Date.now()}.json`);
     }
-    
+
     console.log(`✅ Sovereign Identity System shutdown complete`);
   }
 }
@@ -588,23 +588,23 @@ async function main() {
   try {
     // Initialize Sovereign Identity System
     await sovereign.initialize();
-    
+
     // Display sovereign identity matrix
     sovereign.displaySovereignIdentityMatrix();
-    
+
     // Execute sovereign mischief cycles
     for (let cycle = 0; cycle < 2; cycle++) {
       console.log(`\n🔄 Executing Sovereign Identity Mischief Cycle ${cycle + 1}/2...`);
-      
+
       for (const deviceId of config.deviceIds) {
         await sovereign.runSovereignMischief(deviceId);
         await Bun.sleep(1000);
       }
-      
+
       // Display updated matrix
       sovereign.displaySovereignIdentityMatrix();
     }
-    
+
     // Display final statistics
     const finalStatus = sovereign.getSovereignIdentityMatrix();
     console.log(`\n📊 Final Sovereign Identity Statistics:`);
@@ -618,9 +618,9 @@ async function main() {
     console.log(`   🛡️ Average Security Score: ${finalStatus.performance.avgSecurityScore}/100`);
     console.log(`   🔐 Identities with 2FA: ${finalStatus.performance.identitiesWith2FA}/${finalStatus.overview.totalDevices}`);
     console.log(`   🔑 Identities with Passkeys: ${finalStatus.performance.identitiesWithPasskeys}/${finalStatus.overview.totalDevices}`);
-    
+
     console.log(`\n🎆 SOVEREIGN IDENTITY BLUEPRINT - HUMAN PROFILE DOMINATION COMPLETE!`);
-    
+
   } catch (error) {
     console.error(`❌ Sovereign Identity execution failed: ${error}`);
   } finally {

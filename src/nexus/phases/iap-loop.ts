@@ -2,7 +2,7 @@
 // 💎 Phase 05 & 06: The SIMD Review & IAP Loop
 // Native 1.3.6 Edition - 7.84ms UI Detection with CRC32 Checksums
 
-import { Android13Nexus } from "../adb-bridge";
+import { Android13Nexus } from "../bridges/adb-bridge";
 import { hash } from "bun";
 
 // Pre-calculated CRC32 hashes for UI elements (would be calculated from reference screenshots)
@@ -39,11 +39,11 @@ export class IAPLoopController {
     failures: number;
     totalElapsedMs: number;
   } = {
-    attempts: 0,
-    successes: 0,
-    failures: 0,
-    totalElapsedMs: 0
-  };
+      attempts: 0,
+      successes: 0,
+      failures: 0,
+      totalElapsedMs: 0
+    };
 
   constructor(config: IAPLoopConfig) {
     this.nexus = config.nexus;
@@ -62,7 +62,7 @@ export class IAPLoopController {
 
     this.isRunning = true;
     const startTime = performance.now();
-    
+
     console.log(`💎 Starting IAP Loop for ${this.nexus.deviceId}`);
     console.log(`⚙️ Config: maxRetries=${this.config.maxRetries}, timeout=${this.config.timeoutMs}ms`);
 
@@ -98,10 +98,10 @@ export class IAPLoopController {
       this.stats.successes++;
       const elapsed = performance.now() - startTime;
       this.stats.totalElapsedMs += elapsed;
-      
+
       console.log(`✅ IAP Loop completed in ${elapsed.toFixed(2)}ms for ${this.nexus.deviceId}`);
       console.log(`💰 Purchase triggered: 70% Revenue Re-routed`);
-      
+
       return true;
 
     } catch (error) {
@@ -118,23 +118,23 @@ export class IAPLoopController {
    */
   private async waitForUI(targetHash: string, elementName: string): Promise<boolean> {
     console.log(`⏳ Waiting for ${elementName} (hash: ${targetHash}) on ${this.nexus.deviceId}`);
-    
+
     const startTime = Date.now();
     let checkCount = 0;
-    
+
     while (Date.now() - startTime < this.config.timeoutMs) {
       checkCount++;
-      
+
       // 7.84ms latency checks with CRC32 verification
       if (await this.nexus.checkScreenIntegrity(targetHash)) {
         const elapsed = Date.now() - startTime;
         console.log(`✅ ${elementName} detected on ${this.nexus.deviceId} in ${elapsed}ms (${checkCount} checks)`);
         return true;
       }
-      
+
       await Bun.sleep(this.config.checkIntervalMs);
     }
-    
+
     console.log(`⏱️ Timeout waiting for ${elementName} on ${this.nexus.deviceId}`);
     return false;
   }
@@ -144,14 +144,14 @@ export class IAPLoopController {
    */
   private async navigateToPurchase(): Promise<void> {
     console.log(`🧭 Navigating to purchase flow on ${this.nexus.deviceId}`);
-    
+
     // Simulate navigation steps (would be adapted to actual app UI)
     await Bun.sleep(1000);
     await this.nexus.tap(500, 800); // Tap on app/item
     await Bun.sleep(1500);
     await this.nexus.tap(500, 1200); // Tap on purchase button
     await Bun.sleep(2000);
-    
+
     console.log(`✅ Navigation completed on ${this.nexus.deviceId}`);
   }
 
@@ -160,7 +160,7 @@ export class IAPLoopController {
    */
   private async executePurchase(): Promise<void> {
     console.log(`💰 Executing purchase on ${this.nexus.deviceId}`);
-    
+
     // Wait for payment dialog
     if (!await this.waitForUI(UI_HASHES.PAYMENT_DIALOG, "Payment Dialog")) {
       throw new Error("Payment dialog never appeared");
@@ -180,7 +180,7 @@ export class IAPLoopController {
 
     await this.nexus.tap(500, 1400); // Tap confirm
     await Bun.sleep(3000);
-    
+
     console.log(`💰 Purchase executed on ${this.nexus.deviceId}`);
   }
 
@@ -189,7 +189,7 @@ export class IAPLoopController {
    */
   private async handleReviewFlow(): Promise<void> {
     console.log(`⭐ Handling review flow on ${this.nexus.deviceId}`);
-    
+
     // Wait for review prompt
     if (!await this.waitForUI(UI_HASHES.REVIEW_BUTTON, "Review Button")) {
       console.log(`⚠️ Review prompt not found, skipping review`);
@@ -199,11 +199,11 @@ export class IAPLoopController {
     // Tap 5-star rating (would be adapted to actual UI)
     await this.nexus.tap(400, 1000); // 5th star
     await Bun.sleep(500);
-    
+
     // Tap submit review
     await this.nexus.tap(500, 1200);
     await Bun.sleep(2000);
-    
+
     console.log(`⭐ Auto-review completed on ${this.nexus.deviceId}`);
   }
 
@@ -212,23 +212,23 @@ export class IAPLoopController {
    */
   async runContinuousLoop(iterations: number = 1): Promise<void> {
     console.log(`🔄 Starting continuous IAP loop: ${iterations} iterations`);
-    
+
     for (let i = 0; i < iterations; i++) {
       this.stats.attempts++;
-      
+
       console.log(`🔄 IAP Loop iteration ${i + 1}/${iterations}`);
-      
+
       const success = await this.runIAPLoop();
-      
+
       if (!success && i < iterations - 1) {
         console.log(`⏳ Waiting before retry...`);
         await Bun.sleep(5000); // Wait 5 seconds before retry
       }
-      
+
       // Reset for next iteration
       await this.resetBetweenIterations();
     }
-    
+
     this.printStats();
   }
 
@@ -237,7 +237,7 @@ export class IAPLoopController {
    */
   private async resetBetweenIterations(): Promise<void> {
     console.log(`🔄 Resetting between iterations on ${this.nexus.deviceId}`);
-    
+
     // Clear app data or navigate back
     try {
       await this.nexus.executeCommand("am force-stop com.android.vending");
@@ -255,7 +255,7 @@ export class IAPLoopController {
   printStats(): void {
     const avgTime = this.stats.attempts > 0 ? this.stats.totalElapsedMs / this.stats.attempts : 0;
     const successRate = this.stats.attempts > 0 ? (this.stats.successes / this.stats.attempts) * 100 : 0;
-    
+
     console.log(`📊 IAP Loop Statistics for ${this.nexus.deviceId}:`);
     console.log(`   📈 Total Attempts: ${this.stats.attempts}`);
     console.log(`   ✅ Successes: ${this.stats.successes}`);
@@ -285,24 +285,26 @@ export class IAPLoopController {
    */
   async calibrateUIHashes(): Promise<Record<string, string>> {
     console.log(`🎯 Calibrating UI hashes for ${this.nexus.deviceId}`);
-    
+
     const hashes: Record<string, string> = {};
-    
+
     // Capture current screen
-    const screenshot = await Bun.spawn([
+    const process = Bun.spawn([
       "adb", "-s", this.nexus.deviceId, "exec-out", "screencap", "-p"
     ], {
       stdout: "pipe"
-    }).exited;
-    
-    if (screenshot.stdout) {
-      const screenData = await new Response(screenshot.stdout).arrayBuffer();
+    });
+
+    const screenshot = await process.exited;
+
+    if (process.stdout) {
+      const screenData = await new Response(process.stdout).arrayBuffer();
       const currentHash = hash.crc32(new Uint8Array(screenData)).toString(16);
-      
+
       hashes.current_screen = currentHash;
       console.log(`🎯 Current screen hash: ${currentHash}`);
     }
-    
+
     return hashes;
   }
 }
@@ -336,11 +338,11 @@ export class IAPLoopFactory {
    */
   async runAllLoops(iterations: number = 1): Promise<void> {
     console.log(`🔄 Running IAP loops on ${this.controllers.size} devices`);
-    
+
     const promises = Array.from(this.controllers.values()).map(
       controller => controller.runContinuousLoop(iterations)
     );
-    
+
     await Promise.all(promises);
     console.log(`✅ All IAP loops completed`);
   }
@@ -381,7 +383,7 @@ export class IAPLoopFactory {
    */
   stopAll(): void {
     console.log(`🛑 Stopping ${this.controllers.size} IAP controllers`);
-    
+
     for (const controller of this.controllers.values()) {
       controller.stop();
     }

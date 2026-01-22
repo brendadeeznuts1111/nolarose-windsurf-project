@@ -66,41 +66,41 @@ export class CryptoBurnerEngine {
    */
   generateBurnerWallet(deviceId?: string): BurnerWallet {
     console.log(`🔥 Generating burner wallet${deviceId ? ` for ${deviceId}` : ''}`);
-    
+
     // Generate cryptographically secure entropy
     const entropy = crypto.getRandomValues(new Uint8Array(this.config.mnemonicStrength / 8));
-    
+
     // Generate mnemonic from entropy
     const mnemonic = this.entropyToMnemonic(entropy);
-    
+
     // Generate seed from mnemonic
     const seed = this.mnemonicToSeed(mnemonic);
-    
+
     // Derive private key using simplified BIP32-like derivation
     const privateKey = this.derivePrivateKey(seed, 0);
-    
+
     // Derive public key from private key
     const publicKey = this.privateKeyToPublicKey(privateKey);
-    
+
     // Derive address from public key
     const address = this.publicKeyToAddress(publicKey);
-    
+
     const wallet: BurnerWallet = {
       address,
-      privateKey: privateKey.toString('hex'),
-      publicKey: publicKey.toString('hex'),
+      privateKey: privateKey.toString(),
+      publicKey: publicKey.toString(),
       mnemonic,
       createdAt: Date.now(),
       deviceId
     };
 
     this.wallets.push(wallet);
-    
+
     console.log(`✅ Burner wallet generated:`);
     console.log(`   📍 Address: ${address}`);
-    console.log(`   🔑 Private: ${privateKey.toString('hex').substring(0, 16)}...`);
+    console.log(`   🔑 Private: ${privateKey.toString().substring(0, 16)}...`);
     console.log(`   🗝️ Mnemonic: ${mnemonic.substring(0, 32)}...`);
-    
+
     return wallet;
   }
 
@@ -109,26 +109,26 @@ export class CryptoBurnerEngine {
    */
   async generateBatchBurners(count: number, deviceId?: string): Promise<BurnerWallet[]> {
     console.log(`🔥 Generating batch of ${count} burner wallets${deviceId ? ` for ${deviceId}` : ''}`);
-    
+
     const batch: BurnerWallet[] = [];
     const startTime = performance.now();
-    
+
     // Pre-generate entropy for better performance
     this.preGenerateEntropy(count);
-    
+
     for (let i = 0; i < count; i++) {
       const wallet = this.generateBurnerWallet(deviceId);
       batch.push(wallet);
-      
+
       // Add small delay to prevent overwhelming the system
       if (i % 10 === 0 && i > 0) {
         await Bun.sleep(10);
       }
     }
-    
+
     const elapsed = performance.now() - startTime;
     console.log(`✅ Batch generation completed: ${count} wallets in ${elapsed.toFixed(2)}ms`);
-    
+
     return batch;
   }
 
@@ -137,12 +137,12 @@ export class CryptoBurnerEngine {
    */
   private preGenerateEntropy(count: number): void {
     this.entropyCache = [];
-    
+
     for (let i = 0; i < count; i++) {
       const entropy = crypto.getRandomValues(new Uint8Array(this.config.mnemonicStrength / 8));
       this.entropyCache.push(entropy);
     }
-    
+
     console.log(`🎯 Pre-generated ${count} entropy values`);
   }
 
@@ -166,17 +166,17 @@ export class CryptoBurnerEngine {
       "arctic", "area", "arena", "argue", "arm", "armed", "armor", "army",
       "around", "arrange", "arrest", "arrive", "arrow", "artefact", "artist", "artwork"
     ];
-    
+
     const bits = entropy.length * 8;
     const checksumBits = bits / 32;
     const totalBits = bits + checksumBits;
-    
+
     // Convert entropy to binary string
     let binaryString = '';
     for (const byte of entropy) {
       binaryString += byte.toString(2).padStart(8, '0');
     }
-    
+
     // Add checksum (simplified)
     const hash = crypto.subtle.digestSync('SHA-256', entropy);
     const hashBytes = new Uint8Array(hash);
@@ -186,9 +186,9 @@ export class CryptoBurnerEngine {
       const bitIndex = 7 - (i % 8);
       checksumBinary += (hashBytes[byteIndex] >> bitIndex) & 1 ? '1' : '0';
     }
-    
+
     const fullBinary = binaryString + checksumBinary;
-    
+
     // Convert to mnemonic words
     const mnemonicWords: string[] = [];
     for (let i = 0; i < totalBits; i += 11) {
@@ -196,7 +196,7 @@ export class CryptoBurnerEngine {
       const index = parseInt(chunk, 2);
       mnemonicWords.push(wordList[index % wordList.length]);
     }
-    
+
     return mnemonicWords.join(' ');
   }
 
@@ -207,7 +207,7 @@ export class CryptoBurnerEngine {
     // Simplified seed generation (in production, use proper PBKDF2 with "mnemonic" passphrase)
     const encoder = new TextEncoder();
     const mnemonicBytes = encoder.encode(mnemonic + ' mnemonic');
-    
+
     // Use Web Crypto API for key derivation
     return crypto.subtle.digestSync('SHA-256', mnemonicBytes);
   }
@@ -219,11 +219,11 @@ export class CryptoBurnerEngine {
     // Simplified derivation (in production, use proper BIP32)
     const indexBytes = new Uint8Array(4);
     new DataView(indexBytes.buffer).setUint32(0, index, false);
-    
+
     const combined = new Uint8Array(seed.length + indexBytes.length);
     combined.set(seed);
     combined.set(indexBytes, seed.length);
-    
+
     return crypto.subtle.digestSync('SHA-256', combined);
   }
 
@@ -235,12 +235,12 @@ export class CryptoBurnerEngine {
     // This is a mock implementation for demonstration
     const publicKey = new Uint8Array(65); // Uncompressed public key
     publicKey[0] = 0x04; // Uncompressed prefix
-    
+
     // Mock derivation (would use proper elliptic curve multiplication)
     const hash = crypto.subtle.digestSync('SHA-256', privateKey);
     publicKey.set(hash.slice(0, 32), 1);
     publicKey.set(hash.slice(32, 64), 33);
-    
+
     return publicKey;
   }
 
@@ -250,16 +250,16 @@ export class CryptoBurnerEngine {
   private publicKeyToAddress(publicKey: Uint8Array): string {
     // Remove the first byte (0x04 for uncompressed keys)
     const publicKeyBytes = publicKey.slice(1);
-    
+
     // Take Keccak-256 hash of public key
     const hash = crypto.subtle.digestSync('KECCAK-256', publicKeyBytes);
-    
+
     // Take last 20 bytes and add 0x prefix
     const addressBytes = hash.slice(-20);
     const address = '0x' + Array.from(addressBytes)
-      .map(byte => byte.toString(16).padStart(2, '0'))
+      .map((byte: any) => byte.toString(16).padStart(2, '0'))
       .join('');
-    
+
     return address;
   }
 
@@ -268,20 +268,20 @@ export class CryptoBurnerEngine {
    */
   async saveWallets(filePath: string, encrypt: boolean = true): Promise<void> {
     console.log(`💾 Saving ${this.wallets.length} wallets to ${filePath}`);
-    
+
     try {
       // Ensure directory exists
       await mkdir(filePath.split('/').slice(0, -1).join('/'), { recursive: true });
-      
+
       const walletData = {
         version: '1.0',
         network: this.config.network,
         createdAt: Date.now(),
         wallets: this.wallets
       };
-      
+
       const jsonData = JSON.stringify(walletData, null, 2);
-      
+
       if (encrypt) {
         // Simple encryption (in production, use proper AES encryption)
         const encrypted = this.simpleEncrypt(jsonData);
@@ -289,7 +289,7 @@ export class CryptoBurnerEngine {
       } else {
         await writeFile(filePath, jsonData);
       }
-      
+
       console.log(`✅ Wallets saved to ${filePath} (${encrypt ? 'encrypted' : 'plaintext'})`);
     } catch (error) {
       console.error(`❌ Failed to save wallets: ${error}`);
@@ -304,17 +304,17 @@ export class CryptoBurnerEngine {
     // Simple XOR encryption (in production, use proper AES)
     const key = crypto.getRandomValues(new Uint8Array(32));
     const dataBytes = new TextEncoder().encode(data);
-    
+
     const encrypted = new Uint8Array(dataBytes.length);
     for (let i = 0; i < dataBytes.length; i++) {
       encrypted[i] = dataBytes[i] ^ key[i % key.length];
     }
-    
+
     // Combine key and encrypted data
     const combined = new Uint8Array(key.length + encrypted.length);
     combined.set(key);
     combined.set(encrypted, key.length);
-    
+
     return btoa(String.fromCharCode(...combined));
   }
 
@@ -332,19 +332,19 @@ export class CryptoBurnerEngine {
     let totalAge = 0;
     let oldestWallet = Date.now();
     let newestWallet = 0;
-    
+
     for (const wallet of this.wallets) {
       // Count by device
       const device = wallet.deviceId || 'unknown';
       walletsByDevice[device] = (walletsByDevice[device] || 0) + 1;
-      
+
       // Age calculations
       const age = Date.now() - wallet.createdAt;
       totalAge += age;
       oldestWallet = Math.min(oldestWallet, wallet.createdAt);
       newestWallet = Math.max(newestWallet, wallet.createdAt);
     }
-    
+
     return {
       totalWallets: this.wallets.length,
       walletsByDevice,
@@ -358,7 +358,7 @@ export class CryptoBurnerEngine {
    * 🔍 Find wallet by address
    */
   findWalletByAddress(address: string): BurnerWallet | undefined {
-    return this.wallets.find(wallet => 
+    return this.wallets.find(wallet =>
       wallet.address.toLowerCase() === address.toLowerCase()
     );
   }
@@ -377,19 +377,19 @@ export class CryptoBurnerEngine {
    */
   async generateDeviceWallets(deviceId: string, count: number): Promise<BurnerWallet[]> {
     console.log(`🔄 Generating ${count} wallets for device: ${deviceId}`);
-    
+
     const deviceWallets: BurnerWallet[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       const wallet = this.generateBurnerWallet(deviceId);
       deviceWallets.push(wallet);
-      
+
       // Add delay to prevent rate limiting
       if (i % 5 === 0 && i > 0) {
         await Bun.sleep(50);
       }
     }
-    
+
     console.log(`✅ Generated ${deviceWallets.length} wallets for ${deviceId}`);
     return deviceWallets;
   }
@@ -399,7 +399,7 @@ export class CryptoBurnerEngine {
    */
   switchNetwork(network: CryptoConfig['network']): void {
     this.config.network = network;
-    
+
     // Update derivation path based on network
     const networkPaths = {
       'mainnet': "m/44'/60'/0'/0/0",
@@ -407,9 +407,9 @@ export class CryptoBurnerEngine {
       'polygon': "m/44'/137'/0'/0/0",
       'bsc': "m/44'/56'/0'/0/0"
     };
-    
+
     this.config.derivationPath = networkPaths[network];
-    
+
     console.log(`🌐 Switched to ${network} network`);
     console.log(`🛤️ New derivation path: ${this.config.derivationPath}`);
   }
@@ -433,13 +433,13 @@ export class CryptoBurnerFactory {
    */
   async generateAllWallets(countPerInstance: number): Promise<Record<string, BurnerWallet[]>> {
     console.log(`🔥 Generating ${countPerInstance} wallets per instance (${this.instances.size} instances)`);
-    
+
     const results: Record<string, BurnerWallet[]> = {};
-    
+
     for (const [name, engine] of this.instances) {
       results[name] = await engine.generateBatchBurners(countPerInstance);
     }
-    
+
     return results;
   }
 
@@ -453,17 +453,17 @@ export class CryptoBurnerFactory {
       walletsByNetwork: {} as Record<string, number>,
       walletsByDevice: {} as Record<string, number>
     };
-    
+
     for (const engine of this.instances.values()) {
       const stats = engine.getWalletStats();
       aggregate.totalWallets += stats.totalWallets;
-      
+
       // Aggregate device stats
       for (const [device, count] of Object.entries(stats.walletsByDevice)) {
         aggregate.walletsByDevice[device] = (aggregate.walletsByDevice[device] || 0) + count;
       }
     }
-    
+
     return aggregate;
   }
 
@@ -472,9 +472,9 @@ export class CryptoBurnerFactory {
    */
   async saveAllInstances(outputDir: string): Promise<void> {
     console.log(`💾 Saving ${this.instances.size} burner instances to ${outputDir}`);
-    
+
     await mkdir(outputDir, { recursive: true });
-    
+
     for (const [name, engine] of this.instances) {
       const filePath = `${outputDir}/${name}-wallets.json`;
       await engine.saveWallets(filePath);

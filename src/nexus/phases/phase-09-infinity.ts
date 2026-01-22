@@ -2,7 +2,7 @@
 // 🔄 Phase 09: DuoPlus Cloud Android 13 Reset
 // Native environment reset without VM reboot - leveraging Android 13 settings commands
 
-import { Android13Nexus } from "../adb-bridge";
+import { Android13Nexus } from "../bridges/adb-bridge";
 
 export interface ResetConfig {
   clearBrowserData: boolean;
@@ -180,7 +180,7 @@ export class Android13InfinityReset {
 
     const commands = [
       "pm clear com.android.chrome",
-      "pm clear com.kiwi.browser", 
+      "pm clear com.kiwi.browser",
       "pm clear com.android.browser",
       "rm -rf /data/data/com.android.chrome/app_tabs/*",
       "rm -rf /data/data/com.kiwi.browser/*",
@@ -419,7 +419,7 @@ export class Android13InfinityReset {
     console.log(`   ⏱️ Duration: ${result.duration.toFixed(2)}ms`);
     console.log(`   🔧 Commands: ${result.commandsExecuted.length}`);
     console.log(`   ❌ Errors: ${result.errors.length}`);
-    
+
     if (result.errors.length > 0) {
       console.log(`   🚨 Errors: ${result.errors.join(', ')}`);
     }
@@ -437,11 +437,11 @@ export class Android13InfinityReset {
   } {
     const totalResets = this.resetHistory.length;
     const successfulResets = this.resetHistory.filter(r => r.success).length;
-    const averageDuration = totalResets > 0 
-      ? this.resetHistory.reduce((sum, r) => sum + r.duration, 0) / totalResets 
+    const averageDuration = totalResets > 0
+      ? this.resetHistory.reduce((sum, r) => sum + r.duration, 0) / totalResets
       : 0;
-    const lastResetTime = this.resetHistory.length > 0 
-      ? this.resetHistory[this.resetHistory.length - 1].timestamp 
+    const lastResetTime = this.resetHistory.length > 0
+      ? this.resetHistory[this.resetHistory.length - 1].timestamp
       : 0;
 
     // Count common errors
@@ -454,7 +454,7 @@ export class Android13InfinityReset {
     }
 
     const commonErrors = Object.entries(errorCounts)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
       .map(([error]) => error);
 
@@ -522,7 +522,7 @@ export class InfinityResetFactory {
     );
 
     const results = await Promise.all(promises);
-    
+
     const successful = results.filter(r => r.success).length;
     console.log(`✅ Reset completed: ${successful}/${results.length} devices successful`);
 
@@ -563,7 +563,7 @@ export class InfinityResetFactory {
       aggregate.deviceStats[deviceId] = stats;
     }
 
-    aggregate.averageDuration = aggregate.totalResets > 0 
+    aggregate.averageDuration = aggregate.totalResets > 0
       ? Object.values(aggregate.deviceStats).reduce((sum: number, stats: any) => sum + stats.averageDuration, 0) / this.resets.size
       : 0;
 

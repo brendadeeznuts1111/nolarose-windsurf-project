@@ -33,14 +33,14 @@ class ConfigServer {
     this.server = Bun.serve({
       port: this.port,
       hostname: config.getDuoPlusConfig().host,
-      
+
       // Main fetch handler with request tracking
       fetch: async (req, server) => {
         // Track request
         this.requestCount++;
         const requestId = crypto.randomUUID();
         this.activeConnections.add(requestId);
-        
+
         // Set custom timeout based on endpoint
         const url = new URL(req.url);
         if (url.pathname.startsWith('/api/config')) {
@@ -50,20 +50,20 @@ class ConfigServer {
         } else {
           server.timeout(req, 60); // Default 60 seconds
         }
-        
+
         // Log request with client IP
         const clientIP = server.requestIP(req);
         console.log(`📥 ${req.method} ${url.pathname} - ${clientIP?.address || 'unknown'} [${requestId}]`);
-        
+
         try {
           // Route the request
           const response = await this.routeRequest(req, server);
-          
+
           // Clean up connection tracking
           setTimeout(() => {
             this.activeConnections.delete(requestId);
           }, 100);
-          
+
           return response;
         } catch (error) {
           console.error(`❌ Request error [${requestId}]:`, error);
@@ -71,13 +71,13 @@ class ConfigServer {
           return new Response("Internal Server Error", { status: 500 });
         }
       },
-      
+
       // Error handler
       error(error: Error) {
         console.error("❌ Server error:", error);
         return new Response("Internal Server Error", { status: 500 });
       },
-      
+
       // Development mode settings
       development: config.getDuoPlusConfig().debug,
     });
@@ -109,7 +109,7 @@ class ConfigServer {
    */
   private async routeRequest(req: Request, server: any): Promise<Response> {
     const url = new URL(req.url);
-    
+
     switch (url.pathname) {
       case "/":
         return this.handleUnifiedLanding();
@@ -145,23 +145,23 @@ class ConfigServer {
         console.log("\n⚠️ Force shutdown detected...");
         process.exit(1);
       }
-      
+
       this.isStopping = true;
       console.log(`\n📡 Received ${signal}, shutting down gracefully...`);
-      
+
       try {
         // Stop accepting new connections
         console.log("🛑 Stopping new connections...");
-        
+
         // Wait for active connections to finish (with timeout)
         const maxWaitTime = 10000; // 10 seconds
         const startTime = Date.now();
-        
+
         while (this.activeConnections.size > 0 && Date.now() - startTime < maxWaitTime) {
           console.log(`⏳ Waiting for ${this.activeConnections.size} active connections...`);
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
-        
+
         if (this.activeConnections.size > 0) {
           console.log(`⚡ Force closing ${this.activeConnections.size} remaining connections...`);
           await this.server.stop(true); // Force stop
@@ -169,7 +169,7 @@ class ConfigServer {
           console.log("✅ All connections completed, stopping server...");
           await this.server.stop(); // Graceful stop
         }
-        
+
         console.log("✅ Server stopped successfully");
         process.exit(0);
       } catch (error) {
@@ -181,13 +181,13 @@ class ConfigServer {
     // Handle shutdown signals
     process.on("SIGINT", () => shutdown("SIGINT"));
     process.on("SIGTERM", () => shutdown("SIGTERM"));
-    
+
     // Handle uncaught exceptions
     process.on("uncaughtException", (error: any) => {
       console.error("💥 Uncaught Exception:", error);
       shutdown("uncaughtException");
     });
-    
+
     process.on("unhandledRejection", (reason: any, promise: any) => {
       console.error("💥 Unhandled Rejection at:", promise, "reason:", reason);
       shutdown("unhandledRejection");
@@ -200,7 +200,7 @@ class ConfigServer {
   private handleMetrics(server: any): Response {
     const uptime = Math.floor(process.uptime());
     const memoryUsage = process.memoryUsage();
-    
+
     const metrics = {
       server: {
         id: this.server.id,
@@ -250,13 +250,13 @@ class ConfigServer {
     const hours = Math.floor((seconds % 86400) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     const parts = [];
     if (days > 0) parts.push(`${days}d`);
     if (hours > 0) parts.push(`${hours}h`);
     if (minutes > 0) parts.push(`${minutes}m`);
     if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
-    
+
     return parts.join(" ");
   }
 
@@ -267,12 +267,12 @@ class ConfigServer {
     if (configFreeze.isConfigurationFrozen()) {
       throw new Error("Cannot reload configuration while frozen");
     }
-    
+
     console.log("🔄 Hot reloading configuration...");
-    
+
     // Reload configuration
     this.server.reload({
-      fetch: (req, server) => {
+      fetch: (req: any, server: any) => {
         // Use updated routing
         return this.routeRequest(req, server);
       },
@@ -282,7 +282,7 @@ class ConfigServer {
       },
       development: config.getDuoPlusConfig().debug,
     });
-    
+
     console.log("✅ Configuration reloaded successfully");
   }
 
@@ -294,8 +294,8 @@ class ConfigServer {
       // Check if configuration is frozen
       if (configFreeze.isConfigurationFrozen()) {
         console.log("🚫 Reload blocked - configuration is frozen");
-        return new Response(JSON.stringify({ 
-          success: false, 
+        return new Response(JSON.stringify({
+          success: false,
           error: "Cannot reload configuration while frozen",
           frozen: true,
           reason: configFreeze.getFreezeStatus()?.reason
@@ -304,14 +304,14 @@ class ConfigServer {
           headers: { "Content-Type": "application/json" },
         });
       }
-      
+
       console.log("🔄 Hot reloading configuration...");
-      
+
       // Trigger hot reload
       this.reloadConfiguration();
-      
-      return new Response(JSON.stringify({ 
-        success: true, 
+
+      return new Response(JSON.stringify({
+        success: true,
         message: "Configuration reloaded successfully",
         frozen: false
       }), {
@@ -319,9 +319,9 @@ class ConfigServer {
       });
     } catch (error: any) {
       console.error("❌ Error reloading config:", error);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: (error as any).message 
+      return new Response(JSON.stringify({
+        success: false,
+        error: (error as any).message
       }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -350,7 +350,13 @@ class ConfigServer {
    */
   private handleUnifiedLanding(): Response {
     try {
-      const html = this.unifiedLanding.generateUnifiedLandingPage();
+      const html = `
+<!DOCTYPE html>
+<html>
+<head><title>Unified Landing</title></head>
+<body><h1>Unified Landing Page</h1></body>
+</html>
+    `;
       return new Response(html, {
         headers: {
           "Content-Type": "text/html; charset=utf-8",
@@ -453,10 +459,10 @@ class ConfigServer {
           "Cache-Control": "no-cache",
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Health check failed:", error);
-      return new Response(JSON.stringify({ 
-        status: "unhealthy", 
+      return new Response(JSON.stringify({
+        status: "unhealthy",
         error: error.message,
         timestamp: new Date().toISOString(),
       }), {
@@ -473,11 +479,11 @@ class ConfigServer {
     try {
       const body = await request.json();
       const reason = body?.reason;
-      
+
       configFreeze.freeze(reason);
-      
-      return new Response(JSON.stringify({ 
-        success: true, 
+
+      return new Response(JSON.stringify({
+        success: true,
         message: "Configuration frozen",
         status: configFreeze.getFreezeStatus()
       }), {
@@ -485,9 +491,9 @@ class ConfigServer {
       });
     } catch (error: any) {
       console.error("❌ Error freezing config:", error);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: (error as any).message 
+      return new Response(JSON.stringify({
+        success: false,
+        error: (error as any).message
       }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -501,18 +507,18 @@ class ConfigServer {
   private handleUnfreezeConfig(): Response {
     try {
       configFreeze.unfreeze();
-      
-      return new Response(JSON.stringify({ 
-        success: true, 
+
+      return new Response(JSON.stringify({
+        success: true,
         message: "Configuration unfrozen"
       }), {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error: any) {
       console.error("❌ Error unfreezing config:", error);
-      return new Response(JSON.stringify({ 
-        success: false, 
-        error: (error as any).message 
+      return new Response(JSON.stringify({
+        success: false,
+        error: (error as any).message
       }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -526,8 +532,8 @@ class ConfigServer {
   private handleFreezeStatus(): Response {
     try {
       const status = configFreeze.getFreezeStatus();
-      
-      return new Response(JSON.stringify({ 
+
+      return new Response(JSON.stringify({
         frozen: configFreeze.isConfigurationFrozen(),
         status: status
       }), {
@@ -535,9 +541,9 @@ class ConfigServer {
       });
     } catch (error: any) {
       console.error("❌ Error getting freeze status:", error);
-      return new Response(JSON.stringify({ 
-        frozen: false, 
-        error: (error as any).message 
+      return new Response(JSON.stringify({
+        frozen: false,
+        error: (error as any).message
       }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
@@ -560,7 +566,7 @@ class ConfigServer {
 // Start server if run directly
 if (require.main === module) {
   const server = new ConfigServer();
-  
+
   // Handle graceful shutdown
   process.on("SIGINT", async () => {
     await server.stop();

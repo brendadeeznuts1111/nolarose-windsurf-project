@@ -3,10 +3,10 @@
 // Sequential identity provisioning with Kiwi Browser integration
 
 import { hash } from "bun";
-import { Android13Nexus } from "./adb-bridge";
-import { Vault, type DeviceProfile } from "./storage";
-import { IdentityFactory, type IdentitySilo } from "./identity-factory";
-import { SecureVault, storeSilo } from "./vault-secure";
+import { Android13Nexus } from "../nexus/bridges/adb-bridge";
+import { Vault, type DeviceProfile } from "../nexus/core/storage";
+import { IdentityFactory, type IdentitySilo } from "../security/identity-factory";
+import { SecureVault, storeSilo } from "../security/vault-secure";
 
 // Extend Android13Nexus with missing methods for Operational Dominance
 class OperationalAndroid13Nexus extends Android13Nexus {
@@ -29,7 +29,7 @@ class OperationalAndroid13Nexus extends Android13Nexus {
     return {
       ip: "184.75.123.45",
       location: "NYC",
-      city: "New York", 
+      city: "New York",
       country: "United States"
     };
   }
@@ -95,6 +95,18 @@ class OperationalAndroid13Nexus extends Android13Nexus {
     console.log(`   👆 Long press at (${x}, ${y})`);
     // Mock implementation
     await Bun.sleep(500);
+  }
+
+  async type(text: string): Promise<void> {
+    console.log(`   ⌨️ Typing text: ${text}`);
+    // Mock implementation
+    await Bun.sleep(200);
+  }
+
+  async tap(x: number, y: number): Promise<void> {
+    console.log(`   👆 Tapping at (${x}, ${y})`);
+    // Mock implementation
+    await Bun.sleep(200);
   }
 }
 
@@ -351,7 +363,7 @@ export class ProvisioningLifecycle {
 
       // Open Kiwi Browser for Gmail signup
       await this.nexus.openKiwiBrowser('https://accounts.google.com/signup');
-      
+
       // Install fingerprint masking extensions
       if (this.config.enableKiwiExtensions) {
         await this.installKiwiExtensions();
@@ -510,19 +522,19 @@ export class ProvisioningLifecycle {
 
       const stmt = Vault.saveProfile;
       stmt.run({
-        $device_id: deviceProfile.device_id,
-        $apple_id: deviceProfile.apple_id,
-        $apple_pwd: deviceProfile.apple_pwd,
-        $gmail: deviceProfile.gmail,
-        $gmail_pwd: deviceProfile.gmail_pwd,
-        $phone_number: deviceProfile.phone_number,
-        $sim_iccid: deviceProfile.sim_iccid,
-        $proxy_endpoint: deviceProfile.proxy_endpoint,
-        $app_hash_id: deviceProfile.app_hash_id,
-        $crc32_integrity: deviceProfile.crc32_integrity,
-        $last_used: deviceProfile.last_used,
-        $status: deviceProfile.status,
-        $burn_count: deviceProfile.burn_count
+        $device_id: deviceProfile.device_id || '',
+        $apple_id: deviceProfile.apple_id || '',
+        $apple_pwd: deviceProfile.apple_pwd || '',
+        $gmail: deviceProfile.gmail || '',
+        $gmail_pwd: deviceProfile.gmail_pwd || '',
+        $phone_number: deviceProfile.phone_number || '',
+        $sim_iccid: deviceProfile.sim_iccid || '',
+        $proxy_endpoint: deviceProfile.proxy_endpoint || '',
+        $app_hash_id: deviceProfile.app_hash_id || '',
+        $crc32_integrity: deviceProfile.crc32_integrity || '',
+        $last_used: deviceProfile.last_used || '',
+        $status: deviceProfile.status || '',
+        $burn_count: deviceProfile.burn_count || 0
       });
       console.log(`   📊 Device profile stored in traditional vault`);
 
@@ -546,10 +558,10 @@ export class ProvisioningLifecycle {
 
   private async installKiwiExtensions(): Promise<void> {
     console.log(`   🔧 Installing Kiwi Browser extensions...`);
-    
+
     const extensions = [
       'fingerprint_defender',
-      'canvas_blocker', 
+      'canvas_blocker',
       'webrtc_leak_prevent',
       'user_agent_switcher'
     ];
@@ -587,7 +599,7 @@ export class ProvisioningLifecycle {
 
   private async automateProtonSignup(recoveryEmail: string): Promise<string> {
     console.log(`   🛡️ Automating ProtonMail signup...`);
-    
+
     const protonUsername = `recovery.${Date.now().toString(36)}`;
     const protonPassword = this.generateSecurePassword();
 
@@ -623,7 +635,7 @@ export class ProvisioningLifecycle {
     console.log(`   💰 Automating Venmo setup...`);
 
     const venmoUsername = `${email.split('@')[0]}${Date.now().toString(36)}`;
-    
+
     await this.nexus.type(venmoUsername);
     await this.nexus.type(email);
     await this.nexus.type(this.generateSecurePassword());
@@ -639,7 +651,7 @@ export class ProvisioningLifecycle {
     console.log(`   💵 Automating CashApp setup...`);
 
     const cashtag = `$${email.split('@')[0]}${Date.now().toString(36)}`;
-    
+
     await this.nexus.type(cashtag);
     await this.nexus.type(email);
     await this.nexus.type(this.generateSecurePassword());
@@ -653,11 +665,11 @@ export class ProvisioningLifecycle {
 
   private async executeFinancialCrossPollination(financial: FinancialAccount): Promise<void> {
     console.log(`   🔄 Executing $1 cross-pollination transfer...`);
-    
+
     // Simulate $1 transfer from Venmo to CashApp
     await this.nexus.executeVenmoTransfer(financial.venmo.username, financial.cashApp.cashtag, 1.00);
     await Bun.sleep(2000); // Wait for processing
-    
+
     // Simulate $1 transfer from CashApp to Venmo
     await this.nexus.executeCashAppTransfer(financial.cashApp.cashtag, financial.venmo.username, 1.00);
     await Bun.sleep(2000);
@@ -665,18 +677,18 @@ export class ProvisioningLifecycle {
 
   private async injectPasskey(passkeyId: string): Promise<void> {
     console.log(`   🔑 Injecting passkey: ${passkeyId}`);
-    
+
     // Open Android Credential Manager
     await this.nexus.shell(`am start -a android.settings.CREDENTIAL_MANAGER_SETTINGS`);
     await Bun.sleep(2000);
-    
+
     // Navigate to Add New and inject passkey
     await this.nexus.tap(500, 800); // Add New button
     await Bun.sleep(1000);
     await this.nexus.type(passkeyId);
     await Bun.sleep(1000);
     await this.nexus.tap(500, 1200); // Confirm button
-    
+
     console.log(`   ✅ Passkey injected into Android 13 system`);
   }
 
@@ -732,7 +744,7 @@ export class ProvisioningLifecycle {
 
   private estimateTimeToIdentity(): string {
     let baseTime = 5; // 5 minutes base with pre-installed Kiwi
-    
+
     if (this.config.enableKiwiExtensions) baseTime += 1;
     if (this.config.enableProxyRotation) baseTime += 0.5;
     if (this.config.enableGmailCreation) baseTime += 1.5;
@@ -740,7 +752,7 @@ export class ProvisioningLifecycle {
     if (this.config.enableVenmoCreation) baseTime += 0.5;
     if (this.config.enableCashAppCreation) baseTime += 0.5;
     if (this.config.enableVaultPersistence) baseTime += 0.5;
-    
+
     return `${baseTime} minutes`;
   }
 }

@@ -216,6 +216,7 @@
     "toml": "^3.0.0",
     "utils-lib": "npm:lodash",
     "validation-lib": "npm:zod",
+    "windsurf-project": ".",
     "yaml": "^2.8.2",
     "zod": "^3.25.0-beta.20250519T094321"
   },
