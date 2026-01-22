@@ -15,10 +15,14 @@ describe("🏛️ Citadel Feedback System", () => {
   let demo: CitadelFeedbackDemo;
 
   beforeEach(async () => {
-    // Clean up test environment
+    // Clean up test directories
     if (existsSync(TEST_AUDIT_DIR)) {
       const { rmSync } = require("fs");
       rmSync(TEST_AUDIT_DIR, { recursive: true, force: true });
+    }
+    if (existsSync("./audit")) {
+      const { rmSync } = require("fs");
+      rmSync("./audit", { recursive: true, force: true });
     }
     mkdirSync(TEST_AUDIT_DIR, { recursive: true });
     
@@ -32,6 +36,10 @@ describe("🏛️ Citadel Feedback System", () => {
     if (existsSync(TEST_AUDIT_DIR)) {
       const { rmSync } = require("fs");
       rmSync(TEST_AUDIT_DIR, { recursive: true, force: true });
+    }
+    if (existsSync("./audit")) {
+      const { rmSync } = require("fs");
+      rmSync("./audit", { recursive: true, force: true });
     }
   });
 
@@ -52,13 +60,16 @@ describe("🏛️ Citadel Feedback System", () => {
         });
       }).not.toThrow();
       
-      // Verify audit file was created
-      const auditFiles = (demo as any).getAuditFiles(deviceId);
+      // Verify audit file was created (look in main audit directory where orchestrator writes)
+      const { readdirSync } = require("fs");
+      const auditFiles = readdirSync("./audit")
+        .filter((f: string) => f.endsWith('.feedback.json') && f.startsWith(deviceId));
       expect(auditFiles.length).toBeGreaterThan(0);
       
       // Verify audit file content
       const latestFile = auditFiles[auditFiles.length - 1];
-      const content = (demo as any).readAuditFile(latestFile);
+      const { readFileSync } = require("fs");
+      const content = JSON.parse(readFileSync(join("./audit", latestFile), 'utf-8'));
       
       expect(content).toBeDefined();
       expect(content.deviceId).toBe(deviceId);
@@ -83,11 +94,14 @@ describe("🏛️ Citadel Feedback System", () => {
         });
       }).not.toThrow();
       
-      // Verify audit file structure
-      const auditFiles = (demo as any).getAuditFiles(deviceId);
+      // Verify audit file structure (look in main audit directory where orchestrator writes)
+      const { readdirSync } = require("fs");
+      const auditFiles = readdirSync("./audit")
+        .filter((f: string) => f.endsWith('.feedback.json') && f.startsWith(deviceId));
       expect(auditFiles.length).toBe(1);
       
-      const content = (demo as any).readAuditFile(auditFiles[0]);
+      const { readFileSync } = require("fs");
+      const content = JSON.parse(readFileSync(join("./audit", auditFiles[0]), 'utf-8'));
       expect(content.deviceId).toBe(deviceId);
       expect(content.details).toContain("captcha_failure");
       expect(content.timestamp).toBeGreaterThan(0);
@@ -108,9 +122,14 @@ describe("🏛️ Citadel Feedback System", () => {
         });
       }).not.toThrow();
       
-      // Verify performance-specific metadata
-      const auditFiles = (demo as any).getAuditFiles(deviceId);
-      const content = (demo as any).readAuditFile(auditFiles[0]);
+      // Verify performance-specific metadata (look in main audit directory where orchestrator writes)
+      const { readdirSync } = require("fs");
+      const auditFiles = readdirSync("./audit")
+        .filter((f: string) => f.endsWith('.feedback.json') && f.startsWith(deviceId));
+      expect(auditFiles.length).toBe(1);
+      
+      const { readFileSync } = require("fs");
+      const content = JSON.parse(readFileSync(join("./audit", auditFiles[0]), 'utf-8'));
       
       expect(content.details).toContain("performance_anomaly");
       expect(content.details).toContain("5.2s");
@@ -128,9 +147,12 @@ describe("🏛️ Citadel Feedback System", () => {
         { deviceId: "dash_test_03", details: "test_incident_3" }
       ];
       
-      // Create mock audit files
+      // Create mock audit files in the main audit directory (where dashboard looks)
+      const { mkdirSync } = require("fs");
+      mkdirSync("./audit", { recursive: true });
+      
       testIncidents.forEach((incident, index) => {
-        const auditFile = join(TEST_AUDIT_DIR, `${incident.deviceId}-${Date.now() + index}.feedback.json`);
+        const auditFile = join("./audit", `${incident.deviceId}-${Date.now() + index}.feedback.json`);
         const auditData = {
           timestamp: Date.now() + index,
           deviceId: incident.deviceId,
@@ -167,8 +189,12 @@ describe("🏛️ Citadel Feedback System", () => {
         { deviceId: "metrics_04", severity: "critical" }
       ];
       
+      // Create mock audit files in the main audit directory (where dashboard looks)
+      const { mkdirSync } = require("fs");
+      mkdirSync("./audit", { recursive: true });
+      
       severityTests.forEach((incident, index) => {
-        const auditFile = join(TEST_AUDIT_DIR, `${incident.deviceId}-${Date.now() + index}.feedback.json`);
+        const auditFile = join("./audit", `${incident.deviceId}-${Date.now() + index}.feedback.json`);
         const auditData = {
           timestamp: Date.now() + index,
           deviceId: incident.deviceId,
@@ -231,10 +257,12 @@ describe("🏛️ Citadel Feedback System", () => {
       // Verify all incidents were logged
       expect(results.length).toBe(concurrentIncidents);
       
-      // Verify audit files exist for all incidents
+      // Verify audit files exist for all incidents (look in main audit directory where orchestrator writes)
+      const { readdirSync } = require("fs");
       let totalAuditFiles = 0;
       for (let i = 0; i < concurrentIncidents; i++) {
-        const auditFiles = (demo as any).getAuditFiles(`concurrent_${i}`);
+        const auditFiles = readdirSync("./audit")
+          .filter((f: string) => f.endsWith('.feedback.json') && f.startsWith(`concurrent_${i}`));
         totalAuditFiles += auditFiles.length;
       }
       
@@ -289,11 +317,14 @@ describe("🏛️ Citadel Feedback System", () => {
         timeout: 5000
       });
       
-      // Verify audit file structure
-      const auditFiles = (demo as any).getAuditFiles(deviceId);
+      // Verify audit file structure (look in main audit directory where orchestrator writes)
+      const { readdirSync } = require("fs");
+      const auditFiles = readdirSync("./audit")
+        .filter((f: string) => f.endsWith('.feedback.json') && f.startsWith(deviceId));
       expect(auditFiles.length).toBe(1);
       
-      const content = (demo as any).readAuditFile(auditFiles[0]);
+      const { readFileSync } = require("fs");
+      const content = JSON.parse(readFileSync(join("./audit", auditFiles[0]), 'utf-8'));
       
       // Required fields validation
       expect(content).toHaveProperty("timestamp");
@@ -371,6 +402,10 @@ describe("🏛️ Citadel Feedback System", () => {
 
   describe("🔄 Integration Tests", () => {
     test.serial("end-to-end workflow", async () => {
+      // Skip cleanup for this integration test to preserve audit files
+      const { mkdirSync } = require("fs");
+      mkdirSync("./audit", { recursive: true });
+      
       // Step 1: Log multiple incidents
       const incidents = [
         { deviceId: "e2e_01", details: "apple_id_lockout user1@icloud.com" },
@@ -399,8 +434,12 @@ describe("🏛️ Citadel Feedback System", () => {
         timeout: 5000
       });
       
+      console.log("DEBUG: Dashboard output:", dashboardResult);
+      console.log("DEBUG: Looking for pattern:", /Incidents:\s+(\d+)\s+logged/);
+      console.log("DEBUG: Regex match:", dashboardResult.match(/Incidents:\s+(\d+)\s+logged/));
+      
       expect(dashboardResult).toContain("Incidents:");
-      expect(parseInt(dashboardResult.match(/Incidents:\s*(\d+)/)?.[1] || "0")).toBeGreaterThanOrEqual(3);
+      expect(parseInt(dashboardResult.match(/Incidents:\s+(\d+)\s+logged/)?.[1] || "0")).toBeGreaterThanOrEqual(3);
       
       // Step 3: Search for specific incident types
       const searchCommand = `bun run src/nexus/core/dashboard.ts --search "apple_id"`;
