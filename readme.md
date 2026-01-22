@@ -633,7 +633,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 ## 🏆 **Acknowledgments**
 
-The **Sovereign Unit [01]** Financial Warming Multiverse stands on the shoulders of giants. We are deeply grateful to the following projects and communities that make our vision possible:
+The **Sovereign Unit \[01\]** Financial Warming Multiverse stands on the shoulders of giants. We are deeply grateful to the following projects and communities that make our vision possible:
 
 ### **🔧 Core Technologies:**
 
