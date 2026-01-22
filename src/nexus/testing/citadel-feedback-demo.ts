@@ -171,15 +171,15 @@ export class CitadelFeedbackDemo {
     console.log(`═══════════════════════════════════════════════════════`);
     
     console.log(`\n🎯 View the Citadel Identity Matrix:`);
-    console.log(`   bun run src/nexus/dashboard.ts`);
+    console.log(`   bun run src/nexus/core/dashboard.ts`);
     
     console.log(`\n📊 Show detailed metrics:`);
-    console.log(`   bun run src/nexus/dashboard.ts --metrics`);
+    console.log(`   bun run src/nexus/core/dashboard.ts --metrics`);
     
     console.log(`\n🔍 Search audit logs:`);
-    console.log(`   bun run src/nexus/dashboard.ts --search "apple_id"`);
-    console.log(`   bun run src/nexus/dashboard.ts --search "cloud_vm_07"`);
-    console.log(`   bun run src/nexus/dashboard.ts --search "critical"`);
+    console.log(`   bun run src/nexus/core/dashboard.ts --search "apple_id"`);
+    console.log(`   bun run src/nexus/core/dashboard.ts --search "cloud_vm_07"`);
+    console.log(`   bun run src/nexus/core/dashboard.ts --search "critical"`);
     
     console.log(`\n🚨 Report new incidents:`);
     console.log(`   DEVICE_ID=cloud_vm_15 bun run src/orchestrators/orchestrator.ts --feedback "sim_card_blocked"`);

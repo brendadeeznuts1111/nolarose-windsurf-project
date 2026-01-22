@@ -1,0 +1,16 @@
+{
+  "timestamp": 1769105377402,
+  "deviceId": "e2e_03",
+  "event": "security_incident",
+  "details": "performance_anomaly api_delay_2.1s",
+  "severity": "medium",
+  "metadata": {
+    "source": "cli_feedback",
+    "argv": [
+      "/opt/homebrew/Cellar/bun/1.3.5/bin/bun",
+      "/Users/nolarose/wind/eeeeee/CascadeProjects/windsurf-project/src/orchestrators/orchestrator.ts",
+      "--feedback",
+      "performance_anomaly api_delay_2.1s"
+    ]
+  }
+}

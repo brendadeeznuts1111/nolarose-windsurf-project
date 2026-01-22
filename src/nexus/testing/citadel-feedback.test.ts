@@ -144,7 +144,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       // Test dashboard search functionality
       const { execSync } = require("child_process");
-      const searchCommand = `bun run src/nexus/dashboard.ts --search "test_incident"`;
+      const searchCommand = `bun run src/nexus/core/dashboard.ts --search "test_incident"`;
       
       const result = execSync(searchCommand, { 
         cwd: process.cwd(),
@@ -182,7 +182,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       // Test metrics command
       const { execSync } = require("child_process");
-      const metricsCommand = `bun run src/nexus/dashboard.ts --metrics`;
+      const metricsCommand = `bun run src/nexus/core/dashboard.ts --metrics`;
       
       const result = execSync(metricsCommand, { 
         cwd: process.cwd(),
@@ -391,7 +391,7 @@ describe("🏛️ Citadel Feedback System", () => {
       
       // Step 2: Verify dashboard shows all incidents
       const { execSync } = require("child_process");
-      const dashboardCommand = `bun run src/nexus/dashboard.ts`;
+      const dashboardCommand = `bun run src/nexus/core/dashboard.ts`;
       
       const dashboardResult = execSync(dashboardCommand, { 
         cwd: process.cwd(),
@@ -403,7 +403,7 @@ describe("🏛️ Citadel Feedback System", () => {
       expect(parseInt(dashboardResult.match(/Incidents:\s*(\d+)/)?.[1] || "0")).toBeGreaterThanOrEqual(3);
       
       // Step 3: Search for specific incident types
-      const searchCommand = `bun run src/nexus/dashboard.ts --search "apple_id"`;
+      const searchCommand = `bun run src/nexus/core/dashboard.ts --search "apple_id"`;
       const searchResult = execSync(searchCommand, { 
         cwd: process.cwd(),
         encoding: 'utf8',
@@ -414,7 +414,7 @@ describe("🏛️ Citadel Feedback System", () => {
       expect(searchResult).toContain("Found 1 incidents");
       
       // Step 4: Verify metrics
-      const metricsCommand = `bun run src/nexus/dashboard.ts --metrics`;
+      const metricsCommand = `bun run src/nexus/core/dashboard.ts --metrics`;
       const metricsResult = execSync(metricsCommand, { 
         cwd: process.cwd(),
         encoding: 'utf8',

@@ -107,7 +107,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
       });
       
       // Test dashboard search
-      const searchCommand = `bun run src/nexus/dashboard.ts --search "search_test_incident_unique"`;
+      const searchCommand = `bun run src/nexus/core/dashboard.ts --search "search_test_incident_unique"`;
       
       const result = execSync(searchCommand, { 
         cwd: process.cwd(),
@@ -121,7 +121,7 @@ describe("🏛️ Citadel Feedback System - Core Tests", () => {
     }, 10000);
 
     test.concurrent("dashboard metrics display correctly", async () => {
-      const metricsCommand = `bun run src/nexus/dashboard.ts --metrics`;
+      const metricsCommand = `bun run src/nexus/core/dashboard.ts --metrics`;
       
       const result = execSync(metricsCommand, { 
         cwd: process.cwd(),
