@@ -227,8 +227,8 @@ export const TestDataFactory = {
      */
     createUserData(overrides = {}) {
         return {
-            userId: 'test_user_123',
-            email: 'test@example.com',
+            userId: 'user_123456',
+            email: 'user@example.com',
             phone: '+1234567890',
             accountNumber: '123456789',
             routingNumber: '021000021',
@@ -246,13 +246,16 @@ export const TestDataFactory = {
     createIdentityResult(overrides = {}) {
         return {
             success: true,
-            userId: 'test_user_123',
+            userId: 'user_123456',
+            email: 'user@example.com',
+            phone: '+1234567890',
+            accountNumber: '123456789',
             verificationId: `ver_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             confidence: 85,
             riskScore: 25,
             documents: { verified: true },
-            email: { verified: true },
-            phone: { verified: true },
+            emailVerified: true,
+            phoneVerified: true,
             age: { verified: true, value: 25 },
             address: { verified: true },
             ...overrides
@@ -265,7 +268,10 @@ export const TestDataFactory = {
     createOAuthResult(overrides = {}) {
         return {
             success: true,
-            userId: 'test_user_123',
+            userId: 'user_123456',
+            email: 'user@example.com',
+            phone: '+1234567890',
+            accountNumber: '123456789',
             flowId: `flow_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             state: 'state_' + Math.random().toString(36).substr(2, 9),
             authorizationUrl: 'https://cash.app/oauth/authorize?code=test',
@@ -282,7 +288,10 @@ export const TestDataFactory = {
     createPlaidResult(overrides = {}) {
         return {
             success: true,
-            userId: 'test_user_123',
+            userId: 'user_123456',
+            email: 'user@example.com',
+            phone: '+1234567890',
+            accountNumber: '123456789',
             linkToken: 'link-sandbox-test-token',
             accounts: [
                 {

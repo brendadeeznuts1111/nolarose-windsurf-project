@@ -234,7 +234,7 @@ describe('ValidationEngine Module', () => {
         it('should calculate cross-validation scores correctly', () => {
             const identityResult = TestDataFactory.createIdentityResult({
                 email: 'test@example.com',
-                phone: '+1234567890',
+                phone: '+15551234567',
                 name: 'John Doe'
             });
             
@@ -247,6 +247,7 @@ describe('ValidationEngine Module', () => {
             const plaidResult = TestDataFactory.createPlaidResult({
                 email: 'test@example.com',
                 phone: '5551234567', // Different format, same number
+                accountNumber: '123456789',
                 accounts: [{
                     account_id: 'acc_123456789',
                     name: 'Test Checking',
