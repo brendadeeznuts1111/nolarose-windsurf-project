@@ -206,8 +206,10 @@
     "my-custom-name": "npm:zod",
     "onnxruntime-web": "^1.23.2",
     "react": "^19.0.0-beta-26f2496093-20240514",
+    "toml": "^3.0.0",
     "utils-lib": "npm:lodash",
     "validation-lib": "npm:zod",
+    "yaml": "^2.8.2",
     "zod": "^3.25.0-beta.20250519T094321"
   },
   "devDependencies": {

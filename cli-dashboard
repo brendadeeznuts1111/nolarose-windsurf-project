@@ -5,7 +5,7 @@
 import { spawn } from 'child_process';
 import { createInterface } from 'readline';
 
-const dashboardScript = 'src/nexus/core/dashboard.ts';
+const dashboardScript = 'src/nexus/core/enhanced-dashboard.ts';
 
 async function showEnhancedHelp() {
   console.log(`\n🏛️ ENHANCED CITADEL CLI WORKFLOW`);
@@ -14,6 +14,10 @@ async function showEnhancedHelp() {
   console.log(`  ./cli-dashboard              - Show dashboard status`);
   console.log(`  ./cli-dashboard search       - Interactive search`);
   console.log(`  ./cli-dashboard metrics      - Show detailed metrics`);
+  console.log(`  ./cli-dashboard advanced     - Comprehensive advanced metrics`);
+  console.log(`  ./cli-dashboard packages     - Package registry analysis`);
+  console.log(`  ./cli-dashboard typescript   - TypeScript analysis`);
+  console.log(`  ./cli-dashboard security     - Security analysis`);
   console.log(`  ./cli-dashboard watch        - Start auto-refresh mode`);
   console.log(`  ./cli-dashboard interactive  - Full interactive mode`);
   console.log(`  ./cli-dashboard export       - Export data`);
@@ -25,8 +29,16 @@ async function showEnhancedHelp() {
   console.log(`  ✅ Auto-refresh monitoring`);
   console.log(`  ✅ Data export capabilities`);
   console.log(`  ✅ Device-specific tracking`);
+  console.log(`  ✅ Advanced metrics analysis`);
+  console.log(`  ✅ Package registry integration`);
+  console.log(`  ✅ TypeScript code analysis`);
+  console.log(`  ✅ Security vulnerability scanning`);
   console.log(`\n🎯 EXAMPLES:`);
   console.log(`  ./cli-dashboard search performance`);
+  console.log(`  ./cli-dashboard advanced`);
+  console.log(`  ./cli-dashboard packages`);
+  console.log(`  ./cli-dashboard typescript`);
+  console.log(`  ./cli-dashboard security`);
   console.log(`  ./cli-dashboard device test_vm_01`);
   console.log(`  ./cli-dashboard watch 10`);
   console.log(`  ./cli-dashboard export csv`);
@@ -128,6 +140,10 @@ async function fullInteractiveMode() {
     console.log(`\n📋 AVAILABLE COMMANDS:`);
     console.log(`  status         - Show dashboard status`);
     console.log(`  metrics        - Show detailed metrics`);
+    console.log(`  advanced       - Comprehensive advanced metrics`);
+    console.log(`  packages       - Package registry analysis`);
+    console.log(`  typescript     - TypeScript code analysis`);
+    console.log(`  security       - Security vulnerability analysis`);
     console.log(`  search         - Enter search mode`);
     console.log(`  watch [sec]    - Start auto-refresh (default: 5s)`);
     console.log(`  device <id>    - Check specific device`);
@@ -152,6 +168,18 @@ async function fullInteractiveMode() {
           break;
         case 'metrics':
           await runDashboardCommand(['--metrics']);
+          break;
+        case 'advanced':
+          await runDashboardCommand(['--advanced-metrics']);
+          break;
+        case 'packages':
+          await runDashboardCommand(['--package-metrics']);
+          break;
+        case 'typescript':
+          await runDashboardCommand(['--typescript-metrics']);
+          break;
+        case 'security':
+          await runDashboardCommand(['--security-metrics']);
           break;
         case 'search':
           await interactiveSearch();
@@ -230,6 +258,22 @@ async function main() {
     case 'metrics':
     case '--metrics':
       await runDashboardCommand(['--metrics']);
+      break;
+    case 'advanced':
+    case '--advanced-metrics':
+      await runDashboardCommand(['--advanced-metrics']);
+      break;
+    case 'packages':
+    case '--package-metrics':
+      await runDashboardCommand(['--package-metrics']);
+      break;
+    case 'typescript':
+    case '--typescript-metrics':
+      await runDashboardCommand(['--typescript-metrics']);
+      break;
+    case 'security':
+    case '--security-metrics':
+      await runDashboardCommand(['--security-metrics']);
       break;
     case 'watch':
     case '--watch':
