@@ -3409,7 +3409,7 @@
             if (obj === null || typeof obj !== 'object') return obj;
             
             if (obj instanceof Date) return obj;
-            if (obj instanceof Array) {
+            if (Array.isArray(obj)) {
                 return obj.map(item => limitDepth(item, maxDepth - 1));
             }
             
@@ -3432,6 +3432,7 @@
         }
 
         // 🔗 NEW: Enhanced depth control with Bun integration
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick depth control button
         function toggleDepthControl() {
             const depthData = {
                 currentDepth: currentDepth,
@@ -3670,10 +3671,6 @@
             
             document.getElementById('chart-type-text').textContent = newType === 'line' ? 'Bar Chart' : 'Line Chart';
             dashboard.addEvent('CHART', `Switched to ${newType} chart`, 'info');
-        }
-
-        function clearAllAlerts() {
-            dashboard.clearAllAlerts();
         }
 
         function filterEvents(filter) {
@@ -3964,7 +3961,7 @@
             
             // Count dashboard.refresh errors specifically
             const dashboardRefreshErrors = telemetry.filter(event => 
-                event.message && event.message.includes('dashboard.refresh')
+                event.message?.includes('dashboard.refresh')
             ).length;
             
             // Find most frequent errors
@@ -4065,7 +4062,7 @@
             return recommendations;
         }
 
-        // Clear telemetry data
+        // biome-ignore lint/correctness/noUnusedVariables: Available for telemetry management
         function clearTelemetryData() {
             if (confirm('Are you sure you want to clear all telemetry data?')) {
                 localStorage.removeItem('dashboard-telemetry');

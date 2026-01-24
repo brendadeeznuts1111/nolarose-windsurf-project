@@ -9,8 +9,8 @@
  * bun quick-wins-ab-test.ts --scan --test --json      # Full report with JSON export for CI
  */
 
-import { readdir, readFile, writeFile, stat } from 'fs/promises';
-import { join, extname, dirname } from 'path';
+import { readdir, readFile, writeFile } from 'fs/promises';
+import { join, extname } from 'path';
 
 interface ScanOptions {
   scan: boolean;
@@ -312,14 +312,14 @@ class QuickWinsScanner {
     // Node.js fs style (simulated)
     const startFs = performance.now();
     await writeFile(testFile, testData);
-    const fsContent = await readFile(testFile, 'utf-8');
+    const _fsContent = await readFile(testFile, 'utf-8');
     const endFs = performance.now();
     
     // Bun.file style
     const startBun = performance.now();
     const bunFile = Bun.file(testFile);
     await Bun.write(testFile, testData);
-    const bunContent = await bunFile.text();
+    const _bunContent = await bunFile.text();
     const endBun = performance.now();
     
     benchmarks.push({
