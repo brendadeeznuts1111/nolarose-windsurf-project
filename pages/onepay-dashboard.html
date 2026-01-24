@@ -3192,10 +3192,10 @@
         }
 
         // 🌊 Streaming Demo Function
-        async function demonstrateStreamingDemo() {
+        const demonstrateStreamingDemo = async () => {
             try {
                 dashboard.addEvent('STREAMING', 'Starting Uint8Array to ReadableStream demo', 'info');
-                const report = await dashboard.demonstrateStreaming();
+                await dashboard.demonstrateStreaming();
                 
                 // The modal will be displayed automatically by the enhanced function
                 dashboard.addEvent('STREAMING', 'Streaming demo completed successfully', 'success');
@@ -3352,7 +3352,7 @@
             // Simulate geo data refresh with random variations
             const regions = document.querySelectorAll('.text-right .font-semibold');
             regions.forEach(region => {
-                if (region && region.textContent.includes('%')) {
+                if (region?.textContent?.includes('%')) {
                     const currentPercent = parseInt(region.textContent, 10);
                     const newPercent = Math.floor(Math.random() * 10) + currentPercent - 5;
                     region.textContent = `${Math.max(5, Math.min(50, newPercent))}%`;
@@ -3580,7 +3580,7 @@
             }
 
             // 🔮 Predictive Performance Modeling
-            predictPerformance(currentMetrics, historicalData) {
+            predictPerformance(_currentMetrics, historicalData) {
                 // Simple linear regression for prediction
                 const dataPoints = historicalData.slice(-50).map((item, index) => ({
                     x: index,
