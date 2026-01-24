@@ -3192,7 +3192,7 @@
         }
 
         // 🌊 Streaming Demo Function
-        const demonstrateStreamingDemo = async () => {
+        async function demonstrateStreamingDemo() {
             try {
                 dashboard.addEvent('STREAMING', 'Starting Uint8Array to ReadableStream demo', 'info');
                 await dashboard.demonstrateStreaming();
