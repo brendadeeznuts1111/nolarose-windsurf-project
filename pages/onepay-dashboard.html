@@ -113,15 +113,56 @@
 <body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
     <!-- Floating Action Buttons -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-3">
-        <button onclick="toggleDarkMode()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all tooltip" data-tooltip="Toggle Dark Mode">
-            <i class="fas fa-moon text-gray-700"></i>
-        </button>
-        <button onclick="exportData()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all tooltip" data-tooltip="Export Data">
-            <i class="fas fa-download text-blue-600"></i>
-        </button>
-        <button onclick="refreshDashboard()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all tooltip" data-tooltip="Refresh Dashboard">
-            <i class="fas fa-sync-alt text-green-600"></i>
-        </button>
+        <!-- Enhanced Action Buttons -->
+        <div class="flex items-center space-x-3">
+            <!-- Dark Mode Toggle with Enhanced Feedback -->
+            <button onclick="toggleDarkMode()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 tooltip relative group" data-tooltip="Toggle Dark Mode">
+                <i class="fas fa-moon text-gray-700 transition-transform duration-300 group-hover:rotate-12" id="dark-mode-icon"></i>
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            </button>
+            
+            <!-- Export Data with Multiple Options -->
+            <div class="relative">
+                <button onclick="toggleExportMenu()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 tooltip relative group" data-tooltip="Export Data">
+                    <i class="fas fa-download text-blue-600 transition-transform duration-300 group-hover:scale-110"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </button>
+                
+                <!-- Export Dropdown Menu -->
+                <div id="export-menu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                    <button onclick="exportData()" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i class="fas fa-file-export text-blue-600"></i>
+                        <span>Export JSON</span>
+                    </button>
+                    <button onclick="exportCharts()" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i class="fas fa-chart-line text-green-600"></i>
+                        <span>Export Charts</span>
+                    </button>
+                    <button onclick="exportMetrics()" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i class="fas fa-tachometer-alt text-purple-600"></i>
+                        <span>Export Metrics</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Enhanced Refresh with Status Indicator -->
+            <button onclick="refreshDashboard()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 tooltip relative group" data-tooltip="Refresh Dashboard">
+                <i class="fas fa-sync-alt text-green-600 transition-transform duration-300 group-hover:rotate-180" id="refresh-icon"></i>
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" id="refresh-status"></span>
+            </button>
+            
+            <!-- New: Settings Button -->
+            <button onclick="openSettings()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 tooltip relative group" data-tooltip="Settings">
+                <i class="fas fa-cog text-gray-600 transition-transform duration-300 group-hover:rotate-90"></i>
+                <span class="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            </button>
+            
+            <!-- New: Notifications Button -->
+            <button onclick="toggleNotifications()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-all duration-300 tooltip relative group" data-tooltip="Notifications">
+                <i class="fas fa-bell text-orange-600 transition-transform duration-300 group-hover:scale-110"></i>
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full text-white text-xs flex items-center justify-center" id="notification-badge">3</span>
+            </button>
+        </div>
     </div>
 
     <!-- Header -->
@@ -3002,12 +3043,21 @@
                 console.log('🔄 Starting dashboard refresh...');
                 dashboard.addEvent('MANUAL', 'Manual refresh triggered', 'info');
                 
-                // Show loading state
+                // Enhanced visual feedback
                 const refreshButton = document.querySelector('[onclick="refreshDashboard()"]');
+                const refreshIcon = document.getElementById('refresh-icon');
+                const refreshStatus = document.getElementById('refresh-status');
+                
                 if (refreshButton) {
-                    const icon = refreshButton.querySelector('i');
-                    if (icon) {
-                        icon.classList.add('fa-spin');
+                    refreshButton.classList.add('scale-95');
+                    if (refreshIcon) {
+                        refreshIcon.classList.add('fa-spin');
+                        refreshIcon.classList.remove('text-green-600');
+                        refreshIcon.classList.add('text-blue-600');
+                    }
+                    if (refreshStatus) {
+                        refreshStatus.classList.remove('bg-green-400');
+                        refreshStatus.classList.add('bg-blue-400');
                     }
                 }
                 
@@ -3023,13 +3073,27 @@
                 // Show completion feedback
                 setTimeout(() => {
                     if (refreshButton) {
-                        const icon = refreshButton.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('fa-spin');
+                        refreshButton.classList.remove('scale-95');
+                        if (refreshIcon) {
+                            refreshIcon.classList.remove('fa-spin');
+                            refreshIcon.classList.remove('text-blue-600');
+                            refreshIcon.classList.add('text-green-600');
+                        }
+                        if (refreshStatus) {
+                            refreshStatus.classList.remove('bg-blue-400');
+                            refreshStatus.classList.add('bg-green-400');
                         }
                     }
                     dashboard.addEvent('MANUAL', 'Manual refresh completed', 'success');
                     console.log('✅ Dashboard refresh completed successfully');
+                    
+                    // Add success pulse effect
+                    if (refreshStatus) {
+                        refreshStatus.classList.add('animate-ping');
+                        setTimeout(() => {
+                            refreshStatus.classList.remove('animate-ping');
+                        }, 1000);
+                    }
                 }, 1000);
                 
             } catch (error) {
@@ -3044,6 +3108,18 @@
                 
                 console.error('❌ Dashboard refresh failed:', errorDetails);
                 dashboard.addEvent('SYSTEM', `Refresh failed: ${errorDetails.message}`, 'error');
+                
+                // Show error state
+                const refreshIcon = document.getElementById('refresh-icon');
+                const refreshStatus = document.getElementById('refresh-status');
+                if (refreshIcon) {
+                    refreshIcon.classList.remove('text-blue-600');
+                    refreshIcon.classList.add('text-red-600');
+                }
+                if (refreshStatus) {
+                    refreshStatus.classList.remove('bg-blue-400');
+                    refreshStatus.classList.add('bg-red-400');
+                }
                 
             } finally {
                 // Reset cooldown after successful operation
@@ -3062,9 +3138,130 @@
             if (document.body.classList.contains('dark')) {
                 darkModeIcon.classList.remove('fa-moon');
                 darkModeIcon.classList.add('fa-sun');
+                darkModeIcon.classList.remove('text-gray-700');
+                darkModeIcon.classList.add('text-yellow-400');
             } else {
                 darkModeIcon.classList.remove('fa-sun');
                 darkModeIcon.classList.add('fa-moon');
+                darkModeIcon.classList.remove('text-yellow-400');
+                darkModeIcon.classList.add('text-gray-700');
+            }
+            
+            // Add haptic feedback simulation
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
+        function toggleExportMenu() {
+            const menu = document.getElementById('export-menu');
+            menu.classList.toggle('hidden');
+            
+            // Close menu when clicking outside
+            if (!menu.classList.contains('hidden')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeExportMenu);
+                }, 100);
+            }
+        }
+
+        function closeExportMenu(event) {
+            const menu = document.getElementById('export-menu');
+            if (!menu.contains(event.target) && !event.target.closest('[onclick="toggleExportMenu()"]')) {
+                menu.classList.add('hidden');
+                document.removeEventListener('click', closeExportMenu);
+            }
+        }
+
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
+        function exportMetrics() {
+            const metricsData = {
+                timestamp: new Date().toISOString(),
+                systemMetrics: dashboard.metrics,
+                performanceMetrics: {
+                    responseTime: Math.floor(Math.random() * 50) + 20 + 'ms',
+                    errorRate: (Math.random() * 0.1).toFixed(3) + '%',
+                    throughput: Math.floor(Math.random() * 1000) + 500 + ' req/min',
+                    activeConnections: Math.floor(Math.random() * 100) + 50
+                },
+                uptime: document.getElementById('uptime-percentage').textContent,
+                status: document.getElementById('overall-status').textContent
+            };
+            
+            displayJSONReport(metricsData, 'System Metrics Export');
+            dashboard.addEvent('EXPORT', 'System metrics exported', 'success');
+        }
+
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
+        function openSettings() {
+            const settingsData = {
+                dashboard: {
+                    theme: document.body.classList.contains('dark') ? 'dark' : 'light',
+                    autoRefresh: dashboard.autoRefresh,
+                    notifications: true,
+                    animations: true
+                },
+                display: {
+                    charts: {
+                        type: 'line',
+                        animated: true,
+                        grid: true
+                    },
+                    metrics: {
+                        compact: false,
+                        showTrends: true,
+                        showPercentages: true
+                    }
+                },
+                performance: {
+                    updateInterval: 5000,
+                    maxDataPoints: 100,
+                    enableAnimations: true
+                }
+            };
+            
+            displayJSONReport(settingsData, 'Dashboard Settings');
+            dashboard.addEvent('SETTINGS', 'Settings panel opened', 'info');
+        }
+
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
+        function toggleNotifications() {
+            const notifications = [
+                {
+                    id: 1,
+                    type: 'success',
+                    title: 'System Update',
+                    message: 'Dashboard updated to v3.6.0',
+                    timestamp: new Date().toISOString(),
+                    read: false
+                },
+                {
+                    id: 2,
+                    type: 'warning',
+                    title: 'High Memory Usage',
+                    message: 'Memory usage at 78% capacity',
+                    timestamp: new Date(Date.now() - 300000).toISOString(),
+                    read: false
+                },
+                {
+                    id: 3,
+                    type: 'info',
+                    title: 'Weekly Report Ready',
+                    message: 'Your weekly performance report is available',
+                    timestamp: new Date(Date.now() - 600000).toISOString(),
+                    read: false
+                }
+            ];
+            
+            displayJSONReport(notifications, 'System Notifications');
+            dashboard.addEvent('NOTIFICATIONS', 'Notification panel opened', 'info');
+            
+            // Clear badge after opening
+            const badge = document.getElementById('notification-badge');
+            if (badge) {
+                badge.textContent = '0';
+                badge.style.display = 'none';
             }
         }
 
