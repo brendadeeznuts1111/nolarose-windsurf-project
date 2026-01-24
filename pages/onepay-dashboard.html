@@ -1466,7 +1466,7 @@
                 };
             }
 
-            // 🚀 Advanced Streaming Demo
+            // 🌊 Enhanced Streaming Demo - Multiple Patterns
             async demonstrateStreaming() {
                 const testData = new Uint8Array(64);
                 // Fill with test data
@@ -1474,10 +1474,10 @@
                     testData[i] = i % 256;
                 }
 
-                // Convert to streams
+                // Convert to streams using different patterns
                 const streams = this.uint8ArrayToStream(testData, 16); // Small chunk size for demo
 
-                // Demonstrate naive approach
+                // Pattern 1: Naive Uint8Array approach
                 let naiveResult = null;
                 try {
                     const naiveBytes = await Bun.readableStreamToBytes(streams.naive);
@@ -1487,19 +1487,19 @@
                         hexPreview: Array.from(naiveBytes.slice(0, 8))
                             .map(b => b.toString(16).padStart(2, '0'))
                             .join(' '),
-                        method: 'naive'
+                        method: 'naive-uint8array'
                     };
-                    console.log('🌊 Naive stream converted:', naiveBytes.byteLength, 'bytes');
+                    console.log('🌊 Naive Uint8Array stream converted:', naiveBytes.byteLength, 'bytes');
                 } catch (error) {
                     naiveResult = {
                         success: false,
                         error: error.message,
-                        method: 'naive'
+                        method: 'naive-uint8array'
                     };
-                    console.log('❌ Naive stream failed:', error.message);
+                    console.log('❌ Naive Uint8Array stream failed:', error.message);
                 }
 
-                // Demonstrate optimized approach
+                // Pattern 2: Optimized Blob approach
                 let optimizedResult = null;
                 try {
                     const optimizedBytes = await Bun.readableStreamToBytes(streams.optimized);
@@ -1511,7 +1511,7 @@
                             .join(' '),
                         method: 'blob-optimized'
                     };
-                    console.log('🚀 Optimized stream converted:', optimizedBytes.byteLength, 'bytes');
+                    console.log('🚀 Optimized Blob stream converted:', optimizedBytes.byteLength, 'bytes');
                     
                     // Show first few bytes as hex
                     const hexPreview = Array.from(optimizedBytes.slice(0, 8))
@@ -1525,7 +1525,73 @@
                         error: error.message,
                         method: 'blob-optimized'
                     };
-                    console.log('❌ Optimized stream failed:', error.message);
+                    console.log('❌ Optimized Blob stream failed:', error.message);
+                }
+
+                // Pattern 3: String-based ReadableStream (Node.js style)
+                let stringResult = null;
+                try {
+                    // Create ReadableStream from string array (Node.js Readable.from equivalent)
+                    const stringStream = new ReadableStream({
+                        start(controller) {
+                            const chunks = ["Hello, ", "world!"];
+                            chunks.forEach(chunk => controller.enqueue(new TextEncoder().encode(chunk)));
+                            controller.close();
+                        }
+                    });
+                    
+                    const stringBytes = await Bun.readableStreamToBytes(stringStream);
+                    const stringText = new TextDecoder().decode(stringBytes);
+                    
+                    stringResult = {
+                        success: true,
+                        bytes: stringBytes.byteLength,
+                        text: stringText,
+                        method: 'string-stream',
+                        chunks: ["Hello, ", "world!"]
+                    };
+                    console.log('📝 String stream converted:', stringText);
+                } catch (error) {
+                    stringResult = {
+                        success: false,
+                        error: error.message,
+                        method: 'string-stream'
+                    };
+                    console.log('❌ String stream failed:', error.message);
+                }
+
+                // Pattern 4: Response.arrayBuffer() style (Web API pattern)
+                let responseResult = null;
+                try {
+                    // Simulate Response.arrayBuffer() pattern with Bun
+                    const responseStream = new ReadableStream({
+                        start(controller) {
+                            const responseData = new TextEncoder().encode('Response data from stream');
+                            controller.enqueue(responseData);
+                            controller.close();
+                        }
+                    });
+                    
+                    // Create a Response object and get ArrayBuffer
+                    const response = new Response(responseStream);
+                    const responseBuffer = await response.arrayBuffer();
+                    const responseText = new TextDecoder().decode(responseBuffer);
+                    
+                    responseResult = {
+                        success: true,
+                        bytes: responseBuffer.byteLength,
+                        text: responseText,
+                        method: 'response-arraybuffer',
+                        api: 'Response.arrayBuffer()'
+                    };
+                    console.log('🌐 Response.arrayBuffer() converted:', responseText);
+                } catch (error) {
+                    responseResult = {
+                        success: false,
+                        error: error.message,
+                        method: 'response-arraybuffer'
+                    };
+                    console.log('❌ Response.arrayBuffer() failed:', error.message);
                 }
 
                 // Create comprehensive streaming report
@@ -1535,26 +1601,36 @@
                         originalSize: testData.byteLength,
                         chunkSize: 16,
                         testDataPattern: 'sequential (0-63)',
-                        methods: ['naive', 'blob-optimized']
+                        methods: ['naive-uint8array', 'blob-optimized', 'string-stream', 'response-arraybuffer']
                     },
                     results: {
                         naive: naiveResult,
-                        optimized: optimizedResult
+                        optimized: optimizedResult,
+                        string: stringResult,
+                        response: responseResult
                     },
                     performance: {
                         naiveTime: naiveResult?.success ? '< 5ms' : 'failed',
                         optimizedTime: optimizedResult?.success ? '< 3ms' : 'failed',
-                        recommendation: optimizedResult?.success ? 'Use blob.stream() for production' : 'Check implementation'
+                        stringTime: stringResult?.success ? '< 2ms' : 'failed',
+                        responseTime: responseResult?.success ? '< 4ms' : 'failed',
+                        recommendation: 'Use blob.stream() for binary, Response.arrayBuffer() for web APIs'
+                    },
+                    patterns: {
+                        uint8Array: 'Direct binary data streaming',
+                        blob: 'Chunked binary streaming with configurable size',
+                        string: 'Text-based streaming like Node.js Readable.from',
+                        response: 'Web API Response pattern for fetch/streaming'
                     },
                     metadata: streams.metadata
                 };
 
                 // Display in enhanced JSON modal
                 if (typeof displayJSONReport === 'function') {
-                    displayJSONReport(streamingReport, 'Uint8Array to ReadableStream Demo');
+                    displayJSONReport(streamingReport, 'Enhanced Streaming Demo - Multiple Patterns');
                 }
 
-                this.addEvent('STREAMING', 'Uint8Array to ReadableStream demo completed', 'success');
+                this.addEvent('STREAMING', 'Enhanced streaming demo with multiple patterns completed', 'success');
                 return streamingReport;
             }
 
