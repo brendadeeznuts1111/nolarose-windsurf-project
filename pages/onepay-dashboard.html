@@ -2955,6 +2955,7 @@
             }
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
         function toggleAutoRefresh() {
             dashboard.autoRefresh = !dashboard.autoRefresh;
             document.getElementById('auto-refresh-status').textContent = dashboard.autoRefresh ? 'ON' : 'OFF';
@@ -3015,6 +3016,21 @@
             dashboard.clearAllAlerts();
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
+        function exportCharts() {
+            const chartData = {
+                timestamp: new Date().toISOString(),
+                charts: {
+                    performance: dashboard.charts.performance ? dashboard.charts.performance.data : null,
+                    compliance: dashboard.charts.compliance ? dashboard.charts.compliance.data : null,
+                    activity: dashboard.charts.activity ? dashboard.charts.activity.data : null
+                }
+            };
+            
+            displayJSONReport(chartData, 'Chart Export Data');
+            dashboard.addEvent('EXPORT', 'Charts data exported', 'success');
+        }
+
         function exportData() {
             const data = {
                 timestamp: new Date().toISOString(),
@@ -3069,6 +3085,7 @@
             dashboard.addEvent('EXPORT', 'Charts exported as image', 'success');
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
         function runComplianceCheck() {
             dashboard.addEvent('COMPLIANCE', 'Running compliance check...', 'info');
             
