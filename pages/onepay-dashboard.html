@@ -3910,9 +3910,171 @@
             localStorage.setItem('dashboard-telemetry', JSON.stringify(telemetry));
         }
 
-        // 📊 Telemetry Viewer
+        // 📊 Enhanced Telemetry Viewer
         // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 181)
         function showTelemetryViewer() {
+            const telemetry = JSON.parse(localStorage.getItem('dashboard-telemetry') || '[]');
+            
+            // Enhanced telemetry analysis
+            const analysis = analyzeTelemetry(telemetry);
+            
+            const enhancedTelemetry = {
+                summary: {
+                    totalEvents: telemetry.length,
+                    errorCount: analysis.errorCount,
+                    warningCount: analysis.warningCount,
+                    infoCount: analysis.infoCount,
+                    timeRange: {
+                        start: telemetry.length > 0 ? telemetry[0].timestamp : null,
+                        end: telemetry.length > 0 ? telemetry[telemetry.length - 1].timestamp : null
+                    },
+                    depth: currentDepth,
+                    consoleDepth: localStorage.getItem('bun-console-depth') || '3'
+                },
+                errorAnalysis: {
+                    dashboardRefreshErrors: analysis.dashboardRefreshErrors,
+                    mostFrequentErrors: analysis.mostFrequentErrors,
+                    errorRate: `${((analysis.errorCount / telemetry.length) * 100).toFixed(2)}%`,
+                    status: analysis.errorCount > 0 ? 'Needs Attention' : 'Healthy'
+                },
+                performanceMetrics: {
+                    averageEventInterval: analysis.averageInterval,
+                    peakErrorFrequency: analysis.peakFrequency,
+                    systemStability: analysis.systemStability
+                },
+                recommendations: generateTelemetryRecommendations(analysis),
+                rawData: telemetry,
+                filteredData: {
+                    errorsOnly: telemetry.filter(event => event.level === 'ERROR'),
+                    warningsOnly: telemetry.filter(event => event.level === 'WARNING'),
+                    recent: telemetry.slice(-10)
+                }
+            };
+            
+            displayJSONReport(enhancedTelemetry, 'Enhanced Console Telemetry Analysis');
+            dashboard.addEvent('TELEMETRY', 'Enhanced telemetry analysis completed', 'info');
+        }
+
+        function analyzeTelemetry(telemetry) {
+            const errorCount = telemetry.filter(event => event.level === 'ERROR').length;
+            const warningCount = telemetry.filter(event => event.level === 'WARNING').length;
+            const infoCount = telemetry.filter(event => event.level === 'INFO').length;
+            
+            // Count dashboard.refresh errors specifically
+            const dashboardRefreshErrors = telemetry.filter(event => 
+                event.message && event.message.includes('dashboard.refresh')
+            ).length;
+            
+            // Find most frequent errors
+            const errorMessages = {};
+            telemetry.filter(event => event.level === 'ERROR').forEach(event => {
+                const message = event.message || 'Unknown error';
+                errorMessages[message] = (errorMessages[message] || 0) + 1;
+            });
+            
+            const mostFrequentErrors = Object.entries(errorMessages)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5)
+                .map(([message, count]) => ({ message, count }));
+            
+            // Calculate average interval between events
+            let averageInterval = 0;
+            if (telemetry.length > 1) {
+                const intervals = [];
+                for (let i = 1; i < telemetry.length; i++) {
+                    const prev = new Date(telemetry[i-1].timestamp);
+                    const curr = new Date(telemetry[i].timestamp);
+                    intervals.push(curr - prev);
+                }
+                averageInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+            }
+            
+            // Calculate peak error frequency
+            const errorTimestamps = telemetry
+                .filter(event => event.level === 'ERROR')
+                .map(event => new Date(event.timestamp).getTime());
+            
+            let peakFrequency = 0;
+            if (errorTimestamps.length > 1) {
+                const intervals = [];
+                for (let i = 1; i < errorTimestamps.length; i++) {
+                    intervals.push(errorTimestamps[i] - errorTimestamps[i-1]);
+                }
+                const minInterval = Math.min(...intervals);
+                peakFrequency = minInterval < 1000 ? 'High' : minInterval < 5000 ? 'Medium' : 'Low';
+            }
+            
+            // System stability assessment
+            const systemStability = errorCount === 0 ? 'Excellent' : 
+                                  errorCount < 5 ? 'Good' : 
+                                  errorCount < 20 ? 'Fair' : 'Poor';
+            
+            return {
+                errorCount,
+                warningCount,
+                infoCount,
+                dashboardRefreshErrors,
+                mostFrequentErrors,
+                averageInterval: Math.round(averageInterval),
+                peakFrequency,
+                systemStability
+            };
+        }
+
+        function generateTelemetryRecommendations(analysis) {
+            const recommendations = [];
+            
+            if (analysis.dashboardRefreshErrors > 0) {
+                recommendations.push({
+                    priority: 'HIGH',
+                    issue: 'Dashboard refresh errors detected',
+                    solution: 'Keyboard shortcut system was fixed - errors should be resolved',
+                    action: 'Monitor for any recurring refresh issues'
+                });
+            }
+            
+            if (analysis.errorCount > analysis.infoCount) {
+                recommendations.push({
+                    priority: 'MEDIUM',
+                    issue: 'High error-to-info ratio',
+                    solution: 'Review error patterns and implement preventive measures',
+                    action: 'Consider adding more robust error handling'
+                });
+            }
+            
+            if (analysis.averageInterval < 1000) {
+                recommendations.push({
+                    priority: 'LOW',
+                    issue: 'High frequency of events',
+                    solution: 'Events are generating frequently, which is expected for active debugging',
+                    action: 'Normal behavior for development environment'
+                });
+            }
+            
+            if (analysis.systemStability === 'Excellent') {
+                recommendations.push({
+                    priority: 'INFO',
+                    issue: 'System operating normally',
+                    solution: 'No issues detected - system is performing well',
+                    action: 'Continue monitoring'
+                });
+            }
+            
+            return recommendations;
+        }
+
+        // Clear telemetry data
+        function clearTelemetryData() {
+            if (confirm('Are you sure you want to clear all telemetry data?')) {
+                localStorage.removeItem('dashboard-telemetry');
+                dashboard.addEvent('TELEMETRY', 'Telemetry data cleared', 'info');
+                showTelemetryViewer(); // Refresh the view
+            }
+        }
+
+        // 📊 Telemetry Viewer
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 181)
+        function showTelemetryViewerLegacy() {
             const telemetry = JSON.parse(localStorage.getItem('dashboard-telemetry') || '[]');
             
             if (telemetry.length === 0) {
