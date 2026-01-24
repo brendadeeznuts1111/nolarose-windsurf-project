@@ -7,6 +7,8 @@
   },
   "scripts": {
     "build": "bun build cli/risk-hunter.ts --outfile dist/index.js --target bun",
+    "build:shortcuts": "bun run scripts/build-with-shortcuts.ts",
+    "prebuild": "bun run build:shortcuts",
     "build:cosmic": "bun run cosmic-bundle-optimizer.ts build-all",
     "build:free": "bun run cosmic-bundle-optimizer.ts build free",
     "build:premium": "bun run cosmic-bundle-optimizer.ts build premium",

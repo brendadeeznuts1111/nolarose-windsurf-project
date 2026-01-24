@@ -10,6 +10,8 @@ cli/
 ├── admin/                       # Administrative and management tools
 │   ├── admin.ts                 # DuoPlus Admin CLI with KYC Dashboard
 │   └── sovereign-admin.ts       # Sovereign APY Leaderboard Admin
+├── dashboard/                   # Dashboard management tools
+│   └── dashboard-cli.ts         # Dashboard dev server, benchmarks, validation
 ├── financial/                   # Financial and payment tools
 │   ├── cashapp-green-cli.ts     # Cash App Green CLI
 │   └── enhanced-cli.ts          # Enhanced Analytics CLI
@@ -22,6 +24,14 @@ cli/
 ```
 
 ## CLI Categories
+
+### Dashboard & Frontend
+- **dashboard-cli.ts**: Dashboard development server, performance benchmarks, optimization validation, and production builds
+  - `serve` - Start dev server with CORS support
+  - `bench` - Run performance benchmarks (mitata)
+  - `validate` - Validate all optimizations are active
+  - `build` - Build TypeScript with `--define` for production
+  - See [pages/CLI_USAGE.md](../pages/CLI_USAGE.md) for complete guide
 
 ### Admin & Management
 - **admin.ts**: DuoPlus Admin CLI with KYC Dashboard, Pool Management, and APY Leaderboards
@@ -45,6 +55,12 @@ cli/
 All CLI tools are executable with Bun:
 
 ```bash
+# Dashboard tools
+bun cli/dashboard/dashboard-cli.ts serve      # Start dev server
+bun cli/dashboard/dashboard-cli.ts bench     # Run benchmarks
+bun cli/dashboard/dashboard-cli.ts validate # Validate optimizations
+bun cli/dashboard/dashboard-cli.ts build    # Build for production
+
 # Admin tools
 bun run cli/admin/admin.ts
 bun run cli/admin/sovereign-admin.ts

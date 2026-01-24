@@ -1,0 +1,90 @@
+# DuoPlus Production Configuration
+# Version: 1.0.0
+# Environment: production
+# 
+# This file defines production configuration defaults.
+# Actual secrets should be provided via environment variables.
+# See .env.production.example for required environment variables.
+
+[server]
+port = 3227
+host = "0.0.0.0"
+workers = "auto"
+request_timeout = 30000
+
+[features]
+lightning = true
+cashapp_green = true
+kyc_enforced = true
+ai_risk_prediction = true
+family_controls = true
+sar_filing_enabled = true
+
+[security]
+cors_origins = ["https://app.duoplus.com", "https://admin.duoplus.com"]
+rate_limit_requests = 1000
+rate_limit_window = 60000
+max_request_size = "10mb"
+
+# KYC Provider Configuration
+# In production, provider must be set via DUOPLUS_KYC_PROVIDER env var
+# Valid providers: "chainalysis", "jumio", "onfido", "persona"
+# Mock provider is NOT allowed in production
+[kyc]
+provider = "${DUOPLUS_KYC_PROVIDER}"  # Must be set via environment variable
+api_key = "${DUOPLUS_KYC_API_KEY}"
+webhook_secret = "${DUOPLUS_KYC_WEBHOOK_SECRET}"
+sandbox_mode = false
+
+[kyc.rules]
+daily_limit_usd = 10000
+monthly_limit_usd = 50000
+require_document_verification = true
+require_address_verification = true
+
+# Lightning Network Configuration
+# Certificate path must be set via DUOPLUS_LIGHTNING_CERT_PATH env var
+[lightning]
+node_alias = "DuoPlus-Production-Node"
+network = "mainnet"
+rest_url = "${DUOPLUS_LIGHTNING_ENDPOINT}"
+macaroon_path = "${DUOPLUS_LIGHTNING_MACAROON_PATH}"
+tls_cert_path = "${DUOPLUS_LIGHTNING_CERT_PATH}"
+
+[lightning.fees]
+base_fee_msat = 1000
+fee_rate_ppm = 100
+max_htlc_msat = 1000000000
+
+# Cash App Green Configuration
+[cashapp]
+api_url = "https://api.cash.app/v1"
+account_id = "${CASHAPP_ACCOUNT_ID}"
+access_token = "${CASHAPP_ACCESS_TOKEN}"
+webhook_secret = "${CASHAPP_WEBHOOK_SECRET}"
+sandbox = false
+
+[cashapp.green]
+auto_deposit_threshold = 50.00
+yield_rate = 0.0325
+rebalance_frequency = "hourly"
+
+# Logging & Monitoring
+[logging]
+level = "info"
+format = "json"
+output = "stdout"
+s3_bucket = "${DUOPLUS_S3_BUCKET}"
+s3_region = "${DUOPLUS_S3_REGION}"
+
+[monitoring]
+metrics_enabled = true
+health_check_interval = 30000
+alert_webhook = "${SLACK_WEBHOOK_URL}"
+
+# Compliance
+[compliance]
+fincen_ctr_threshold = 10000
+ofac_screening = true
+record_retention_days = 1825
+sar_filing_enabled = true

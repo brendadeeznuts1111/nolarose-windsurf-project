@@ -34,7 +34,8 @@ const DEFAULT_CONFIG: NetworkConfig = {
 		"https://api.crowdstrike.com",
 		"https://api.mandiant.com",
 	],
-	maxSimultaneousConnections: 256,
+	// QUICK WIN: Increased for 4k+ sessions/sec throughput
+	maxSimultaneousConnections: 512, // BUN_CONFIG_MAX_HTTP_REQUESTS default is 256
 	connectionTimeout: 30000,
 	keepAlive: true,
 	retryAttempts: 3,
@@ -65,9 +66,13 @@ export class NetworkOptimizer {
 	async initialize(): Promise<void> {
 		console.log("🚀 Initializing network optimizer...");
 
-		// Set environment variable for connection limit
+		// QUICK WIN: Set Bun's max HTTP requests config for 4k+ sessions/sec
+		// This prevents queuing when processing high throughput
 		process.env.BUN_CONFIG_MAX_HTTP_REQUESTS =
 			this.config.maxSimultaneousConnections.toString();
+		console.log(
+			`⚙️  BUN_CONFIG_MAX_HTTP_REQUESTS=${this.config.maxSimultaneousConnections}`,
+		);
 
 		// Preconnect to all configured hosts
 		await this.preconnectToHosts();

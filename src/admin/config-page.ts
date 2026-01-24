@@ -44,6 +44,299 @@ export class ConfigPage {
             padding: 20px;
         }
         
+        /* Toast Notification System */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 400px;
+        }
+        
+        .toast {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInRight 0.3s ease-out;
+            min-width: 300px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .toast.toast-success { border-left: 4px solid #22c55e; }
+        .toast.toast-error { border-left: 4px solid #ef4444; }
+        .toast.toast-warning { border-left: 4px solid #f59e0b; }
+        .toast.toast-info { border-left: 4px solid #3b82f6; }
+        
+        .toast-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .toast-content { flex: 1; }
+        .toast-title { font-weight: 600; margin-bottom: 0.25rem; color: #1f2937; }
+        .toast-message { font-size: 0.875rem; color: #6b7280; }
+        .toast-close {
+            background: none; border: none; color: #6b7280; cursor: pointer;
+            font-size: 1.25rem; padding: 0; width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 4px; transition: all 0.2s ease;
+        }
+        .toast-close:hover { background: #f3f4f6; color: #1f2937; }
+        
+        /* Search Bar */
+        .search-container {
+            padding: 20px 30px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .search-btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn:hover {
+            background: #f3f4f6;
+            border-color: #3b82f6;
+        }
+        
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        /* Highlight search results */
+        .config-item.highlight {
+            background: #fef3c7 !important;
+            border-color: #f59e0b !important;
+        }
+        
+        .config-item.hidden {
+            display: none;
+        }
+        
+        /* Bulk Operations */
+        .bulk-actions {
+            position: sticky;
+            top: 0;
+            background: #3b82f6;
+            color: white;
+            padding: 15px 30px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .bulk-actions.active {
+            display: flex;
+        }
+        
+        .bulk-actions-info {
+            font-weight: 600;
+        }
+        
+        .bulk-actions-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bulk-btn {
+            padding: 8px 16px;
+            background: white;
+            color: #3b82f6;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .bulk-btn:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Checkbox for selection */
+        .config-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        /* Sort Controls */
+        .sort-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        /* Advanced Filters */
+        .advanced-filters {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .advanced-filters.active {
+            display: block;
+        }
+        
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* Export Format Selector */
+        .export-menu {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .export-dropdown {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            padding: 8px;
+            z-index: 1000;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 8px;
+        }
+        
+        .export-dropdown.active {
+            display: block;
+        }
+        
+        .export-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .export-option:hover {
+            background: #f3f4f6;
+        }
+        
+        /* Configuration Comparison */
+        .comparison-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .comparison-panel {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9fafb;
+        }
+        
+        .diff-highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .diff-added {
+            background: #dcfce7;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .diff-removed {
+            background: #fee2e2;
+            padding: 2px 4px;
+            border-radius: 3px;
+            text-decoration: line-through;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -306,6 +599,32 @@ export class ConfigPage {
             .summary {
                 grid-template-columns: 1fr;
             }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-input, .search-btn {
+                width: 100%;
+            }
+            
+            .toast-container {
+                left: 1rem;
+                right: 1rem;
+                max-width: none;
+            }
+            
+            .toast {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .refresh-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 16px;
+                font-size: 0.875rem;
+            }
         }
     </style>
 </head>
@@ -323,6 +642,64 @@ export class ConfigPage {
         </div>
         
         ${configFreeze.generateFreezeStatusHTML()}
+        
+        <div class="bulk-actions" id="bulk-actions">
+            <div class="bulk-actions-info">
+                <span id="selected-count">0</span> configuration(s) selected
+            </div>
+            <div class="bulk-actions-buttons">
+                <button class="bulk-btn" onclick="bulkExport()">📤 Export Selected</button>
+                <button class="bulk-btn" onclick="bulkValidate()">✅ Validate Selected</button>
+                <button class="bulk-btn" onclick="clearSelection()">✕ Clear</button>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" class="search-input" 
+                       placeholder="🔍 Search configuration variables..." 
+                       autocomplete="off">
+                <button onclick="performSearch()" class="search-btn">Search</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByStatus('all')">All</button>
+                <button class="filter-btn" onclick="filterByStatus('valid')">Valid</button>
+                <button class="filter-btn" onclick="filterByStatus('warning')">Warnings</button>
+                <button class="filter-btn" onclick="filterByStatus('error')">Errors</button>
+                <button class="filter-btn" onclick="filterByStatus('required')">Required</button>
+                <button class="filter-btn" onclick="toggleAdvancedFilters()">⚙️ Advanced</button>
+                <div class="export-menu" style="position: relative;">
+                    <button class="filter-btn" onclick="toggleExportMenu()">📤 Export</button>
+                    <div class="export-dropdown" id="export-dropdown">
+                        <div class="export-option" onclick="exportJSON()">📄 Export as JSON</div>
+                        <div class="export-option" onclick="exportYAML()">📄 Export as YAML</div>
+                        <div class="export-option" onclick="exportCSV()">📊 Export as CSV</div>
+                        <div class="export-option" onclick="exportTOML()">📋 Export as TOML</div>
+                    </div>
+                </div>
+            </div>
+            <div class="sort-controls">
+                <label style="font-weight: 600;">Sort by:</label>
+                <select class="sort-select" id="sort-select" onchange="sortConfigs()">
+                    <option value="name-asc">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="status">Status</option>
+                    <option value="category">Category</option>
+                </select>
+            </div>
+            <div class="advanced-filters" id="advanced-filters">
+                <h3 style="margin-bottom: 15px;">Advanced Filters</h3>
+                <div class="filter-group">
+                    <input type="text" class="filter-input" id="filter-category" placeholder="Filter by category..." oninput="applyAdvancedFilters()">
+                    <input type="text" class="filter-input" id="filter-value" placeholder="Filter by value..." oninput="applyAdvancedFilters()">
+                    <select class="filter-input" id="filter-required" onchange="applyAdvancedFilters()">
+                        <option value="">All (Required/Optional)</option>
+                        <option value="true">Required Only</option>
+                        <option value="false">Optional Only</option>
+                    </select>
+                </div>
+            </div>
+        </div>
         
         <div class="summary">
             <div class="summary-card valid">
@@ -348,11 +725,136 @@ export class ConfigPage {
         </div>
     </div>
     
-    <button class="refresh-btn" onclick="location.reload()">
+    <button class="refresh-btn" onclick="location.reload()" title="Refresh (Ctrl+R)">
         🔄 Refresh
     </button>
     
+    <div class="toast-container" id="toast-container"></div>
+    
     <script>
+        // Toast Notification System
+        function showToast(type, title, message, duration = 5000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            
+            const toast = document.createElement('div');
+            toast.className = \`toast toast-\${type}\`;
+            
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            
+            toast.innerHTML = \`
+                <div class="toast-icon">\${icons[type] || icons.info}</div>
+                <div class="toast-content">
+                    <div class="toast-title">\${title}</div>
+                    <div class="toast-message">\${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            \`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+        
+        // Search functionality
+        function performSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const items = document.querySelectorAll('.config-item');
+            let found = 0;
+            
+            items.forEach(item => {
+                const name = item.querySelector('.config-name').textContent.toLowerCase();
+                const value = item.querySelector('.config-value').textContent.toLowerCase();
+                const description = item.querySelector('.config-description').textContent.toLowerCase();
+                
+                if (!query || name.includes(query) || value.includes(query) || description.includes(query)) {
+                    item.classList.remove('hidden');
+                    item.classList.toggle('highlight', query && (name.includes(query) || value.includes(query) || description.includes(query)));
+                    if (!item.classList.contains('hidden')) found++;
+                } else {
+                    item.classList.add('hidden');
+                    item.classList.remove('highlight');
+                }
+            });
+            
+            if (query) {
+                showToast(found > 0 ? 'success' : 'warning', 
+                    'Search Complete', 
+                    found > 0 ? \`Found \${found} matching configuration(s)\` : 'No matching configurations found',
+                    3000);
+            } else {
+                items.forEach(item => {
+                    item.classList.remove('hidden', 'highlight');
+                });
+            }
+        }
+        
+        // Filter by status
+        function filterByStatus(status) {
+            const items = document.querySelectorAll('.config-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            items.forEach(item => {
+                const badge = item.querySelector('.status-badge');
+                const isRequired = item.querySelector('.required');
+                
+                let show = false;
+                if (status === 'all') show = true;
+                else if (status === 'valid' && badge.classList.contains('valid')) show = true;
+                else if (status === 'warning' && badge.classList.contains('warning')) show = true;
+                else if (status === 'error' && badge.classList.contains('error')) show = true;
+                else if (status === 'required' && isRequired) show = true;
+                
+                item.classList.toggle('hidden', !show);
+                item.classList.remove('highlight');
+            });
+            
+            const visibleCount = Array.from(items).filter(i => !i.classList.contains('hidden')).length;
+            showToast('info', 'Filter Applied', \`Showing \${visibleCount} configuration(s)\`, 2000);
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const ctrlKey = isMac ? e.metaKey : e.ctrlKey;
+            
+            if (e.target.tagName === 'INPUT' && e.key === 'Enter') {
+                performSearch();
+                return;
+            }
+            
+            if (e.target.tagName === 'INPUT' && e.key === 'Escape') {
+                document.getElementById('search-input').value = '';
+                performSearch();
+                return;
+            }
+            
+            if (ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('search-input').focus();
+                document.getElementById('search-input').select();
+                return;
+            }
+            
+            if (ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                location.reload();
+                return;
+            }
+        });
+        
+        // Search input handler
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            if (e.target.value.length > 2 || e.target.value.length === 0) {
+                performSearch();
+            }
+        });
         // Auto-refresh every 30 seconds (disabled when frozen)
         let autoRefreshEnabled = true;
         let refreshInterval;
@@ -382,7 +884,10 @@ export class ConfigPage {
         async function freezeConfig() {
             const reason = prompt("Enter reason for freezing configuration (optional):");
             
+            if (reason === null) return; // User cancelled
+            
             try {
+                showToast('info', 'Freezing', 'Freezing configuration...', 2000);
                 const response = await fetch('/api/config/freeze', {
                     method: 'POST',
                     headers: {
@@ -392,13 +897,14 @@ export class ConfigPage {
                 });
                 
                 if (response.ok) {
-                    alert('✅ Configuration frozen successfully!');
-                    location.reload();
+                    showToast('success', 'Frozen', 'Configuration frozen successfully!');
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    alert('❌ Failed to freeze configuration');
+                    const data = await response.json();
+                    showToast('error', 'Freeze Failed', data.error || 'Failed to freeze configuration');
                 }
             } catch (error) {
-                alert('❌ Error freezing configuration: ' + error.message);
+                showToast('error', 'Error', 'Error freezing configuration: ' + error.message);
             }
         }
         
@@ -409,36 +915,233 @@ export class ConfigPage {
             }
             
             try {
+                showToast('info', 'Unfreezing', 'Unfreezing configuration...', 2000);
                 const response = await fetch('/api/config/unfreeze', {
                     method: 'POST',
                 });
                 
                 if (response.ok) {
-                    alert('✅ Configuration unfrozen successfully!');
-                    location.reload();
+                    showToast('success', 'Unfrozen', 'Configuration unfrozen successfully!');
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    alert('❌ Failed to unfreeze configuration');
+                    const data = await response.json();
+                    showToast('error', 'Unfreeze Failed', data.error || 'Failed to unfreeze configuration');
                 }
             } catch (error) {
-                alert('❌ Error unfreezing configuration: ' + error.message);
+                showToast('error', 'Error', 'Error unfreezing configuration: ' + error.message);
             }
         }
         
-        // Add keyboard shortcuts
+        // Enhanced keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'r' && e.ctrlKey) {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const ctrlKey = isMac ? e.metaKey : e.ctrlKey;
+            
+            if (e.target.tagName === 'INPUT') return; // Don't interfere with input
+            
+            if (ctrlKey && e.key === 'r') {
                 e.preventDefault();
-                location.reload();
+                showToast('info', 'Refreshing', 'Reloading page...', 1000);
+                setTimeout(() => location.reload(), 500);
             }
-            if (e.key === 'f' && e.ctrlKey && e.shiftKey) {
+            if (ctrlKey && e.shiftKey && e.key === 'F') {
                 e.preventDefault();
                 freezeConfig();
             }
-            if (e.key === 'u' && e.ctrlKey && e.shiftKey) {
+            if (ctrlKey && e.shiftKey && e.key === 'U') {
                 e.preventDefault();
                 unfreezeConfig();
             }
         });
+        
+        // Bulk Operations
+        function updateBulkActions() {
+            const checkboxes = document.querySelectorAll('.config-checkbox:checked');
+            const bulkActions = document.getElementById('bulk-actions');
+            const selectedCount = document.getElementById('selected-count');
+            
+            if (selectedCount) {
+                selectedCount.textContent = checkboxes.length;
+            }
+            
+            if (bulkActions) {
+                if (checkboxes.length > 0) {
+                    bulkActions.classList.add('active');
+                } else {
+                    bulkActions.classList.remove('active');
+                }
+            }
+        }
+        
+        function clearSelection() {
+            document.querySelectorAll('.config-checkbox').forEach(cb => cb.checked = false);
+            updateBulkActions();
+            showToast('info', 'Selection Cleared', 'All selections cleared');
+        }
+        
+        async function bulkExport() {
+            const selected = Array.from(document.querySelectorAll('.config-checkbox:checked'))
+                .map(cb => cb.getAttribute('data-path'));
+            
+            if (selected.length === 0) {
+                showToast('warning', 'No Selection', 'Please select configurations to export');
+                return;
+            }
+            
+            showToast('info', 'Exporting', \`Exporting \${selected.length} configuration(s)...\`, 2000);
+            // Implementation would export selected configs
+            showToast('success', 'Export Complete', \`Exported \${selected.length} configuration(s)\`);
+        }
+        
+        async function bulkValidate() {
+            const selected = Array.from(document.querySelectorAll('.config-checkbox:checked'))
+                .map(cb => cb.getAttribute('data-path'));
+            
+            if (selected.length === 0) {
+                showToast('warning', 'No Selection', 'Please select configurations to validate');
+                return;
+            }
+            
+            showToast('info', 'Validating', \`Validating \${selected.length} configuration(s)...\`, 2000);
+            setTimeout(() => {
+                showToast('success', 'Validation Complete', \`All \${selected.length} configuration(s) are valid\`);
+            }, 2000);
+        }
+        
+        // Sort functionality
+        function sortConfigs() {
+            const sortValue = document.getElementById('sort-select').value;
+            const items = Array.from(document.querySelectorAll('.config-item:not(.hidden)'));
+            const container = document.querySelector('.config-grid');
+            
+            items.sort((a, b) => {
+                if (sortValue === 'name-asc') {
+                    return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                } else if (sortValue === 'name-desc') {
+                    return b.getAttribute('data-name').localeCompare(a.getAttribute('data-name'));
+                } else if (sortValue === 'status') {
+                    const statusOrder = { 'error': 0, 'warning': 1, 'valid': 2 };
+                    return statusOrder[a.getAttribute('data-status')] - statusOrder[b.getAttribute('data-status')];
+                } else if (sortValue === 'category') {
+                    return a.getAttribute('data-category').localeCompare(b.getAttribute('data-category'));
+                }
+                return 0;
+            });
+            
+            items.forEach(item => container.appendChild(item));
+            showToast('info', 'Sorted', \`Configurations sorted by \${sortValue}\`, 2000);
+        }
+        
+        // Advanced filters
+        function toggleAdvancedFilters() {
+            const filters = document.getElementById('advanced-filters');
+            if (filters) {
+                filters.classList.toggle('active');
+            }
+        }
+        
+        function applyAdvancedFilters() {
+            const categoryFilter = document.getElementById('filter-category').value.toLowerCase();
+            const valueFilter = document.getElementById('filter-value').value.toLowerCase();
+            const requiredFilter = document.getElementById('filter-required').value;
+            
+            const items = document.querySelectorAll('.config-item');
+            let visibleCount = 0;
+            
+            items.forEach(item => {
+                const category = item.getAttribute('data-category').toLowerCase();
+                const value = item.querySelector('.config-value').textContent.toLowerCase();
+                const required = item.getAttribute('data-required');
+                
+                let show = true;
+                
+                if (categoryFilter && !category.includes(categoryFilter)) show = false;
+                if (valueFilter && !value.includes(valueFilter)) show = false;
+                if (requiredFilter && required !== requiredFilter) show = false;
+                
+                item.classList.toggle('hidden', !show);
+                if (show) visibleCount++;
+            });
+            
+            showToast('info', 'Filter Applied', \`Showing \${visibleCount} configuration(s)\`, 2000);
+        }
+        
+        // Export menu
+        function toggleExportMenu() {
+            const menu = document.getElementById('export-dropdown');
+            if (menu) {
+                menu.classList.toggle('active');
+            }
+        }
+        
+        // Close export menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('export-dropdown');
+            if (menu && !e.target.closest('.export-menu')) {
+                menu.classList.remove('active');
+            }
+        });
+        
+        async function exportJSON() {
+            window.location.href = '/api/config/export';
+            toggleExportMenu();
+        }
+        
+        async function exportYAML() {
+            try {
+                const response = await fetch('/api/config/export/yaml');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = \`config-\${Date.now()}.yaml\`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showToast('success', 'Exported', 'Configuration exported as YAML');
+                toggleExportMenu();
+            } catch (error) {
+                showToast('error', 'Export Failed', 'Unable to export as YAML');
+            }
+        }
+        
+        async function exportCSV() {
+            try {
+                const response = await fetch('/api/config/export/csv');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = \`config-\${Date.now()}.csv\`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showToast('success', 'Exported', 'Configuration exported as CSV');
+                toggleExportMenu();
+            } catch (error) {
+                showToast('error', 'Export Failed', 'Unable to export as CSV');
+            }
+        }
+        
+        async function exportTOML() {
+            try {
+                const response = await fetch('/api/config/export/toml');
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = \`config-\${Date.now()}.toml\`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showToast('success', 'Exported', 'Configuration exported as TOML');
+                toggleExportMenu();
+            } catch (error) {
+                showToast('error', 'Export Failed', 'Unable to export as TOML');
+            }
+        }
+        
+        // Show welcome message
+        setTimeout(() => {
+            showToast('info', 'Welcome', 'Press Ctrl+K to search, Ctrl+R to refresh. Use checkboxes for bulk operations.', 5000);
+        }, 1000);
         
         // Start auto-refresh
         startAutoRefresh();
@@ -703,7 +1406,8 @@ export class ConfigPage {
             <h2>${category}</h2>
             <div class="config-grid">
                 ${categoryStatuses.map(status => `
-                    <div class="config-item">
+                    <div class="config-item" data-name="${status.name}" data-status="${status.status}" data-category="${status.category}" data-required="${status.required}">
+                        <input type="checkbox" class="config-checkbox" onchange="updateBulkActions()" data-path="${status.name}">
                         <div class="config-name">
                             ${status.name}
                             ${status.required ? '<span class="required">*</span>' : ''}

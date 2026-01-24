@@ -33,16 +33,18 @@ export class ConfigManager {
         
         // KYC Configuration
         kyc: {
-          provider: Bun.env.DUOPLUS_KYC_PROVIDER || 'mock',
+          // In production, provider MUST be set via environment variable (cannot be 'mock')
+          provider: Bun.env.DUOPLUS_KYC_PROVIDER || (environment === 'production' ? '' : 'mock'),
           apiKey: Bun.env.DUOPLUS_KYC_API_KEY || '',
           webhookSecret: Bun.env.DUOPLUS_KYC_WEBHOOK_SECRET || '',
         },
         
         // Lightning Network Configuration
         lightning: {
-          endpoint: Bun.env.DUOPLUS_LIGHTNING_ENDPOINT || 'https://api.lightning.network',
+          endpoint: Bun.env.DUOPLUS_LIGHTNING_ENDPOINT || (environment === 'production' ? '' : 'https://api.lightning.network'),
           macaroon: Bun.env.DUOPLUS_LIGHTNING_MACAROON || '',
-          certPath: Bun.env.DUOPLUS_LIGHTNING_CERT_PATH || './certs/lightning.pem',
+          macaroonPath: Bun.env.DUOPLUS_LIGHTNING_MACAROON_PATH || '',
+          certPath: Bun.env.DUOPLUS_LIGHTNING_CERT_PATH || (environment === 'production' ? '' : './certs/lightning-dev.pem'),
         },
         
         // S3 Configuration
@@ -166,15 +168,23 @@ export class ConfigManager {
     // Validate production requirements
     if (config.environment === 'production') {
       if (config.security.jwtSecret === 'default-secret-change-in-production') {
-        throw new Error('JWT_SECRET must be set in production');
+        throw new Error('DUOPLUS_JWT_SECRET must be set in production');
+      }
+      
+      if (config.kyc.provider === 'mock' || config.kyc.provider === '') {
+        throw new Error('DUOPLUS_KYC_PROVIDER must be set to a real provider (chainalysis, jumio, onfido, persona) in production. Mock provider is not allowed.');
       }
       
       if (config.kyc.apiKey === '') {
-        throw new Error('KYC_API_KEY must be set in production');
+        throw new Error('DUOPLUS_KYC_API_KEY must be set in production');
       }
       
       if (config.s3.accessKey === '' || config.s3.secretKey === '') {
-        throw new Error('S3 credentials must be set in production');
+        throw new Error('S3 credentials (DUOPLUS_S3_ACCESS_KEY, DUOPLUS_S3_SECRET_KEY) must be set in production');
+      }
+      
+      if (!config.lightning.certPath || config.lightning.certPath === './certs/lightning-dev.pem') {
+        throw new Error('DUOPLUS_LIGHTNING_CERT_PATH must be set to production certificate path');
       }
     }
     
