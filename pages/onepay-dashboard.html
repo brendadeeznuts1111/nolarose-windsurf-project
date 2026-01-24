@@ -3646,11 +3646,13 @@
             }, 1500);
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Available for system log viewing
         function viewLogs() {
             dashboard.addEvent('LOGS', 'Opening system logs...', 'info');
             // In a real implementation, this would open a logs modal or navigate to logs page
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Available for metrics view switching
         function toggleMetricsView() {
             const buttonText = document.getElementById('metrics-view-text');
             if (buttonText.textContent === 'Detailed View') {
@@ -3792,6 +3794,7 @@
             return depth;
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Available for JSON display formatting
         function formatJSON(style) {
             const content = document.getElementById('json-content');
             if (style === 'compact') {
@@ -3802,6 +3805,7 @@
         }
 
         // 📋 Copy and Download Functions
+        // biome-ignore lint/correctness/noUnusedVariables: Available for JSON clipboard operations
         async function copyJSONToClipboard() {
             try {
                 const jsonString = JSON.stringify(window.currentJSONData, null, 2);
@@ -3827,6 +3831,7 @@
             }
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Available for JSON download operations
         function downloadJSONReport() {
             try {
                 const jsonString = JSON.stringify(window.currentJSONData, null, 2);
@@ -4177,6 +4182,7 @@
             }
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Available for WebSocket reconnection
         function reconnectWebSocket() {
             if (window.advancedExtensions) {
                 dashboard.addEvent('WEBSOCKET', 'Attempting to reconnect...', 'info');
