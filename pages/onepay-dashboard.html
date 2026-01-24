@@ -2991,7 +2991,7 @@
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
         }
 
         function getJSONDepth(obj) {
@@ -3282,7 +3282,7 @@
             const regions = document.querySelectorAll('.text-right .font-semibold');
             regions.forEach(region => {
                 if (region && region.textContent.includes('%')) {
-                    const currentPercent = parseInt(region.textContent);
+                    const currentPercent = parseInt(region.textContent, 10);
                     const newPercent = Math.floor(Math.random() * 10) + currentPercent - 5;
                     region.textContent = `${Math.max(5, Math.min(50, newPercent))}%`;
                 }
@@ -3673,7 +3673,7 @@
                     if (count > avgActivity * 3) {
                         unusual.push({
                             type: 'activity_spike',
-                            hour: parseInt(hour),
+                            hour: parseInt(hour, 10),
                             count,
                             expected: Math.round(avgActivity)
                         });
