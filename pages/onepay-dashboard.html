@@ -3236,63 +3236,6 @@
         const MAX_DEPTH = 10;
         const MIN_DEPTH = 1;
 
-        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
-        function toggleDepthControl() {
-            const depthData = {
-                currentDepth: currentDepth,
-                maxDepth: MAX_DEPTH,
-                minDepth: MIN_DEPTH,
-                availableDepths: Array.from({length: MAX_DEPTH}, (_, i) => i + 1),
-                depthConfigurations: {
-                    1: {
-                        name: 'Overview',
-                        description: 'High-level summary metrics',
-                        dataPoints: 10,
-                        refreshInterval: 30000,
-                        detail: 'Basic system status and key performance indicators'
-                    },
-                    2: {
-                        name: 'Standard',
-                        description: 'Detailed operational data',
-                        dataPoints: 25,
-                        refreshInterval: 15000,
-                        detail: 'Comprehensive metrics with trend analysis'
-                    },
-                    3: {
-                        name: 'Deep',
-                        description: 'In-depth analytics',
-                        dataPoints: 50,
-                        refreshInterval: 10000,
-                        detail: 'Advanced analytics with predictive insights'
-                    },
-                    4: {
-                        name: 'Expert',
-                        description: 'Expert-level analysis',
-                        dataPoints: 100,
-                        refreshInterval: 5000,
-                        detail: 'Detailed technical metrics and diagnostics'
-                    },
-                    5: {
-                        name: 'Research',
-                        description: 'Research-grade data',
-                        dataPoints: 200,
-                        refreshInterval: 3000,
-                        detail: 'Comprehensive data for research and analysis'
-                    }
-                },
-                currentConfiguration: getDepthConfiguration(currentDepth),
-                systemImpact: {
-                    performance: calculatePerformanceImpact(currentDepth),
-                    memory: calculateMemoryUsage(currentDepth),
-                    network: calculateNetworkLoad(currentDepth),
-                    recommendations: getDepthRecommendations(currentDepth)
-                }
-            };
-            
-            displayJSONReport(depthData, 'Depth Control Configuration');
-            dashboard.addEvent('DEPTH', `Depth control opened at level ${currentDepth}`, 'info');
-        }
-
         function getDepthConfiguration(depth) {
             const configs = {
                 1: { name: 'Overview', refreshInterval: 30000, dataPoints: 10, complexity: 'Low' },
@@ -3424,6 +3367,142 @@
             
             // Update performance monitoring
             dashboard.updatePerformanceMonitoring(config.complexity);
+            
+            // 🔗 NEW: Sync with Bun console depth
+            syncBunConsoleDepth(currentDepth);
+        }
+
+        // 🔗 NEW: Sync dashboard depth with Bun console depth
+        function syncBunConsoleDepth(depth) {
+            try {
+                // Store depth preference for Bun processes
+                localStorage.setItem('bun-console-depth', depth.toString());
+                
+                // Update console logging depth for dashboard
+                console.originalLog = console.originalLog || console.log;
+                console.originalDir = console.originalDir || console.dir;
+                
+                // Override console methods with depth control
+                console.log = function(...args) {
+                    const depthLimitedArgs = args.map(arg => limitDepth(arg, depth));
+                    console.originalLog.apply(console, depthLimitedArgs);
+                };
+                
+                console.dir = function(obj, options = {}) {
+                    const depthOptions = { ...options, depth: depth };
+                    console.originalDir.call(console, obj, depthOptions);
+                };
+                
+                // Log the synchronization
+                console.originalLog(`🔗 Console depth synchronized to level ${depth}`);
+                dashboard.addEvent('DEPTH', `Console depth synchronized to ${depth}`, 'info');
+                
+            } catch (error) {
+                console.warn('Failed to sync console depth:', error);
+            }
+        }
+
+        // 🔗 NEW: Limit object depth for console output
+        function limitDepth(obj, maxDepth) {
+            if (maxDepth <= 0) return '[Object]';
+            
+            if (obj === null || typeof obj !== 'object') return obj;
+            
+            if (obj instanceof Date) return obj;
+            if (obj instanceof Array) {
+                return obj.map(item => limitDepth(item, maxDepth - 1));
+            }
+            
+            const limited = {};
+            for (const [key, value] of Object.entries(obj)) {
+                if (maxDepth > 1) {
+                    limited[key] = limitDepth(value, maxDepth - 1);
+                } else {
+                    limited[key] = typeof value === 'object' ? '[Object]' : value;
+                }
+            }
+            
+            return limited;
+        }
+
+        // 🔗 NEW: Get Bun-style console output
+        function getBunConsoleOutput(data, depth = currentDepth) {
+            const limited = limitDepth(data, depth);
+            return JSON.stringify(limited, null, 2);
+        }
+
+        // 🔗 NEW: Enhanced depth control with Bun integration
+        function toggleDepthControl() {
+            const depthData = {
+                currentDepth: currentDepth,
+                maxDepth: MAX_DEPTH,
+                minDepth: MIN_DEPTH,
+                bunIntegration: {
+                    consoleDepth: currentDepth,
+                    flag: `--console-depth ${currentDepth}`,
+                    command: `bun --console-depth ${currentDepth} run index.tsx`,
+                    description: "Controls how deeply nested objects are displayed in console.log() output"
+                },
+                availableDepths: Array.from({length: MAX_DEPTH}, (_, i) => i + 1),
+                depthConfigurations: {
+                    1: {
+                        name: 'Overview',
+                        description: 'High-level summary metrics',
+                        dataPoints: 10,
+                        refreshInterval: 30000,
+                        detail: 'Basic system status and key performance indicators',
+                        consoleOutput: 'Shows minimal object structure (like --console-depth 1)'
+                    },
+                    2: {
+                        name: 'Standard',
+                        description: 'Detailed operational data',
+                        dataPoints: 25,
+                        refreshInterval: 15000,
+                        detail: 'Comprehensive metrics with trend analysis',
+                        consoleOutput: 'Default Bun console depth (like --console-depth 2)'
+                    },
+                    3: {
+                        name: 'Deep',
+                        description: 'In-depth analytics',
+                        dataPoints: 50,
+                        refreshInterval: 10000,
+                        detail: 'Advanced analytics with predictive insights',
+                        consoleOutput: 'Enhanced object inspection (like --console-depth 3)'
+                    },
+                    4: {
+                        name: 'Expert',
+                        description: 'Expert-level analysis',
+                        dataPoints: 100,
+                        refreshInterval: 5000,
+                        detail: 'Detailed technical metrics and diagnostics',
+                        consoleOutput: 'Detailed nested properties (like --console-depth 4)'
+                    },
+                    5: {
+                        name: 'Research',
+                        description: 'Research-grade data',
+                        dataPoints: 200,
+                        refreshInterval: 3000,
+                        detail: 'Comprehensive data for research and analysis',
+                        consoleOutput: 'Maximum detail for debugging (like --console-depth 5)'
+                    }
+                },
+                currentConfiguration: getDepthConfiguration(currentDepth),
+                systemImpact: {
+                    performance: calculatePerformanceImpact(currentDepth),
+                    memory: calculateMemoryUsage(currentDepth),
+                    network: calculateNetworkLoad(currentDepth),
+                    recommendations: getDepthRecommendations(currentDepth)
+                },
+                consoleExamples: {
+                    nested: { a: { b: { c: { d: "deep" } } } },
+                    outputAtCurrentDepth: getBunConsoleOutput({ a: { b: { c: { d: "deep" } } } }, currentDepth),
+                    outputAtDepth2: getBunConsoleOutput({ a: { b: { c: { d: "deep" } } } }, 2),
+                    outputAtDepth4: getBunConsoleOutput({ a: { b: { c: { d: "deep" } } } }, 4)
+                }
+            };
+            
+            displayJSONReport(depthData, 'Depth Control Configuration - Bun Console Integration');
+            dashboard.addEvent('DEPTH', `Depth control opened at level ${currentDepth} with Bun integration`, 'info');
         }
 
         // Add depth control keyboard shortcuts
