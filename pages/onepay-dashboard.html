@@ -2939,22 +2939,6 @@
         // Global functions for button handlers
         let dashboard;
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-            dashboard.darkMode = !dashboard.darkMode;
-            localStorage.setItem('dashboard-dark-mode', dashboard.darkMode.toString());
-            
-            // Update icon
-            const darkModeIcon = document.querySelector('button[onclick="toggleDarkMode()"] i');
-            if (dashboard.darkMode) {
-                darkModeIcon.classList.remove('fa-moon');
-                darkModeIcon.classList.add('fa-sun');
-            } else {
-                darkModeIcon.classList.remove('fa-sun');
-                darkModeIcon.classList.add('fa-moon');
-            }
-        }
-
         // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
         function toggleAutoRefresh() {
             dashboard.autoRefresh = !dashboard.autoRefresh;
@@ -3014,21 +2998,6 @@
         // biome-ignore lint/correctness/noUnusedVariables: Called from keyboard shortcuts
         function clearAllAlerts() {
             dashboard.clearAllAlerts();
-        }
-
-        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute
-        function exportCharts() {
-            const chartData = {
-                timestamp: new Date().toISOString(),
-                charts: {
-                    performance: dashboard.charts.performance ? dashboard.charts.performance.data : null,
-                    compliance: dashboard.charts.compliance ? dashboard.charts.compliance.data : null,
-                    activity: dashboard.charts.activity ? dashboard.charts.activity.data : null
-                }
-            };
-            
-            displayJSONReport(chartData, 'Chart Export Data');
-            dashboard.addEvent('EXPORT', 'Charts data exported', 'success');
         }
 
         function exportData() {
