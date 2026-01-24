@@ -2956,11 +2956,39 @@
             localStorage.setItem('dashboard-auto-refresh', dashboard.autoRefresh.toString());
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick refresh button
         function refreshDashboard() {
+            // Show loading state
+            const refreshButton = document.querySelector('[onclick="refreshDashboard()"]');
+            if (refreshButton) {
+                const icon = refreshButton.querySelector('i');
+                if (icon) {
+                    icon.classList.add('fa-spin');
+                }
+            }
+            
+            // Perform comprehensive refresh
             dashboard.updateMetrics();
             dashboard.updateCharts();
             dashboard.updateUI();
+            
+            // Refresh additional components
+            dashboard.updateSystemMetrics();
+            dashboard.updatePerformanceMetrics();
+            
+            // Add telemetry event
             dashboard.addEvent('MANUAL', 'Manual refresh triggered', 'info');
+            
+            // Show completion feedback
+            setTimeout(() => {
+                if (refreshButton) {
+                    const icon = refreshButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-spin');
+                    }
+                }
+                dashboard.addEvent('MANUAL', 'Manual refresh completed', 'success');
+            }, 1000);
         }
 
         function exportData() {
