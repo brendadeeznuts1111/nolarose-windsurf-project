@@ -176,6 +176,9 @@
                             <button onclick="viewLogs()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm">
                                 <i class="fas fa-list mr-2"></i>View Logs
                             </button>
+                            <button onclick="showTelemetryViewer()" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
+                                <i class="fas fa-chart-line mr-2"></i>Telemetry
+                            </button>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
@@ -2783,6 +2786,10 @@
                 events: dashboard.events.slice(0, 10)
             };
             
+            // Display in enhanced JSON modal
+            displayJSONReport(data, 'Dashboard Export Data');
+            
+            // Also provide download option
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2791,7 +2798,7 @@
             a.click();
             URL.revokeObjectURL(url);
             
-            dashboard.addEvent('EXPORT', 'Dashboard data exported', 'success');
+            dashboard.addEvent('EXPORT', 'Dashboard data exported with enhanced preview', 'success');
         }
 
         function exportCharts() {
@@ -2891,11 +2898,240 @@
                 dashboard.addEvent('AI', 'Comprehensive AI report generated', 'success');
                 console.log('📊 AI Report Generated:', report);
                 
+                // Display report in enhanced code block with telemetry and copy
+                displayJSONReport(report, 'AI Analytics Report');
+                
                 // Update UI with latest insights
                 updateAIInsightsUI(report);
             } else {
                 dashboard.addEvent('AI', 'Advanced extensions not yet initialized', 'warning');
             }
+        }
+
+        // 📊 Enhanced JSON Display with Telemetry and Copy Functionality
+        function displayJSONReport(data, title = 'JSON Report') {
+            // Create modal container
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-4 max-h-[80vh] overflow-hidden">
+                    <div class="flex items-center justify-between p-4 border-b bg-gray-50">
+                        <div class="flex items-center space-x-3">
+                            <h3 class="text-lg font-semibold text-gray-800">${title}</h3>
+                            <div class="flex items-center space-x-2 text-sm text-gray-500">
+                                <i class="fas fa-clock"></i>
+                                <span id="report-timestamp">${new Date().toLocaleString()}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="copyJSONToClipboard()" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors flex items-center space-x-1">
+                                <i class="fas fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                            <button onclick="downloadJSONReport()" class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors flex items-center space-x-1">
+                                <i class="fas fa-download"></i>
+                                <span>Download</span>
+                            </button>
+                            <button onclick="closeJSONModal()" class="px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                <div class="flex items-center space-x-1">
+                                    <i class="fas fa-database"></i>
+                                    <span>Size: <span id="json-size">${formatBytes(JSON.stringify(data).length)}</span></span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="fas fa-code"></i>
+                                    <span>Lines: <span id="json-lines">${JSON.stringify(data, null, 2).split('\n').length}</span></span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>Depth: <span id="json-depth">${getJSONDepth(data)}</span></span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="formatJSON('compact')" class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Compact</button>
+                                <button onclick="formatJSON('expanded')" class="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Expanded</button>
+                            </div>
+                        </div>
+                        <div class="relative bg-gray-900 rounded-lg overflow-hidden">
+                            <div class="absolute top-2 right-2 z-10">
+                                <div class="bg-green-500 text-white text-xs px-2 py-1 rounded flex items-center space-x-1">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>JSON Valid</span>
+                                </div>
+                            </div>
+                            <pre class="text-sm text-gray-300 p-4 overflow-x-auto max-h-96"><code id="json-content">${JSON.stringify(data, null, 2)}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Store data globally for copy/download functions
+            window.currentJSONData = data;
+            window.currentJSONTitle = title;
+            
+            // Add to page
+            document.body.appendChild(modal);
+            
+            // Add escape key listener
+            document.addEventListener('keydown', handleEscapeKey);
+            
+            // Log telemetry
+            dashboard.addEvent('TELEMETRY', `JSON report displayed: ${title}`, 'info');
+        }
+
+        // 🔧 Utility Functions for JSON Display
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getJSONDepth(obj) {
+            if (typeof obj !== 'object' || obj === null) return 0;
+            let depth = 1;
+            for (const key in obj) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    depth = Math.max(depth, 1 + getJSONDepth(obj[key]));
+                }
+            }
+            return depth;
+        }
+
+        function formatJSON(style) {
+            const content = document.getElementById('json-content');
+            if (style === 'compact') {
+                content.textContent = JSON.stringify(window.currentJSONData);
+            } else {
+                content.textContent = JSON.stringify(window.currentJSONData, null, 2);
+            }
+        }
+
+        // 📋 Copy and Download Functions
+        async function copyJSONToClipboard() {
+            try {
+                const jsonString = JSON.stringify(window.currentJSONData, null, 2);
+                await navigator.clipboard.writeText(jsonString);
+                
+                // Show success feedback
+                const button = event.target.closest('button');
+                const originalContent = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+                button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                button.classList.add('bg-green-600', 'hover:bg-green-700');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalContent;
+                    button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                }, 2000);
+                
+                dashboard.addEvent('TELEMETRY', 'JSON report copied to clipboard', 'success');
+            } catch (error) {
+                dashboard.addEvent('TELEMETRY', 'Failed to copy JSON to clipboard', 'error');
+                console.error('Failed to copy:', error);
+            }
+        }
+
+        function downloadJSONReport() {
+            try {
+                const jsonString = JSON.stringify(window.currentJSONData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${window.currentJSONTitle.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                dashboard.addEvent('TELEMETRY', `JSON report downloaded: ${window.currentJSONTitle}`, 'success');
+            } catch (error) {
+                dashboard.addEvent('TELEMETRY', 'Failed to download JSON report', 'error');
+                console.error('Failed to download:', error);
+            }
+        }
+
+        function closeJSONModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+                document.removeEventListener('keydown', handleEscapeKey);
+                dashboard.addEvent('TELEMETRY', 'JSON report modal closed', 'info');
+            }
+        }
+
+        function handleEscapeKey(event) {
+            if (event.key === 'Escape') {
+                closeJSONModal();
+            }
+        }
+
+        // 🎯 Enhanced Console Logging with Telemetry
+        function enhanceConsoleLogging() {
+            const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                logToTelemetry('LOG', args);
+            };
+            
+            console.error = function(...args) {
+                originalError.apply(console, args);
+                logToTelemetry('ERROR', args);
+            };
+            
+            console.warn = function(...args) {
+                originalWarn.apply(console, args);
+                logToTelemetry('WARN', args);
+            };
+        }
+
+        function logToTelemetry(level, args) {
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            
+            // Create telemetry entry
+            const telemetryEntry = {
+                timestamp: new Date().toISOString(),
+                level: level,
+                message: message,
+                args: args.map(arg => typeof arg === 'object' ? '[Object]' : arg),
+                url: window.location.href,
+                userAgent: navigator.userAgent
+            };
+            
+            // Store in local storage for debugging
+            const telemetry = JSON.parse(localStorage.getItem('dashboard-telemetry') || '[]');
+            telemetry.push(telemetryEntry);
+            
+            // Keep only last 100 entries
+            if (telemetry.length > 100) {
+                telemetry.shift();
+            }
+            
+            localStorage.setItem('dashboard-telemetry', JSON.stringify(telemetry));
+        }
+
+        // 📊 Telemetry Viewer
+        function showTelemetryViewer() {
+            const telemetry = JSON.parse(localStorage.getItem('dashboard-telemetry') || '[]');
+            
+            if (telemetry.length === 0) {
+                alert('No telemetry data available.');
+                return;
+            }
+            
+            displayJSONReport(telemetry, 'Console Telemetry Data');
         }
 
         function toggleAIInsights() {
@@ -3556,6 +3792,9 @@
 
         // 🚀 Initialize Advanced Extensions
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize enhanced console logging with telemetry
+            enhanceConsoleLogging();
+            
             // Wait for main dashboard to initialize
             setTimeout(() => {
                 if (typeof dashboard !== 'undefined') {
