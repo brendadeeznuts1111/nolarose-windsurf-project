@@ -1535,7 +1535,9 @@
                     const stringStream = new ReadableStream({
                         start(controller) {
                             const chunks = ["Hello, ", "world!"];
-                            chunks.forEach(chunk => controller.enqueue(new TextEncoder().encode(chunk)));
+                            chunks.forEach(chunk => {
+                                controller.enqueue(new TextEncoder().encode(chunk));
+                            });
                             controller.close();
                         }
                     });
