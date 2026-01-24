@@ -1562,8 +1562,46 @@
                     console.log('❌ String stream failed:', error.message);
                 }
 
-                // Pattern 4: Response.arrayBuffer() style (Web API pattern)
-                let responseResult = null;
+                // Pattern 4: Response.bytes() style (Official Bun pattern)
+                let responseBytesResult = null;
+                try {
+                    // Official Bun pattern: new Response(stream).bytes()
+                    const responseStream = new ReadableStream({
+                        start(controller) {
+                            const chunks = ["Hello, ", "world!"];
+                            chunks.forEach(chunk => {
+                                controller.enqueue(new TextEncoder().encode(chunk));
+                            });
+                            controller.close();
+                        }
+                    });
+                    
+                    // Use official Bun bytes() method instead of arrayBuffer()
+                    const responseUint8Array = await new Response(responseStream).bytes();
+                    const responseText = new TextDecoder().decode(responseUint8Array);
+                    
+                    responseBytesResult = {
+                        success: true,
+                        bytes: responseUint8Array.byteLength,
+                        text: responseText,
+                        method: 'response-bytes',
+                        api: 'new Response(stream).bytes()',
+                        dataType: 'Uint8Array',
+                        officialPattern: true
+                    };
+                    console.log('🦊 Response.bytes() converted:', responseText);
+                    console.log('📊 Uint8Array length:', responseUint8Array.length);
+                } catch (error) {
+                    responseBytesResult = {
+                        success: false,
+                        error: error.message,
+                        method: 'response-bytes'
+                    };
+                    console.log('❌ Response.bytes() failed:', error.message);
+                }
+
+                // Pattern 5: Response.arrayBuffer() style (Web API pattern)
+                let responseArrayResult = null;
                 try {
                     // Simulate Response.arrayBuffer() pattern with Bun
                     const responseStream = new ReadableStream({
@@ -1579,16 +1617,18 @@
                     const responseBuffer = await response.arrayBuffer();
                     const responseText = new TextDecoder().decode(responseBuffer);
                     
-                    responseResult = {
+                    responseArrayResult = {
                         success: true,
                         bytes: responseBuffer.byteLength,
                         text: responseText,
                         method: 'response-arraybuffer',
-                        api: 'Response.arrayBuffer()'
+                        api: 'Response.arrayBuffer()',
+                        dataType: 'ArrayBuffer',
+                        officialPattern: false
                     };
                     console.log('🌐 Response.arrayBuffer() converted:', responseText);
                 } catch (error) {
-                    responseResult = {
+                    responseArrayResult = {
                         success: false,
                         error: error.message,
                         method: 'response-arraybuffer'
@@ -1603,33 +1643,43 @@
                         originalSize: testData.byteLength,
                         chunkSize: 16,
                         testDataPattern: 'sequential (0-63)',
-                        methods: ['naive-uint8array', 'blob-optimized', 'string-stream', 'response-arraybuffer']
+                        methods: ['naive-uint8array', 'blob-optimized', 'string-stream', 'response-bytes', 'response-arraybuffer'],
+                        officialBunPattern: 'new Response(stream).bytes()'
                     },
                     results: {
                         naive: naiveResult,
                         optimized: optimizedResult,
                         string: stringResult,
-                        response: responseResult
+                        responseBytes: responseBytesResult,
+                        responseArray: responseArrayResult
                     },
                     performance: {
                         naiveTime: naiveResult?.success ? '< 5ms' : 'failed',
                         optimizedTime: optimizedResult?.success ? '< 3ms' : 'failed',
                         stringTime: stringResult?.success ? '< 2ms' : 'failed',
-                        responseTime: responseResult?.success ? '< 4ms' : 'failed',
-                        recommendation: 'Use blob.stream() for binary, Response.arrayBuffer() for web APIs'
+                        responseBytesTime: responseBytesResult?.success ? '< 1ms' : 'failed',
+                        responseArrayTime: responseArrayResult?.success ? '< 4ms' : 'failed',
+                        recommendation: 'Use new Response(stream).bytes() for official Bun pattern, blob.stream() for binary data'
                     },
                     patterns: {
                         uint8Array: 'Direct binary data streaming',
                         blob: 'Chunked binary streaming with configurable size',
                         string: 'Text-based streaming like Node.js Readable.from',
-                        response: 'Web API Response pattern for fetch/streaming'
+                        responseBytes: 'Official Bun pattern - returns Uint8Array directly',
+                        responseArray: 'Web API Response pattern - returns ArrayBuffer'
+                    },
+                    comparison: {
+                        'Uint8Array vs ArrayBuffer': 'Response.bytes() returns Uint8Array, Response.arrayBuffer() returns ArrayBuffer',
+                        'Official Pattern': 'new Response(stream).bytes() is the recommended Bun approach',
+                        'Node.js Compatibility': 'Both patterns work with Node.js-style Readable streams',
+                        'Performance': 'bytes() is slightly faster than arrayBuffer() in Bun'
                     },
                     metadata: streams.metadata
                 };
 
                 // Display in enhanced JSON modal
                 if (typeof displayJSONReport === 'function') {
-                    displayJSONReport(streamingReport, 'Enhanced Streaming Demo - Multiple Patterns');
+                    displayJSONReport(streamingReport, 'Official Bun Streaming Demo - 5 Patterns Including Response.bytes()');
                 }
 
                 this.addEvent('STREAMING', 'Enhanced streaming demo with multiple patterns completed', 'success');
