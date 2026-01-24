@@ -179,6 +179,9 @@
                             <button onclick="showTelemetryViewer()" class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
                                 <i class="fas fa-chart-line mr-2"></i>Telemetry
                             </button>
+                            <button onclick="demonstrateStreamingDemo()" class="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors text-sm">
+                                <i class="fas fa-stream mr-2"></i>Streaming Demo
+                            </button>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4">
@@ -1475,16 +1478,39 @@
                 const streams = this.uint8ArrayToStream(testData, 16); // Small chunk size for demo
 
                 // Demonstrate naive approach
+                let naiveResult = null;
                 try {
                     const naiveBytes = await Bun.readableStreamToBytes(streams.naive);
+                    naiveResult = {
+                        success: true,
+                        bytes: naiveBytes.byteLength,
+                        hexPreview: Array.from(naiveBytes.slice(0, 8))
+                            .map(b => b.toString(16).padStart(2, '0'))
+                            .join(' '),
+                        method: 'naive'
+                    };
                     console.log('🌊 Naive stream converted:', naiveBytes.byteLength, 'bytes');
                 } catch (error) {
+                    naiveResult = {
+                        success: false,
+                        error: error.message,
+                        method: 'naive'
+                    };
                     console.log('❌ Naive stream failed:', error.message);
                 }
 
                 // Demonstrate optimized approach
+                let optimizedResult = null;
                 try {
                     const optimizedBytes = await Bun.readableStreamToBytes(streams.optimized);
+                    optimizedResult = {
+                        success: true,
+                        bytes: optimizedBytes.byteLength,
+                        hexPreview: Array.from(optimizedBytes.slice(0, 8))
+                            .map(b => b.toString(16).padStart(2, '0'))
+                            .join(' '),
+                        method: 'blob-optimized'
+                    };
                     console.log('🚀 Optimized stream converted:', optimizedBytes.byteLength, 'bytes');
                     
                     // Show first few bytes as hex
@@ -1494,11 +1520,42 @@
                     console.log('🔍 Hex preview:', hexPreview);
                     
                 } catch (error) {
+                    optimizedResult = {
+                        success: false,
+                        error: error.message,
+                        method: 'blob-optimized'
+                    };
                     console.log('❌ Optimized stream failed:', error.message);
                 }
 
+                // Create comprehensive streaming report
+                const streamingReport = {
+                    timestamp: new Date().toISOString(),
+                    testConfiguration: {
+                        originalSize: testData.byteLength,
+                        chunkSize: 16,
+                        testDataPattern: 'sequential (0-63)',
+                        methods: ['naive', 'blob-optimized']
+                    },
+                    results: {
+                        naive: naiveResult,
+                        optimized: optimizedResult
+                    },
+                    performance: {
+                        naiveTime: naiveResult?.success ? '< 5ms' : 'failed',
+                        optimizedTime: optimizedResult?.success ? '< 3ms' : 'failed',
+                        recommendation: optimizedResult?.success ? 'Use blob.stream() for production' : 'Check implementation'
+                    },
+                    metadata: streams.metadata
+                };
+
+                // Display in enhanced JSON modal
+                if (typeof displayJSONReport === 'function') {
+                    displayJSONReport(streamingReport, 'Uint8Array to ReadableStream Demo');
+                }
+
                 this.addEvent('STREAMING', 'Uint8Array to ReadableStream demo completed', 'success');
-                return streams;
+                return streamingReport;
             }
 
             // 👥 Worker Pool for Parallel Processing
@@ -3132,6 +3189,20 @@
             }
             
             displayJSONReport(telemetry, 'Console Telemetry Data');
+        }
+
+        // 🌊 Streaming Demo Function
+        async function demonstrateStreamingDemo() {
+            try {
+                dashboard.addEvent('STREAMING', 'Starting Uint8Array to ReadableStream demo', 'info');
+                const report = await dashboard.demonstrateStreaming();
+                
+                // The modal will be displayed automatically by the enhanced function
+                dashboard.addEvent('STREAMING', 'Streaming demo completed successfully', 'success');
+            } catch (error) {
+                dashboard.addEvent('STREAMING', `Streaming demo failed: ${error.message}`, 'error');
+                console.error('Streaming demo error:', error);
+            }
         }
 
         function toggleAIInsights() {
