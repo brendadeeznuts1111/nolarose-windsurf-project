@@ -3587,6 +3587,7 @@
             dashboard.addEvent('EXPORT', 'Dashboard data exported with enhanced preview', 'success');
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick export menu
         function exportCharts() {
             // Create a canvas to combine charts
             const canvas = document.createElement('canvas');
@@ -3633,6 +3634,7 @@
             }, 2000);
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from advanced dashboard extensions
         function generateReport() {
             dashboard.addEvent('REPORT', 'Generating comprehensive report...', 'info');
             
@@ -4166,6 +4168,7 @@
             dashboard.addEvent('SYSTEM', `System status changed to ${status}`, 'info');
         }
 
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick AI insights button
         function toggleAIInsights() {
             const buttonText = document.getElementById('ai-insights-text');
             if (buttonText.textContent === 'Expand') {
