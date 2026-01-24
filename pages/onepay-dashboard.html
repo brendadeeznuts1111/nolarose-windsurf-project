@@ -149,10 +149,15 @@
                 <div class="flex items-center space-x-6">
                     <div class="text-right">
                         <p class="text-sm opacity-90">System Status</p>
-                        <p class="font-semibold text-lg" id="overall-status">HEALTHY</p>
-                        <p class="text-xs opacity-75 mt-1">Uptime: 99.9%</p>
+                        <div class="flex items-center space-x-2">
+                            <p class="font-semibold text-lg transition-all duration-300" id="overall-status">HEALTHY</p>
+                            <button onclick="toggleStatusDetails()" class="text-xs opacity-75 hover:opacity-100 transition-opacity cursor-pointer" title="Click for details">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs opacity-75 mt-1">Uptime: <span id="uptime-percentage">99.9</span>%</p>
                     </div>
-                    <div class="status-indicator bg-green-400" id="status-indicator"></div>
+                    <div class="status-indicator bg-green-400 w-3 h-3 rounded-full animate-pulse" id="status-indicator"></div>
                 </div>
             </div>
         </div>
@@ -3364,6 +3369,72 @@
             }
         }
 
+        // 📊 Enhanced Status Management
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 154)
+        function toggleStatusDetails() {
+            const statusDetails = {
+                current: document.getElementById('overall-status').textContent,
+                uptime: document.getElementById('uptime-percentage').textContent,
+                lastCheck: new Date().toLocaleString(),
+                components: {
+                    api: 'OPERATIONAL',
+                    database: 'OPERATIONAL', 
+                    cache: 'OPERATIONAL',
+                    storage: 'OPERATIONAL',
+                    monitoring: 'OPERATIONAL'
+                },
+                metrics: {
+                    responseTime: Math.floor(Math.random() * 50) + 20 + 'ms',
+                    errorRate: (Math.random() * 0.1).toFixed(3) + '%',
+                    throughput: Math.floor(Math.random() * 1000) + 500 + ' req/min',
+                    activeConnections: Math.floor(Math.random() * 100) + 50
+                }
+            };
+            
+            displayJSONReport(statusDetails, 'System Status Details');
+        }
+
+        function updateSystemStatus(status = 'HEALTHY', details = {}) {
+            const statusElement = document.getElementById('overall-status');
+            const indicatorElement = document.getElementById('status-indicator');
+            const uptimeElement = document.getElementById('uptime-percentage');
+            
+            // Update status text with color coding
+            statusElement.textContent = status;
+            statusElement.className = 'font-semibold text-lg transition-all duration-300';
+            
+            // Update colors based on status
+            switch (status.toUpperCase()) {
+                case 'HEALTHY':
+                    statusElement.classList.add('text-green-400');
+                    indicatorElement.className = 'status-indicator bg-green-400 w-3 h-3 rounded-full animate-pulse';
+                    break;
+                case 'WARNING':
+                    statusElement.classList.add('text-yellow-400');
+                    indicatorElement.className = 'status-indicator bg-yellow-400 w-3 h-3 rounded-full animate-pulse';
+                    break;
+                case 'CRITICAL':
+                    statusElement.classList.add('text-red-400');
+                    indicatorElement.className = 'status-indicator bg-red-400 w-3 h-3 rounded-full animate-pulse';
+                    break;
+                case 'MAINTENANCE':
+                    statusElement.classList.add('text-blue-400');
+                    indicatorElement.className = 'status-indicator bg-blue-400 w-3 h-3 rounded-full';
+                    break;
+                default:
+                    statusElement.classList.add('text-gray-400');
+                    indicatorElement.className = 'status-indicator bg-gray-400 w-3 h-3 rounded-full';
+            }
+            
+            // Update uptime if provided
+            if (details.uptime) {
+                uptimeElement.textContent = details.uptime;
+            }
+            
+            // Log status change
+            dashboard.addEvent('SYSTEM', `System status changed to ${status}`, 'info');
+        }
+
         function toggleAIInsights() {
             const buttonText = document.getElementById('ai-insights-text');
             if (buttonText.textContent === 'Expand') {
@@ -4022,23 +4093,28 @@
 
         // 🚀 Initialize Advanced Extensions
         document.addEventListener('DOMContentLoaded', () => {
-            // Initialize enhanced console logging with telemetry
-            enhanceConsoleLogging();
+            // Initialize enhanced status system
+            updateSystemStatus('HEALTHY', { uptime: '99.9' });
+        
+            // Simulate status changes periodically
+            setInterval(() => {
+                const statuses = ['HEALTHY', 'HEALTHY', 'HEALTHY', 'WARNING'];
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                const uptime = (Math.random() * 2 + 98).toFixed(1);
+                updateSystemStatus(randomStatus, { uptime });
+            }, 30000); // Every 30 seconds
             
-            // Wait for main dashboard to initialize
-            setTimeout(() => {
-                if (typeof dashboard !== 'undefined') {
-                    const advancedExtensions = new AdvancedDashboardExtensions(dashboard);
+            const advancedExtensions = new AdvancedDashboardExtensions(dashboard);
                     
-                    // Initialize advanced features
-                    advancedExtensions.initializeWebSocket();
-                    advancedExtensions.initializeAIAnalytics();
+            // Initialize advanced features
+            advancedExtensions.initializeWebSocket();
+            advancedExtensions.initializeAIAnalytics();
                     
-                    // Add global access
-                    window.advancedExtensions = advancedExtensions;
+            // Add global access
+            window.advancedExtensions = advancedExtensions;
                     
-                    // Start AI insights simulation
-                    simulateAIInsightsUpdates();
+            // Start AI insights simulation
+            simulateAIInsightsUpdates();
                     
                     // Generate initial report after 5 seconds
                     setTimeout(() => {
