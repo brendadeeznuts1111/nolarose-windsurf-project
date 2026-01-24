@@ -1994,20 +1994,48 @@
 
             setupKeyboardShortcuts() {
                 document.addEventListener('keydown', (e) => {
-                    if (e.ctrlKey && e.key === 'r') {
-                        e.preventDefault();
-                        refreshDashboard(); // Call global function, not this.refreshDashboard()
-                    }
-                    if (e.ctrlKey && e.key === 'e') {
-                        e.preventDefault();
-                        this.exportData();
-                    }
-                    if (e.ctrlKey && e.key === 'd') {
-                        e.preventDefault();
-                        toggleDarkMode(); // Call global function
-                    }
-                    if (e.key === 'Escape') {
-                        clearAllAlerts(); // Call global function
+                    // Enhanced keyboard shortcut handling with safeguards
+                    try {
+                        if (e.ctrlKey && e.key === 'r') {
+                            e.preventDefault();
+                            e.stopImmediatePropagation(); // Prevent event bubbling
+                            console.log('⌨️ Keyboard shortcut: Ctrl+R triggered');
+                            refreshDashboard(); // Call global function, not this.refreshDashboard()
+                        }
+                        if (e.ctrlKey && e.key === 'e') {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            console.log('⌨️ Keyboard shortcut: Ctrl+E triggered');
+                            this.exportData();
+                        }
+                        if (e.ctrlKey && e.key === 'd') {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            console.log('⌨️ Keyboard shortcut: Ctrl+D triggered');
+                            toggleDarkMode(); // Call global function
+                        }
+                        if (e.key === 'Escape') {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            console.log('⌨️ Keyboard shortcut: Escape triggered');
+                            clearAllAlerts(); // Call global function
+                        }
+                    } catch (error) {
+                        // Enhanced error logging for keyboard shortcuts
+                        const errorDetails = error instanceof Error ? {
+                            name: error.name,
+                            message: error.message,
+                            stack: error.stack,
+                            key: e.key,
+                            ctrlKey: e.ctrlKey,
+                            metaKey: e.metaKey
+                        } : {
+                            error: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+                            key: e.key
+                        };
+                        
+                        console.error('❌ Keyboard shortcut error:', errorDetails);
+                        this.addEvent('SYSTEM', `Keyboard shortcut failed: ${errorDetails.message}`, 'error');
                     }
                 });
             }
@@ -2946,39 +2974,84 @@
             localStorage.setItem('dashboard-auto-refresh', dashboard.autoRefresh.toString());
         }
 
+        // Global refresh debounce to prevent rapid-fire calls
+        let isRefreshing = false;
+        let refreshAttempts = 0;
+        const MAX_REFRESH_ATTEMPTS = 5;
+        const REFRESH_COOLDOWN = 1000; // 1 second
+
         // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick refresh button
         function refreshDashboard() {
-            // Show loading state
-            const refreshButton = document.querySelector('[onclick="refreshDashboard()"]');
-            if (refreshButton) {
-                const icon = refreshButton.querySelector('i');
-                if (icon) {
-                    icon.classList.add('fa-spin');
+            // Prevent rapid-fire calls
+            if (isRefreshing) {
+                refreshAttempts++;
+                console.warn(`Refresh already in progress (attempt ${refreshAttempts}/${MAX_REFRESH_ATTEMPTS})`);
+                
+                if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
+                    console.error('Max refresh attempts reached - stopping to prevent infinite loop');
+                    dashboard.addEvent('SYSTEM', 'Refresh throttled - max attempts reached', 'error');
+                    return;
                 }
+                return;
             }
+
+            isRefreshing = true;
+            refreshAttempts = 0;
             
-            // Perform comprehensive refresh
-            dashboard.updateMetrics();
-            dashboard.updateCharts();
-            dashboard.updateUI();
-            
-            // Refresh additional components
-            dashboard.updateSystemMetrics();
-            dashboard.updatePerformanceMetrics();
-            
-            // Add telemetry event
-            dashboard.addEvent('MANUAL', 'Manual refresh triggered', 'info');
-            
-            // Show completion feedback
-            setTimeout(() => {
+            try {
+                console.log('🔄 Starting dashboard refresh...');
+                dashboard.addEvent('MANUAL', 'Manual refresh triggered', 'info');
+                
+                // Show loading state
+                const refreshButton = document.querySelector('[onclick="refreshDashboard()"]');
                 if (refreshButton) {
                     const icon = refreshButton.querySelector('i');
                     if (icon) {
-                        icon.classList.remove('fa-spin');
+                        icon.classList.add('fa-spin');
                     }
                 }
-                dashboard.addEvent('MANUAL', 'Manual refresh completed', 'success');
-            }, 1000);
+                
+                // Perform comprehensive refresh
+                dashboard.updateMetrics();
+                dashboard.updateCharts();
+                dashboard.updateUI();
+                
+                // Refresh additional components
+                dashboard.updateSystemMetrics();
+                dashboard.updatePerformanceMetrics();
+                
+                // Show completion feedback
+                setTimeout(() => {
+                    if (refreshButton) {
+                        const icon = refreshButton.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('fa-spin');
+                        }
+                    }
+                    dashboard.addEvent('MANUAL', 'Manual refresh completed', 'success');
+                    console.log('✅ Dashboard refresh completed successfully');
+                }, 1000);
+                
+            } catch (error) {
+                // Enhanced error logging as suggested
+                const errorDetails = error instanceof Error ? {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                } : {
+                    error: JSON.stringify(error, Object.getOwnPropertyNames(error))
+                };
+                
+                console.error('❌ Dashboard refresh failed:', errorDetails);
+                dashboard.addEvent('SYSTEM', `Refresh failed: ${errorDetails.message}`, 'error');
+                
+            } finally {
+                // Reset cooldown after successful operation
+                setTimeout(() => {
+                    isRefreshing = false;
+                    refreshAttempts = 0;
+                }, REFRESH_COOLDOWN);
+            }
         }
 
         // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick and keyboard shortcuts
