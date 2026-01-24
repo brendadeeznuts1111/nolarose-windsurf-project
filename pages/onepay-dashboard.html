@@ -2949,6 +2949,7 @@
         }
 
         // 🚀 Advanced Features Functions
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 174)
         function generateAIReport() {
             if (window.advancedExtensions) {
                 const report = window.advancedExtensions.generateReport();
@@ -3180,6 +3181,7 @@
         }
 
         // 📊 Telemetry Viewer
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 181)
         function showTelemetryViewer() {
             const telemetry = JSON.parse(localStorage.getItem('dashboard-telemetry') || '[]');
             
@@ -3192,6 +3194,7 @@
         }
 
         // 🌊 Streaming Demo Function
+        // biome-ignore lint/correctness/noUnusedVariables: Called from HTML onclick attribute (line 182)
         async function demonstrateStreamingDemo() {
             try {
                 dashboard.addEvent('STREAMING', 'Starting Uint8Array to ReadableStream demo', 'info');
